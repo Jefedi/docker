@@ -1,0 +1,286 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Private Configuration File
+
+> Configure advanced Pangolin settings using the privateConfig.yml file for enterprise features
+
+<div />
+
+The `privateConfig.yml` file provides advanced configuration options for enterprise deployments. This file is mounted at `config/privateConfig.yml` in your Docker container.
+
+<Note>
+  The private configuration file is only used on enterprise deployments. If you're using Pangolin Community, refer to the [main configuration file documentation](/self-host/advanced/config-file) instead. The private config file is not required.
+</Note>
+
+## Setting up your `privateConfig.yml`
+
+Here's a basic example with common settings:
+
+```yaml title="private-config.yml" theme={"theme":"gruvbox-light-hard"}
+app:
+  identity_provider_mode: "org"
+
+branding:
+  app_name: "My Company Portal"
+  hide_auth_layout_footer: false
+```
+
+## Reference
+
+This section contains the complete reference for all configuration options in `private-config.yml`.
+
+### Application Settings
+
+<ResponseField name="app" type="object">
+  Regional and base domain configuration for multi-region deployments.
+
+  <Expandable title="properties">
+    <ResponseField name="identity_provider_mode" type="string" default="global">
+      Set the identity provider (IdP) mode for authentication. By default both global and org pages will show until set. See the [Identity Providers documentation](/manage/identity-providers/add-an-idp#identity-provider-types) for more details on how this affects authentication and user management.
+
+      Possible values:
+
+      * `global`: (default) Both global and organization-level IdP login pages are available. Users can authenticate using either global or organization-specific identity providers.
+      * `org`: Only organization-level IdP login pages are available. Users must authenticate using identity providers defined at the organization
+
+      ```yaml theme={"theme":"gruvbox-light-hard"}
+      app:
+        identity_provider_mode: "org"
+      ```
+    </ResponseField>
+
+    <ResponseField name="region" type="string" default="default">
+      The region identifier for this Pangolin instance. Used for multi-region deployments.
+
+      ```yaml theme={"theme":"gruvbox-light-hard"}
+      app:
+        region: "us-east-1"
+      ```
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Server Configuration
+
+<ResponseField name="server" type="object">
+  Advanced server configuration including encryption keys and API integrations.
+
+  <Expandable title="properties">
+    <ResponseField name="encryption_key" type="string" default="./config/encryption.pem" required>
+      Path to the RSA private key used for encrypting sensitive data. Must be at least 8 characters long. THIS IS ONLY USED WITH pangolin\_dns FEATURE FLAG ENABLED AND REQUIRES EXTERNAL COMPONENTS.
+
+      ```yaml theme={"theme":"gruvbox-light-hard"}
+      server:
+        encryption_key_path: "./config/encryption.pem"
+      ```
+
+      <Warning>
+        The `encryption_key_path` must point to a valid RSA key file. Generate one using:
+
+        ```bash theme={"theme":"gruvbox-light-hard"}
+        openssl genrsa -out encryption.pem 4096
+        ```
+
+        Keep this key secure and backed up - it encrypts sensitive data in your database.
+      </Warning>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Redis Configuration
+
+<ResponseField name="redis" type="object">
+  Redis connection settings for caching, sessions, and rate limiting. Useful for clustering Pangolin nodes.
+
+  <Expandable title="properties">
+    <ResponseField name="host" type="string" required>
+      Redis server hostname or IP address.
+
+      ```yaml theme={"theme":"gruvbox-light-hard"}
+      redis:
+        host: "redis.example.com"
+      ```
+    </ResponseField>
+
+    <ResponseField name="port" type="number" required>
+      Redis server port (1-65535).
+
+      ```yaml theme={"theme":"gruvbox-light-hard"}
+      redis:
+        port: 6379
+      ```
+    </ResponseField>
+
+    <ResponseField name="password" type="string">
+      Redis authentication password.
+
+      ```yaml theme={"theme":"gruvbox-light-hard"}
+      redis:
+        password: "your-secure-password"
+      ```
+    </ResponseField>
+
+    <ResponseField name="db" type="number" default="0">
+      Redis database number (0-15 typically).
+
+      ```yaml theme={"theme":"gruvbox-light-hard"}
+      redis:
+        db: 0
+      ```
+    </ResponseField>
+
+    <ResponseField name="replicas" type="array">
+      Array of read replica configurations for high-availability deployments.
+
+      ```yaml theme={"theme":"gruvbox-light-hard"}
+      redis:
+        host: "redis-primary"
+        port: 6379
+        replicas:
+          - host: "redis-replica-1"
+            port: 6379
+            password: "replica-password"
+            db: 0
+          - host: "redis-replica-2"
+            port: 6379
+            password: "replica-password"
+            db: 0
+      ```
+
+      <Expandable title="replica properties">
+        <ResponseField name="host" type="string" required>
+          Replica server hostname.
+        </ResponseField>
+
+        <ResponseField name="port" type="number" required>
+          Replica server port.
+        </ResponseField>
+
+        <ResponseField name="password" type="string">
+          Replica authentication password.
+        </ResponseField>
+
+        <ResponseField name="db" type="number" default="0">
+          Database number on replica.
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Gerbil Tunnel Configuration
+
+<ResponseField name="gerbil" type="object">
+  Configuration for the Gerbil tunnel exit node integration.
+
+  <Expandable title="properties">
+    <ResponseField name="local_exit_node_reachable_at" type="string" default="http://gerbil:3004">
+      URL where the local Gerbil exit node can be reached by Pangolin. Useful when clustering multiple pangolin nodes. Overrides the value stored in the database. Useful when using Docker and address the local gerbil container using the host's address.
+
+      ```yaml theme={"theme":"gruvbox-light-hard"}
+      gerbil:
+        local_exit_node_reachable_at: "http://gerbil:3004"
+      ```
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Feature Flags
+
+<ResponseField name="flags" type="object">
+  Feature toggles for advanced functionality.
+
+  <Expandable title="properties">
+    <ResponseField name="use_org_only_idp" type="boolean" default="false">
+      **DEPRECATED**! See `app.identity_provider_mode: "org"` instead.
+
+      Restrict identity provider (IdP) authentication to organization-level only.
+
+      ```yaml theme={"theme":"gruvbox-light-hard"}
+      flags:
+        use_org_only_idp: true
+      ```
+    </ResponseField>
+
+    <ResponseField name="enable_acme_cert_sync" type="boolean" default="true">
+      Enable automatic synchronization of ACME certificates for TLS termination on private resources.
+
+      ```yaml theme={"theme":"gruvbox-light-hard"}
+      flags:
+        enable_acme_cert_sync: true
+      ```
+    </ResponseField>
+
+    <ResponseField name="enable_redis" type="boolean" default="false">
+      Enable Redis for caching and session management. Requires `redis` configuration.
+
+      ```yaml theme={"theme":"gruvbox-light-hard"}
+      flags:
+        enable_redis: true
+      ```
+    </ResponseField>
+
+    <ResponseField name="use_pangolin_dns" type="boolean" default="false">
+      Use Pangolin DNS servers for client connections instead of external DNS servers for DNS delegation and CNAME setups. Used for clustering Pangolin nodes. REQUIRES EXTERNAL COMPONENTS. PLEASE CONTACT SUPPORT TO OBTAIN ACCESS BEFORE ENABLING.
+
+      ```yaml theme={"theme":"gruvbox-light-hard"}
+      flags:
+        use_pangolin_dns: true
+      ```
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### ACME Configuration
+
+<ResponseField name="acme" type="object">
+  Configuration for ACME certificate synchronization. Used in conjunction with `flags.enable_acme_cert_sync` to synchronize TLS certificates issued by Traefik (or another ACME client) into Pangolin for use on private resources.
+
+  <Expandable title="properties">
+    <ResponseField name="acme_json_path" type="string" default="config/letsencrypt/acme.json">
+      Path to the `acme.json` file or a directory containing more than one acme json file produced by Traefik (or another ACME client). Pangolin reads this file to extract certificates for synchronization and will look for all files in the specified directory if a directory is provided. The file must be in the format produced by Traefik's ACME integration. This file is typically mounted as a volume from your ACME client container.
+
+      ```yaml theme={"theme":"gruvbox-light-hard"}
+      acme:
+        acme_json_path: "config/letsencrypt/acme.json"
+      ```
+    </ResponseField>
+
+    <ResponseField name="sync_interval_ms" type="number" default="5000">
+      Interval in milliseconds at which Pangolin polls the `acme.json` file for certificate changes.
+
+      ```yaml theme={"theme":"gruvbox-light-hard"}
+      acme:
+        sync_interval_ms: 5000
+      ```
+    </ResponseField>
+
+    <ResponseField name="acme_http_endpoint" type="string" default="">
+      HTTP endpoint where Pangolin can pull SSL certificates from to load into the database. Provided in the following format:
+
+      ```json theme={"theme":"gruvbox-light-hard"}
+      [
+          {
+              "wildcard": false,
+              "altName": "subdomain.example.com",
+              "certName": "subdomain.example.com",
+              "commonName": "subdomain.example.com",
+              "certFile": "",
+              "keyFile": ""
+          }
+      ]
+      ```
+
+      ```yaml theme={"theme":"gruvbox-light-hard"}
+      acme:
+        acme_http_endpoint: "http://controller-api.pangolin.svc.cluster.local/api/v1/certificates"
+      ```
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Branding Configuration
+
+Please refer to the [branding configuration documentation](/manage/branding).

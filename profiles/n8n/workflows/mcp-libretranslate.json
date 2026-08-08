@@ -1,0 +1,60 @@
+{
+  "name": "MCP - LibreTranslate",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "libretranslate",
+        "authentication": "none"
+      },
+      "id": "trigger-libretranslate",
+      "name": "LibreTranslate MCP Trigger",
+      "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+      "typeVersion": 1.1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "={{ $fromAI(\"method\", \"HTTP method: GET or POST\") }}",
+        "url": "=https://translate.jefe.ovh/{{ $fromAI(\"path\", \"LibreTranslate API path. Actions: detect (POST /detect), translate (POST /translate), languages (GET /languages). Full API: https://libretranslate.com/docs/\") }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "specifyQuery": "json",
+        "jsonQuery": "={{ $fromAI(\"query\", \"Query params as JSON. For /translate: { q: string, source: string, target: string }. For /detect: { q: string }\") }}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $fromAI(\"body\", \"Request body as JSON. For /translate: { q: string, source: string, target: string }\") }}",
+        "options": {
+          "timeout": 30000,
+          "response": {
+            "neverError": true
+          }
+        }
+      },
+      "id": "tool-libretranslate",
+      "name": "LibreTranslate API Tool",
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.4,
+      "position": [450, 300]
+    }
+  ],
+  "connections": {
+    "LibreTranslate MCP Trigger": {
+      "ai_tool": [
+        {
+          "node": "LibreTranslate API Tool",
+          "type": "ai_tool",
+          "index": 0
+        }
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1",
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}

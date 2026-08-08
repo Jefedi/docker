@@ -1,0 +1,35 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Without Tunneling
+
+> Use Pangolin as a local reverse proxy without Gerbil tunneling
+
+<div />
+
+Use Pangolin as a local reverse proxy and authentication manager
+
+You can use Pangolin without Gerbil and tunneling. In this configuration, Pangolin acts as a normal reverse proxy and authentication manager that can be deployed on your local network to provide access to resources.
+
+<Note>
+  You can also use "local" sites to expose resources on the same VPS as Pangolin in addition to remote sites.
+</Note>
+
+## Setup
+
+### Using the Installer
+
+When asked if you want to install Gerbil for tunneling, select **No**. Gerbil will be removed from the Docker Compose configuration.
+
+### Manual Installation
+
+Follow the [manual install steps](/self-host/manual/docker-compose), but **Gerbil is not required**. Your Docker Compose should not include the Gerbil container.
+
+## How It Works
+
+When Gerbil starts up, it registers itself with Pangolin. By not installing Gerbil, you will only have the option to choose the "Local" connection method. This means Traefik will use the local network to reach your resources.
+
+<Warning>
+  All setup remains the same, except Pangolin and Traefik must now be on the same network as the resources you want to proxy to.
+</Warning>

@@ -1,0 +1,45 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Aliases
+
+> Friendly names for resources, overlaps, loopback on the site host, and DNS behavior
+
+<div />
+
+Aliases provide a secondary, user-friendly address for any of your resources, allowing users to access the resource using this alternate name in addition to the original address.
+
+For instance, a router with the address `10.0.0.1` could be assigned the alias `router.internal`, and users could connect using either. Aliases are accessible to anyone who has access to the resource, and they are exclusively accessible when connected with a Pangolin client, meaning they function without requiring any external DNS record setup. Furthermore, aliases are protocol agnostic, which means they will work with any network protocol, essentially acting as a pseudo-A record for an address that is only functional within the Pangolin environment.
+
+## Overlapping Networks and Loopback on the Site Host
+
+Several situations described on the [Destinations](/manage/resources/private/destinations) page are where an alias is especially important—either optional but strongly recommended, or effectively required.
+
+Overlapping IP spaces across sites are common (for example the same RFC1918 subnet behind different Pangolin sites). Pangolin helps route connections without users picking a site by hand, but raw IPs or ambiguous names can still collide across environments. Assigning a distinct alias per resource gives clients a single hostname whose DNS resolution goes through Pangolin, so traffic consistently reaches the intended resource and site instead of whichever overlapping address would otherwise win. See [Overlapping destinations across sites](/manage/resources/private/destinations#overlapping-destinations-across-sites).
+
+Loopback on the site host is another case: if the resource destination is `127.0.0.1` or `localhost` on the machine running the site, those strings still mean “this machine” on the user’s laptop or desktop—not the remote site. There is no safe way for users to type loopback literals and reach the service behind another host; an alias hostname is required so the client resolves the name via Pangolin and sends traffic over the tunnel to the site, which then forwards to its own loopback. See [Loopback on the site host](/manage/resources/private/destinations#loopback-on-the-site-host).
+
+## CIDRs vs. IPs
+
+An alias can only be created for a resource that is a single host (IP or FQDN). Aliases cannot be created for resources that are CIDR ranges because it would be ambiguous which host within the range the alias should point to.
+
+## Domain Structure
+
+Since aliases cannot be single-label domains, you must avoid using domain names that do not contain a dot (e.g., `pangolin`). A domain like `pangolin.net`, which includes a dot, is acceptable. Instead of a single-label domain, you should consider using a subdomain of a domain you control, such as `router.mywebsite.com`, or an existing private/internal domain name, like `router.internal` or `router.corp`.
+
+### Wildcards
+
+Wildcards allow you to define aliases that match multiple hostnames using special characters in the FQDN. For example, in an alias like `*.host-0?.autoco.internal`, the asterisk `*` matches any sequence of characters (including none), and the question mark `?` matches exactly one character.
+
+If you use a wildcard such as `*.proxy.internal`, it will match any hostname that ends with `.proxy.internal` and has something before the dot—such as `host.proxy.internal`, `longerhost.proxy.internal`, or even `sub.host.proxy.internal`. However, the wildcard will not match the base domain itself (`autoco.internal` without anything before the dot).
+
+### .local TLD
+
+The `.local` TLD is reserved for local networking and multicast DNS (mDNS). mDNS is commonly used by Apple Bonjour, Linux zeroconf, and limited Windows features. Because of this, aliases that use `.local` may not resolve reliably across many devices. We recommend using a subdomain you control (for example, `alias.mywebsite.com`) or a private/internal domain such as `alias.internal` or `alias.corp`.
+
+## Custom Upstream DNS
+
+Aliases work by overriding the DNS of your computer running the client so that all DNS requests are sent to the Pangolin client for resolution. That behavior is controlled by the Enable Aliases (Override DNS) preference; see [Configure Clients](/manage/clients/configure-client#enable-aliases-override-dns). The DNS server on your computer is typically `100.96.128.1` (the first address inside of your utility subnet on the org) when connected to the tunnel, which forwards requests to an upstream server. By default, we use `1.1.1.1`, but this upstream address can be configured in the CLI or in the client settings.
+
+**If you are attempting to set an upstream DNS server that is only accessible via the tunnel, ensure that you create a resource and check the tunnel DNS option in the client configuration settings.** Otherwise, connectivity to the server may fail when connected to the tunnel. Enable Aliases (Override DNS) must also be on—see [Configure Clients](/manage/clients/configure-client#enable-aliases-override-dns)—so the client can intercept DNS and forward queries to the upstream server.

@@ -1,0 +1,3 @@
+model:
+  provider: ollama-cloud
+  default: glm-5.2

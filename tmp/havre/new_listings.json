@@ -1,0 +1,28 @@
+[
+  {
+    "id": "sqhab-547b5cfc-571a-48ae-9739-d19a72f2ec94",
+    "pieces": 0,
+    "surface": 0,
+    "price": 458,
+    "href": "https://www.squarehabitat.fr/annonces/location/bien/appartement/immobilier/normandie/seine-maritime/le-havre-76600/547b5cfc-571a-48ae-9739-d19a72f2ec94",
+    "desc": "Appartement à louer - LE HAVRE",
+    "source": "squarehabitat",
+    "lumineux": false,
+    "has_open_kitchen": false,
+    "has_no_closed_bedroom": false,
+    "quartier_accepted": false
+  },
+  {
+    "id": "sqhab-0e25b2fa-1cc0-4150-8c9b-66d83ac87c47",
+    "pieces": 2,
+    "surface": 0,
+    "price": 435,
+    "href": "https://www.squarehabitat.fr/annonces/location/bien/appartement/immobilier/normandie/seine-maritime/le-havre-76600/0e25b2fa-1cc0-4150-8c9b-66d83ac87c47",
+    "desc": "Appartement à louer - LE HAVRE, 2 pièces",
+    "source": "squarehabitat",
+    "lumineux": false,
+    "has_open_kitchen": false,
+    "has_no_closed_bedroom": false,
+    "quartier_accepted": false
+  }
+]

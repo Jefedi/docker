@@ -1,0 +1,15 @@
+---
+title: "404 Client Error: Not Found ('no such image: homeassistant/...)"
+description: "This error means an update or app could not be downloaded. It is almost always caused by not having enough free disk space, or by a temporary network problem."
+ha_category: Home Assistant
+---
+
+This error means an update or {% term app %} could not be downloaded to your system. In almost every case, this is because there is not enough free disk space.
+
+A few things to check:
+
+- **Free disk space**. Go to {% my system_dashboard title="**Settings** > **System**" %} and look at the storage information. If your system is nearly full, you will need to free up space, or move to larger storage.
+- **Virtual machine disk size**. The default Home Assistant virtual machine image is around 6 GB, which is fine to get started but quickly becomes too small. We recommend at least 32 GB.
+- **Network connection**. If your system has plenty of space, the download may have failed due to a temporary network problem. Wait a few minutes and try again.
+
+If the issue keeps happening, share the full error from {% my logs title="**Settings** > **System** > **Logs**" %} when [asking for help](/help/).

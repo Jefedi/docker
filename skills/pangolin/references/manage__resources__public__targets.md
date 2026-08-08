@@ -1,0 +1,246 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Targets
+
+> Configure destination endpoints for resource routing and load balancing
+
+<div />
+
+When you create a resource in Pangolin, you define different targets that specify where traffic should be routed within your network. Each target represents a specific destination that the resource can proxy to when handling incoming requests.
+
+## How Targets Work
+
+### Target Routing
+
+Targets function as destination endpoints for your resources:
+
+1. **Resource Creation**: When you create a resource, you configure one or more targets
+2. **Traffic Routing**: Incoming traffic is routed to the appropriate target based on your configuration
+3. **Network Access**: Newt proxy routes traffic to the local network through the tunnel
+4. **Direct Connection**: No additional routing is necessary on the remote network
+
+## Additional Proxy Settings
+
+In the public resource **Proxy** tab, Pangolin also provides additional proxy settings for how requests are sent to the upstream target.
+
+### Custom Host Header
+
+Use **Custom Host Header** when the upstream application expects a specific `Host` value instead of the public resource hostname.
+
+This is commonly needed for virtual-hosted backends that route traffic based on `Host`.
+
+### Custom Headers
+
+Use **Custom Headers** to add static headers to every proxied request for the resource.
+
+* Enter one header per line.
+* Use the format `Header-Name: value`.
+* Save the change with **Save Proxy Settings**.
+
+Example:
+
+```text theme={"theme":"gruvbox-light-hard"}
+X-Example-Header: example-value
+X-Environment: production
+```
+
+Typical uses include upstream shared-secret headers, feature flags, or tenant-routing headers that your application expects on every request.
+
+<Note>
+  Custom headers are static resource-level headers. If you need Pangolin to pass user identity to the upstream app, use [Forwarded Headers](/manage/access-control/forwarded-headers) instead.
+</Note>
+
+## Multi-Site Targets
+
+Targets have sites associated with them. This provides significant benefits for reliability and load distribution described below.
+
+### Site-Distributed Resources
+
+You can now configure targets across different sites for the same resource:
+
+<Card title="High Availability">
+  Distribute your resources across multiple sites so that if one site goes down, traffic automatically continues to be served from other available sites.
+</Card>
+
+<Card title="Load Balancing">
+  Set up load balancing across sites to distribute traffic in a round-robin fashion between all available targets.
+</Card>
+
+### Distributing Sites Load Across Servers
+
+<Note>
+  This is an [Enterprise Edition](/self-host/enterprise-edition)-only feature.
+</Note>
+
+This refers to having more than on Pangolin server node that a site can connect to. If one of the server nodes goes down, the site moves to another node. This has some implications for site-based load balancing, because DNS must can only route a FQDN to one Pangolin server node at a time.
+
+Load balancing between different targets only works when sites are connected to the same Pangolin node. In Pangolin instances with multiple remote nodes, ensure load balancing occurs on the same node.
+
+To ensure effective load balancing in multi-node environments:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+newt --prefer-endpoint <specific-endpoint> <other-args>
+```
+
+## Path-Based Routing
+
+Path-based routing allows you to direct traffic to different targets based on the request path. This enables sophisticated routing scenarios where different services can handle different parts of your application.
+
+### How Path-Based Routing Works
+
+Each target can be configured with optional path routing parameters:
+
+* **Path**: The path pattern to match against incoming requests
+* **Match**: The matching strategy to use when comparing the request path
+
+When a request comes in, Pangolin evaluates the path against all targets and routes traffic to the target with the matching path configuration.
+
+### Match Types
+
+Pangolin supports three different matching strategies:
+
+#### Exact Match
+
+**exact**: The request path must match the configured path exactly.
+
+Example: Path `/api/users` with exact match only matches `/api/users`
+
+#### Prefix Match
+
+**prefix**: The request path must start with the configured path.
+
+Example: Path `/api` with prefix match matches `/api/users`, `/api/orders`, `/api/users/123`, etc.
+
+#### Regex Match
+
+**regex**: The request path is matched against a regular expression pattern.
+
+Example: Path `^/api/users/[0-9]+$` with regex match matches `/api/users/123` but not `/api/users/abc`
+
+<Frame caption="Pangolin UI showing targets with path-based routing configuration">
+  <img src="https://mintcdn.com/fossorial/Ml6kFBgdb1oUkXPj/images/targets_config_path_match.png?fit=max&auto=format&n=Ml6kFBgdb1oUkXPj&q=85&s=4e04171f4730cd9280a7216ea38a34fc" alt="Targets example" width="1537" height="382" data-path="images/targets_config_path_match.png" />
+</Frame>
+
+### Load Balancing with Path-Based Routing
+
+When multiple targets have the same path and match configuration, Pangolin will load balance between them using round-robin distribution.
+
+**Example Scenario:**
+
+* Target 1: Path `/api`, Match `prefix`, Address `10.0.1.10:8080`
+* Target 2: Path `/api`, Match `prefix`, Address `10.0.1.11:8080`
+* Target 3: Path `/web`, Match `prefix`, Address `10.0.1.12:80`
+
+In this configuration:
+
+* Requests to `/api/users` will be load balanced between Target 1 and Target 2
+* Requests to `/web/dashboard` will only go to Target 3
+
+## Path Rewriting
+
+Path rewriting allows you to modify the request path before it reaches your backend service. This enables you to expose different URL structures to your users while maintaining your existing backend API paths.
+
+<Note>
+  Path rewriting requires path-based routing to be configured first. You must set up a Path Match before you can configure path rewriting.
+</Note>
+
+### How Path Rewriting Works
+
+After Pangolin matches a request using path-based routing, it can rewrite the path before forwarding the request to your target service. Each target with path matching configured can optionally include path rewriting:
+
+* **Rewrite Type**: The strategy to use for rewriting the path
+* **Rewrite Value**: The new path or pattern to apply (optional for Strip Prefix)
+
+The rewriting happens after the path match evaluation but before the request reaches your backend service.
+
+### Rewrite Types
+
+Pangolin supports four different rewriting strategies:
+
+#### Prefix Rewrite
+
+**prefix**: Replaces the matched portion with a new prefix, preserving the rest of the path.
+
+* With Prefix Match: `/api` → `/v2/api` transforms `/api/users` into `/v2/api/users`
+* With Exact Match: `/old` → `/new` transforms `/old` into `/new`
+* With Regex Match: Uses the regex pattern with the rewrite value as replacement
+
+#### Exact Rewrite
+
+**exact**: Replaces the matched path with the exact rewrite path.
+
+Example: Match path `/api/users` → Rewrite to `/users` transforms `/api/users` into `/users`
+
+#### Regex Rewrite
+
+**regex**: Uses regular expression substitution to transform the path. Works with any match type.
+
+* With Regex Match: Uses the regex pattern directly
+* With Prefix Match: Automatically captures everything after the prefix with `(.*)`
+* With Exact Match: Matches the exact path
+
+Example: Match path `^/api/v1/(.*)` (regex) → Rewrite to `/api/v2/$1` transforms `/api/v1/users` into `/api/v2/users`
+
+#### Strip Prefix
+
+**stripPrefix**: Removes the matched prefix from the path.
+
+* With Prefix Match: Efficiently strips the prefix using Traefik's stripPrefix middleware
+* With Exact/Regex Match: Uses regex replacement to remove the matched portion
+* Optionally add a new prefix after stripping by providing a rewrite value
+
+Example: Match path `/api` (prefix) → Strip Prefix transforms `/api/users` into `/users`
+
+Example with new prefix: Match path `/old` (prefix) → Strip Prefix + Rewrite to `/new` transforms `/old/users` into `/new/users`
+
+<Frame caption="Pangolin UI showing path rewriting configuration">
+  <img src="https://mintcdn.com/fossorial/Ml6kFBgdb1oUkXPj/images/targets_config_path_rewrite.png?fit=max&auto=format&n=Ml6kFBgdb1oUkXPj&q=85&s=2b4ac27da9b338ddbe5c084ca4f50738" alt="Targets with path rewriting" width="1545" height="376" data-path="images/targets_config_path_rewrite.png" />
+</Frame>
+
+### Configuration Requirements
+
+<Warning>
+  Path rewriting validation ensures your configuration is valid:
+
+  * Path rewriting requires path matching to be configured first
+  * When using rewrite types other than Strip Prefix, both rewrite path and rewrite type must be specified together
+  * For regex path matching, the path pattern must be a valid regular expression
+  * Strip Prefix works with any match type, but is most effective with Prefix match type
+</Warning>
+
+### Automatic Path Normalization
+
+Pangolin automatically normalizes paths to ensure correct routing:
+
+* Non-regex paths that don't start with `/` will have `/` prepended automatically
+* Non-regex rewrite paths that don't start with `/` will have `/` prepended automatically
+* This ensures consistent behavior across different configurations
+
+### Load Balancing with Path Rewriting
+
+All targets with identical path match and path rewrite configurations will be load balanced together.
+
+**Example:**
+
+* Target 1: Match `/api` (prefix), Rewrite `/v2` (prefix), Address `10.0.1.10:8080`
+* Target 2: Match `/api` (prefix), Rewrite `/v2` (prefix), Address `10.0.1.11:8080`
+* Target 3: Match `/api` (prefix), Strip Prefix, Address `10.0.1.12:8080`
+
+Requests to `/api/users` will:
+
+* Load balance between Target 1 and Target 2 (both rewrite to `/v2/users`)
+* NOT be sent to Target 3 (different rewrite configuration - strips to `/users`)
+
+### Priority Calculation
+
+When using path rewriting, request priority is automatically calculated to ensure proper routing order:
+
+* Base priority: 100
+* Path matching adds +10 to priority
+* Exact match adds +5 more
+* Prefix match adds +3 more
+* Regex match adds +2 more
+* Root path `/` gets priority 1 (lowest, acts as catch-all)
+* Custom priorities override the automatic calculation

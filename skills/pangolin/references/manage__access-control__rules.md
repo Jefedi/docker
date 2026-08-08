@@ -1,0 +1,114 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Rules
+
+> Configure rules to allow or deny access to resources without authentication
+
+<div />
+
+Rules allow you to either "allow" and bypass the Pangolin auth system (no pin, login, password), or "deny" and fully reject the request. After you create a resource you can select the "Rules" tab on the sidebar and enable rules. On public resources, you can also define rules in a [resource policy](/manage/resources/public/resource-policies) and share them across multiple resources.
+
+<CardGroup cols={3}>
+  <Card title="Bypass Auth" icon="check">
+    Bypass authentication completely for matching requests. Users can access resources without any login or PIN.
+  </Card>
+
+  <Card title="Block Access" icon="x">
+    Completely reject requests that match the rule. Useful for blocking admin paths or sensitive endpoints.
+  </Card>
+
+  <Card title="Pass to Auth" icon="x">
+    Pass requests that match the rule to the next stage for user to authenticate with SSO, password, or pin. Useful for enforcing auth on specific paths while allowing others.
+  </Card>
+</CardGroup>
+
+## Types of Rules
+
+Rules are processed from top to bottom in order of their priority. This means you can have multiple rules to bypass auth and to just flat deny users at the end.
+
+Right now you can match on the following items:
+
+### Path
+
+Path match rules allow URL patterns defined with plain text and wildcards (`*`) that match any characters. Patterns and URLs are split into segments (using `/`), and **each segment is matched individually**.
+
+#### Examples:
+
+* `blog/posts`
+  Matches the exact path `/blog/posts`.
+
+* `blog/*`
+  Matches any path under `/blog` (e.g., `/blog/travel`).
+
+* `*/2023/*`
+  Matches paths with `/2023/` as a middle segment (e.g., `/news/2023/summary`).
+
+* `article*`
+  Matches **segments** starting with "article" (e.g., `/article-123`).
+
+* `*admin*`
+  Matches **segments** containing "admin" (e.g., `/my-admin-panel`).
+
+* `personal-*/*`
+  Matches paths where the first segment starts with `personal-` and is followed by any segment (e.g., `/personal-blog/post`).
+
+#### Segment-by-Segment Matching
+
+* **Normalization:**
+  Both patterns and URLs are split into segments. For example, `/blog/journal/entry` becomes `["blog", "journal", "entry"]`, while `/blog*` becomes `["blog*"]`.
+
+* **Validation:**
+  Each pattern segment must correspond to a URL segment, and wildcards match zero or more characters within that segment. A pattern like `/blog*` only matches the first segment, so URLs with extra segments require additional placeholders (e.g., `/blog*/*`).
+
+### Country
+
+Country match rules allow you to specify allowed or denied countries for requests based on their IP address. This is useful for geo-restrictions or compliance with regional regulations.
+
+We use a IP database to geolocate the IP address but this is not always accurate. Try to keep it updated, but there may be cases where the location is incorrect.
+
+Select the "ALL" option to match all countries for allowing or denying access.
+
+To use country rules, follow this guide to set up the geolocation database: [Enable Geo-location](/self-host/advanced/enable-geolocation).
+
+### Region
+
+Region match rules allow you to specify allowed or denied regions for requests based on their IP address. This is useful for geo-restrictions or compliance with regional regulations. Regions are made up of a list of countries in that region (e.g. "EU" includes France, Germany, etc.) so this is a more broad match than country.
+
+To use region rules, follow this guide to set up the geolocation database: [Enable Geo-location](/self-host/advanced/enable-geolocation).
+
+### CIDR
+
+CIDR (Classless Inter-Domain Routing) notation specifies IP address ranges using an IP address and a network prefix length. The format is \[IP address]/\[prefix length].
+
+**Examples:**
+
+* `192.168.1.0/0` - Matches all 256 IPs from 192.168.1.0 to 192.168.1.255
+* `10.0.0.0/8` - Matches any IP starting with 10 (16.7 million addresses)
+* `2001:db8::/32` - Matches a range of IPv6 addresses
+* `0.0.0.0/0` - Matches all IPv4 addresses
+
+<Note>
+  The prefix length (1-32 for IPv4, 1-128 for IPv6) determines how many bits from the left are fixed. Smaller prefix numbers match larger ranges.
+</Note>
+
+### IP
+
+Pretty simple: you can match on simply an IP address like your home IP to bypass auth. This is the same as entering a /32 CIDR.
+
+### ASN
+
+ASN (Autonomous System Number) match rules allow you to specify allowed or denied ASNs for requests based on their IP address. This is useful for blocking or allowing traffic from specific ISPs or organizations.
+
+To use ASN rules, follow this guide to set up the ASN lookup database: [Enable ASN Lookup](/self-host/advanced/enable-asn-lookup).
+
+**Examples:**
+
+* `23.234.134.32`
+* `34.45.245.64`
+* `192.168.1.1`
+
+### Community Contributed Rules
+
+Some common bypass paths for common self hosted apps can be found [in the community contributed rules](/self-host/community-guides/rules).

@@ -1,0 +1,29 @@
+name: Backup Notification
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Count changed files and notify
+        env:
+          NTFY_TOKEN: ${{ secrets.NTFY_TOKEN }}
+          COMMIT_MSG: ${{ github.event.head_commit.message }}
+          COMMIT_URL: ${{ github.event.head_commit.url }}
+        run: |
+          FILES=$(git diff --name-only HEAD~1 HEAD | wc -l)
+          MSG="Backup poussé sur GitHub — ${FILES} fichiers modifiés. ${COMMIT_URL}"
+          curl -s -H "Authorization: Bearer ${NTFY_TOKEN}" \
+            -H "Title: ✅ Backup GitHub réussi" \
+            -H "Priority: default" \
+            -H "Tags: white_check_mark" \
+            -d "${MSG}" \
+            "https://ntfy.jefe.ovh/hermes-agent-jefe"

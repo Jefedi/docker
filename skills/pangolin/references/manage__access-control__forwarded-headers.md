@@ -1,0 +1,56 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Forwarded Headers
+
+> Learn how Pangolin forwards user identity information to your backend applications through HTTP headers
+
+<div />
+
+Pangolin can forward user identity information to your backend applications through custom HTTP headers. This allows your applications to receive user details directly from the request headers, enabling integration with Pangolin's authentication system.
+
+<Info>
+  Forwarded headers are only available when using authentication methods that provide user identity information.
+</Info>
+
+## Supported Headers
+
+Pangolin forwards the following headers to your backend when user identity is available:
+
+| Header         | Description                     | Example                |
+| -------------- | ------------------------------- | ---------------------- |
+| `Remote-User`  | Unique username or user ID      | `user_123`             |
+| `Remote-Email` | User's email address            | `john.doe@example.com` |
+| `Remote-Name`  | User's full name                | `John Doe`             |
+| `Remote-Role`  | User's role or group membership | `admin`                |
+
+## Authentication Methods
+
+### Headers Available
+
+These authentication methods provide user identity information and will include the forwarded headers:
+
+<CardGroup cols={2}>
+  <Card title="Single Sign-On (SSO)" icon="users">
+    Full user identity information including username, email, and name.
+  </Card>
+</CardGroup>
+
+### Headers Not Available
+
+These authentication methods do not provide user identity information:
+
+<CardGroup cols={2}>
+  <Card title="PIN Code" icon="hashtag">
+    No user identity - only access control.
+  </Card>
+
+  <Card title="Password" icon="lock">
+    No user identity - only access control.
+  </Card>
+
+  <Card title="Shareable Links" icon="link">
+    No user identity - only access control.
+  </Card>
+</CardGroup>

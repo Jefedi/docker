@@ -1,0 +1,13 @@
+{
+  "source": "discord-admin-elite",
+  "source_url": "discord-admin-elite",
+  "bundle_hash": "sha256:0d1ec7c1dc045e5eea100ab45f18038ebfb21cdc75f7f4fbb4c4cd47b60e5a9e",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "safe",
+  "trust_level": "community",
+  "findings": [],
+  "rules": [],
+  "scanned_at": "2026-07-22T18:30:10.368747+00:00",
+  "summary": "discord-admin-elite: clean scan, no threats detected",
+  "fresh": true
+}

@@ -1,0 +1,8 @@
+{
+  "taps": [
+    {
+      "repo": "nextlevelbuilder/ui-ux-pro-max-skill",
+      "path": "skills/"
+    }
+  ]
+}

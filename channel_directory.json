@@ -1,0 +1,76 @@
+{
+  "updated_at": "2026-08-08T16:57:31.898149",
+  "platforms": {
+    "discord": [
+      {
+        "id": "1508212863406309506",
+        "name": "jefe59",
+        "type": "dm",
+        "thread_id": null
+      }
+    ],
+    "telegram": [
+      {
+        "id": "7509874421",
+        "name": "Jefe",
+        "type": "dm",
+        "thread_id": null
+      },
+      {
+        "id": "7509874421:131413",
+        "name": "Jefe / topic 131413",
+        "type": "dm",
+        "thread_id": "131413"
+      },
+      {
+        "id": "7509874421:131408",
+        "name": "Jefe / topic 131408",
+        "type": "dm",
+        "thread_id": "131408"
+      },
+      {
+        "id": "7509874421:131394",
+        "name": "Jefe / topic 131394",
+        "type": "dm",
+        "thread_id": "131394"
+      },
+      {
+        "id": "7509874421:131235",
+        "name": "Jefe / topic 131235",
+        "type": "dm",
+        "thread_id": "131235"
+      },
+      {
+        "id": "7509874421:131191",
+        "name": "Jefe / topic 131191",
+        "type": "dm",
+        "thread_id": "131191"
+      },
+      {
+        "id": "7509874421:131162",
+        "name": "Jefe / topic 131162",
+        "type": "dm",
+        "thread_id": "131162"
+      },
+      {
+        "id": "7509874421:131155",
+        "name": "Jefe / topic 131155",
+        "type": "dm",
+        "thread_id": "131155"
+      },
+      {
+        "id": "7509874421:130926",
+        "name": "Jefe / topic 130926",
+        "type": "dm",
+        "thread_id": "130926"
+      },
+      {
+        "id": "7509874421:130909",
+        "name": "Jefe / topic 130909",
+        "type": "dm",
+        "thread_id": "130909"
+      }
+    ],
+    "email": []
+  }
+}

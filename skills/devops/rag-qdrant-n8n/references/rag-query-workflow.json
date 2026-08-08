@@ -1,0 +1,90 @@
+{
+  "name": "RAG - HA Docs Query",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "rag-query",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-query",
+      "name": "Webhook Query",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "rag-query-webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.17.0.1:9200/embed",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"texts\": [$json.body.query] } }}",
+        "options": { "timeout": 30000 }
+      },
+      "id": "query-embed",
+      "name": "Embed Query",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.17.0.1:6333/collections/ha-docs/points/search",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"vector\": $json.embeddings[0], \"limit\": 5, \"with_payload\": true, \"score_threshold\": 0.3 } }}",
+        "options": {}
+      },
+      "id": "qdrant-search",
+      "name": "Search Qdrant",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.17.0.1:9119/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "Bearer <API_SERVER_KEY>" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"model\": \"hermes-agent\", \"messages\": [ { \"role\": \"system\", \"content\": \"Tu es un assistant expert. Reponds en francais. Utilise le contexte fourni pour repondre precisement.\" }, { \"role\": \"user\", \"content\": \"Question: \" + $('Webhook Query').item.json.body.query + \"\\n\\nContexte:\\n\" + $json.result.map(item => item.payload.title + ': ' + item.payload.content).join('\\n\\n') } ], \"temperature\": 0.3 } }}",
+        "options": { "timeout": 120000 }
+      },
+      "id": "hermes-llm",
+      "name": "Hermes LLM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"query\": $('Webhook Query').item.json.body.query, \"answer\": $json.choices[0].message.content, \"sources\": $('Search Qdrant').item.json.result.map(item => ({ title: item.payload.title, score: item.score, source: item.payload.source })), \"context_count\": $('Search Qdrant').item.json.result.length } }}",
+        "options": { "responseCode": 200 }
+      },
+      "id": "respond-query",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1120, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Query": { "main": [ [{ "node": "Embed Query", "type": "main", "index": 0 }] ] },
+    "Embed Query": { "main": [ [{ "node": "Search Qdrant", "type": "main", "index": 0 }] ] },
+    "Search Qdrant": { "main": [ [{ "node": "Hermes LLM", "type": "main", "index": 0 }] ] },
+    "Hermes LLM": { "main": [ [{ "node": "Respond", "type": "main", "index": 0 }] ] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

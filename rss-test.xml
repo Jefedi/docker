@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Hermes Curation</title>
+    <link>https://n8n.jefe.ovh/webhook/rss-curation</link>
+    <description>Articles curates par Hermes</description>
+    <language>fr</language>
+    <lastBuildDate>Tue, 28 Jul 2026 08:20:00 GMT</lastBuildDate>
+    <item>
+      <title>GLM 5.2 censure moins s'il se croit américain</title>
+      <link>https://korben.info/glm-kimi-modeles-chinois-identite-claude.html</link>
+      <description>Les modèles chinois GLM et Kimi montrent un comportement intéressant : leur censure varie selon l'identité qu'ils pensent avoir.</description>
+      <pubDate>Tue, 28 Jul 2026 09:29:55 +0200</pubDate>
+      <author>korben</author>
+    </item>
+    <item>
+      <title>Sa boîte à goûter fait tourner un LLM en local</title>
+      <link>https://korben.info/cyberdeck-lunchbox-mask-raspberry-pi.html</link>
+      <description>Un cyberdeck construit dans une boîte à goûter avec un Raspberry Pi qui fait tourner un LLM en local.</description>
+      <pubDate>Tue, 28 Jul 2026 07:56:36 +0200</pubDate>
+      <author>korben</author>
+    </item>
+    <item>
+      <title>7.1 Earthquake in Japan</title>
+      <link>https://www.data.jma.go.jp/multi/quake/quake_detail.html?eventID=20260728163528&amp;lang=en</link>
+      <description>A 7.1 magnitude earthquake struck Japan.</description>
+      <pubDate>Tue, 28 Jul 2026 07:44:24 +0000</pubDate>
+      <author>hackernews</author>
+    </item>
+    <item>
+      <title>Our position on open-weights models</title>
+      <link>https://www.anthropic.com/news/position-open-weights-models</link>
+      <description>Anthropic shares their position on open-weights models.</description>
+      <pubDate>Mon, 27 Jul 2026 22:03:49 +0000</pubDate>
+      <author>hackernews</author>
+    </item>
+    <item>
+      <title>A $500 RL fine-tune of a 9B open model beat frontier models on catalog review</title>
+      <link>https://fermisense.com/when-machines-take-the-wheel/</link>
+      <description>A $500 reinforcement learning fine-tune of a 9B parameter open model beat frontier models on catalog review.</description>
+      <pubDate>Tue, 28 Jul 2026 02:18:53 +0000</pubDate>
+      <author>hackernews</author>
+    </item>
+  </channel>
+</rss>

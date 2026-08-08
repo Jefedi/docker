@@ -1,0 +1,261 @@
+{
+  "unlocks": {
+    "actually_read_the_logs": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1783936121
+    },
+    "autonomous_avalanche": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1780865876
+    },
+    "background_process_enjoyer": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1784825093
+    },
+    "browser_possession": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1783936121
+    },
+    "cache_hit_appreciator": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1783936121
+    },
+    "citation_goblin": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1781120979
+    },
+    "claude_confidant": {
+      "evidence": null,
+      "first_tier": "Gold",
+      "unlocked_at": 1780865876
+    },
+    "codex_conjurer": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1783936121
+    },
+    "config_surgeon": {
+      "evidence": null,
+      "first_tier": "Silver",
+      "unlocked_at": 1780865876
+    },
+    "context_dragon": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1783936121
+    },
+    "dependency_hell_tourist": {
+      "evidence": null,
+      "first_tier": null,
+      "unlocked_at": 1781120979
+    },
+    "docker_name_collision": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1784825093
+    },
+    "docs_archaeologist": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1783936121
+    },
+    "file_archaeologist": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1783936121
+    },
+    "five_model_flight": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1784825093
+    },
+    "forgot_the_env_var": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1781120979
+    },
+    "gateway_dweller": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1783936121
+    },
+    "gemini_cartographer": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1780865876
+    },
+    "let_him_cook": {
+      "evidence": {
+        "session_id": "20260629_173854_a3496a63",
+        "title": "Custom Formats Below Profile Minimum",
+        "value": 281
+      },
+      "first_tier": "Copper",
+      "unlocked_at": 1783936121
+    },
+    "marathon_operator": {
+      "evidence": null,
+      "first_tier": "Gold",
+      "unlocked_at": 1783936121
+    },
+    "memory_keeper": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1784825093
+    },
+    "memory_palace": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1784825093
+    },
+    "model_hopper": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1783936121
+    },
+    "model_sommelier": {
+      "evidence": null,
+      "first_tier": "Gold",
+      "unlocked_at": 1780865876
+    },
+    "night_shift_operator": {
+      "evidence": null,
+      "first_tier": "Gold",
+      "unlocked_at": 1783936121
+    },
+    "one_character_fix": {
+      "evidence": null,
+      "first_tier": null,
+      "unlocked_at": 1783936121
+    },
+    "openrouter_enjoyer": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1783936121
+    },
+    "permission_denied_any_percent": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1780865876
+    },
+    "plugin_goblin": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1783936121
+    },
+    "port_3000_taken": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1781120979
+    },
+    "provider_polyglot": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1780865876
+    },
+    "rabbit_hole_certified": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1783936121
+    },
+    "rebase_acrobat": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1780865876
+    },
+    "red_text_connoisseur": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1781120979
+    },
+    "rollback_wizard": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1784825093
+    },
+    "screenshot_hunter": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1780865876
+    },
+    "skill_issue_skill_created": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1783936121
+    },
+    "skillsmith": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1783936121
+    },
+    "stack_trace_sommelier": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1783936121
+    },
+    "subagent_commander": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1784825093
+    },
+    "supposed_to_be_quick": {
+      "evidence": {
+        "session_id": "20260606_220146_0ce93dbe",
+        "title": "MCP Assistant Capabilities",
+        "value": 351
+      },
+      "first_tier": "Copper",
+      "unlocked_at": 1780865876
+    },
+    "terminal_goblin": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1780948692
+    },
+    "test_suite_tamer": {
+      "evidence": null,
+      "first_tier": "Silver",
+      "unlocked_at": 1780865876
+    },
+    "the_fix_was_restarting": {
+      "evidence": null,
+      "first_tier": null,
+      "unlocked_at": 1783936121
+    },
+    "toolchain_maxxer": {
+      "evidence": {
+        "session_id": "20260608_181327_c69d9a5d",
+        "title": "Pangolin Proxy Auth Problem",
+        "value": 28
+      },
+      "first_tier": "Silver",
+      "unlocked_at": 1780948692
+    },
+    "toolset_cartographer": {
+      "evidence": null,
+      "first_tier": "Gold",
+      "unlocked_at": 1780865876
+    },
+    "voice_of_the_machine": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1781120979
+    },
+    "weekend_warrior": {
+      "evidence": null,
+      "first_tier": "Diamond",
+      "unlocked_at": 1783936121
+    },
+    "yaml_colon_incident": {
+      "evidence": null,
+      "first_tier": "Copper",
+      "unlocked_at": 1781120979
+    }
+  }
+}

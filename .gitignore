@@ -1,0 +1,210 @@
+# ============================================================
+# Hermes Agent /opt/data — Backup .gitignore
+# Stratégie: backuper config + skills + cron + scripts + mcp + plugins
+# Exclure: secrets, sessions, logs, caches, binaires, runtime state
+# ============================================================
+
+# === SECRETS — JAMAIS SUR GITHUB ===
+.env
+.env.*
+*.key
+*.pem
+*.p12
+auth.json
+paperclip_agent_key.json
+gateway_state.json
+.ntfy_token
+.hermes/
+scripts/.discord_token
+scripts/.discord_token_*
+scripts/nvidia-nim-key.txt
+scripts/sse_token.txt
+profiles/*/auth.json
+profiles/*/paperclip_agent_key.json
+bazarr_api_key.txt
+profiles/*/bazarr_api_key.txt
+*.txt
+!profiles/*/SOUL.md
+profiles/*/jellyfin_token.txt
+profiles/*/prowlarr_api_key.txt
+profiles/*/radarr_api_key.txt
+profiles/*/sonarr_api_key.txt
+profiles/*/qb_password.txt
+profiles/*/portainer_key.txt
+profiles/*/tmp_pangolin_key.txt
+ntfy.env
+profiles/*/ntfy.env
+webui.ctl.env
+profiles/*/webui.ctl.env
+
+# === SESSIONS & LOGS ===
+sessions/
+logs/
+*.log
+
+# === CACHE & TEMP — régénérable ===
+cache/
+audio_cache/
+browser_screenshots/
+image_cache/
+lazy-packages/
+state-snapshots/
+backups/
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+
+# === HOME (volumineux: .local, .npm) ===
+home/
+profiles/*/home/
+
+# === BINARIES ===
+bin/
+pets/
+
+# === RUNTIME STATE — change à chaque tick ===
+*.lock
+*.db
+*.db-shm
+*.db-wal
+*.db.bak
+*.db.bak-*
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+state.db.malformed-backup*
+state.db.malformed-backup*-shm
+state.db.malformed-backup*-wal
+
+# === CORE DUMPS — JAMAIX dans le backup ===
+core.*
+
+# === SKILLS HUB INDEX CACHE — volumineux, régénérable ===
+skills/.hub/index-cache/
+processes.json
+hermes_metrics.json
+hermes_metrics_prev.json
+.restart_last_processed.json
+.update_check
+
+# === CRON RUNTIME (garder jobs.json) ===
+cron/executions.db
+cron/.tick.lock
+cron/.jobs.lock
+cron/ticker_last_success
+cron/ticker_heartbeat
+cron/output/
+
+# === LARGE CACHES ===
+models_dev_cache.json
+ollama_cloud_models_cache.json
+provider_models_cache.json
+context_length_cache.yaml
+skills-lock.json
+voxtral_usage.json
+
+# === PLATFORM PAIRING — secrets ===
+platforms/pairing/
+platforms/whatsapp/
+
+# === PYTHON SITE-PACKAGES & NPM ===
+.local/
+# === NPM CACHE ===
+.npm/
+
+# === LSP (node_modules volumineux) ===
+lsp/
+
+# === BUILT-IN AGENTS (regénérables) ===
+.agents/
+
+# === SKILLS ARCHIVES & BACKUPS ===
+skills/.archive/
+skills/.curator_backups/
+
+# === MISC — volumineux ou non-pertinent ===
+hermes_patch/
+webui/
+src/
+sandboxes/
+kanban/
+pastes/
+plans/
+gateway/
+hooks/
+pairing/
+discord-mcp/
+dockhand-mcp/
+myanimelist-mcp/
+radicale/
+byterover/
+
+# === EMBEDDED GIT REPOS — trop volumineux pour le backup ===
+hermes-agent/
+hermes-ios-build/
+hermes-webui/
+goxlr-utility-build/
+
+# === WHATSAPP BRIDGE (volumineux, non-essentiel) ===
+scripts/whatsapp-bridge/
+
+# === PROFILES — exclure tous les sous-dossiers, garder fichiers racine ===
+profiles/*/audio_cache/
+profiles/*/bin/
+profiles/*/browser_screenshots/
+profiles/*/byterover/
+profiles/*/cache/
+profiles/*/cron/output/
+profiles/*/discord-mcp/
+profiles/*/dockhand-mcp/
+profiles/*/gateway/
+profiles/*/home/
+profiles/*/hooks/
+profiles/*/image_cache/
+profiles/*/kanban/
+profiles/*/lazy-packages/
+profiles/*/logs/
+profiles/*/mcp/
+profiles/*/memories/
+profiles/*/myanimelist-mcp/
+profiles/*/pairing/
+profiles/*/pastes/
+profiles/*/pets/
+profiles/*/platforms/
+profiles/*/plugins/
+profiles/*/radicale/
+profiles/*/sandboxes/
+profiles/*/scripts/
+profiles/*/skills/
+profiles/*/sessions/
+profiles/*/src/
+profiles/*/state-snapshots/
+profiles/*/webui/
+profiles/*/workspace/
+profiles/*/channel_directory.json
+profiles/*/gateway_state.json
+profiles/*/processes.json
+profiles/*/hermes_metrics*.json
+profiles/*/.restart_last_processed.json
+profiles/*/.update_check
+profiles/*/.hermes_history
+profiles/*/.npm/
+profiles/*/.local/
+profiles/*/*.lock
+profiles/*/*.db
+
+# === HISTORY ===
+.hermes_history
+.codex_gpt55_autoraise_notice
+.install_method
+config.yaml.bak-avant-migration
+
+# === HUGGINGFACE CACHE — modèles volumineux, régénérables ===
+.cache/
+
+# === CUA-DRIVER BINARY — 40 MB, régénérable ===
+.cua-driver/
+
+# === GIT ===
+.git/

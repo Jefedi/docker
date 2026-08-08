@@ -1,0 +1,818 @@
+model:
+  provider: auto
+  default: glm-5.2
+  base_url: http://127.0.0.1:4000/v1
+  api_key: sk-PC6NO_N-7ZXgH6Ey_zrAxA
+toolsets:
+  - hermes-cli
+agent:
+  max_turns: 90
+  gateway_timeout: 1800
+  restart_drain_timeout: 0
+  api_max_retries: 3
+  service_tier: ''
+  tool_use_enforcement: auto
+  task_completion_guidance: true
+  parallel_tool_call_guidance: true
+  environment_probe: true
+  environment_hint: ''
+  coding_context: auto
+  verify_on_stop: auto
+  gateway_timeout_warning: 900
+  clarify_timeout: 3600
+  gateway_notify_interval: 180
+  gateway_auto_continue_freshness: 3600
+  image_input_mode: auto
+  disabled_toolsets: []
+  personalities:
+    catgirl: You are Neko-chan, an anime catgirl AI assistant, nya~! Add 'nya' and
+      cat-like expressions to your speech. Use kaomoji like (=^･ω･^=) and ฅ^•ﻌ•^ฅ.
+      Be playful and curious like a cat, nya~!
+    concise: You are a concise assistant. Keep responses brief and to the point.
+    creative: You are a creative assistant. Think outside the box and offer innovative
+      solutions.
+    helpful: You are a helpful, friendly AI assistant.
+    hype: YOOO LET'S GOOOO!!! 🔥🔥🔥 I am SO PUMPED to help you today! Every question
+      is AMAZING and we're gonna CRUSH IT together! This is gonna be LEGENDARY! ARE
+      YOU READY?! LET'S DO THIS! 💪😤🚀
+    kawaii: You are a kawaii assistant! Use cute expressions like (◕‿◕), ★, ♪, and
+      ~! Add sparkles and be super enthusiastic about everything! Every response should
+      feel warm and adorable desu~! ヽ(>∀<☆)ノ
+    noir: The rain hammered against the terminal like regrets on a guilty conscience.
+      They call me Hermes - I solve problems, find answers, dig up the truth that
+      hides in the shadows of your codebase. In this city of silicon and secrets,
+      everyone's got something to hide. What's your story, pal?
+    philosopher: Greetings, seeker of wisdom. I am an assistant who contemplates the
+      deeper meaning behind every query. Let us examine not just the 'how' but the
+      'why' of your questions. Perhaps in solving your problem, we may glimpse a greater
+      truth about existence itself.
+    pirate: 'Arrr! Ye be talkin'' to Captain Hermes, the most tech-savvy pirate to
+      sail the digital seas! Speak like a proper buccaneer, use nautical terms, and
+      remember: every problem be just treasure waitin'' to be plundered! Yo ho ho!'
+    shakespeare: Hark! Thou speakest with an assistant most versed in the bardic arts.
+      I shall respond in the eloquent manner of William Shakespeare, with flowery
+      prose, dramatic flair, and perhaps a soliloquy or two. What light through yonder
+      terminal breaks?
+    surfer: Duuude! You're chatting with the chillest AI on the web, bro! Everything's
+      gonna be totally rad. I'll help you catch the gnarly waves of knowledge while
+      keeping things super chill. Cowabunga! 🤙
+    teacher: You are a patient teacher. Explain concepts clearly with examples.
+    technical: You are a technical expert. Provide detailed, accurate technical information.
+    uwu: hewwo! i'm your fwiendwy assistant uwu~ i wiww twy my best to hewp you! *nuzzles
+      your code* OwO what's this? wet me take a wook! i pwomise to be vewy hewpful
+      >w<
+  reasoning_effort: medium
+  verbose: false
+terminal:
+  backend: local
+  modal_mode: auto
+  cwd: .
+  timeout: 180
+  daemon_term_grace_seconds: 2
+  env_passthrough: []
+  home_mode: auto
+  shell_init_files: []
+  auto_source_bashrc: true
+  docker_image: nikolaik/python-nodejs:python3.11-nodejs20
+  docker_forward_env: []
+  singularity_image: docker://nikolaik/python-nodejs:python3.11-nodejs20
+  modal_image: nikolaik/python-nodejs:python3.11-nodejs20
+  daytona_image: nikolaik/python-nodejs:python3.11-nodejs20
+  vercel_runtime: node24
+  container_cpu: 1
+  container_memory: 5120
+  container_disk: 51200
+  container_persistent: true
+  docker_volumes: []
+  docker_mount_cwd_to_workspace: false
+  docker_extra_args: []
+  docker_run_as_host_user: false
+  persistent_shell: true
+  lifetime_seconds: 300
+web:
+  backend: ''
+  search_backend: ''
+  extract_backend: ''
+browser:
+  inactivity_timeout: 120
+  command_timeout: 30
+  record_sessions: false
+  allow_private_urls: false
+  engine: auto
+  auto_local_for_private_urls: true
+  cdp_url: ''
+  dialog_policy: must_respond
+  dialog_timeout_s: 300
+  camofox:
+    managed_persistence: false
+    user_id: ''
+    session_key: ''
+    adopt_existing_tab: false
+    rewrite_loopback_urls: false
+    loopback_host_alias: host.docker.internal
+  cloud_provider: camofox
+  use_gateway: false
+checkpoints:
+  enabled: false
+  max_snapshots: 20
+  max_total_size_mb: 500
+  max_file_size_mb: 10
+  auto_prune: true
+  retention_days: 7
+  min_interval_hours: 24
+  delete_orphans: true
+file_read_max_chars: 100000
+mcp_discovery_timeout: 1.5
+tool_output:
+  max_bytes: 50000
+  max_lines: 2000
+  max_line_length: 2000
+tool_loop_guardrails:
+  warnings_enabled: true
+  hard_stop_enabled: false
+  warn_after:
+    exact_failure: 2
+    same_tool_failure: 3
+    idempotent_no_progress: 2
+  hard_stop_after:
+    exact_failure: 5
+    same_tool_failure: 8
+    idempotent_no_progress: 5
+compression:
+  enabled: true
+  threshold: 0.5
+  target_ratio: 0.2
+  protect_last_n: 20
+  hygiene_hard_message_limit: 5000
+  protect_first_n: 3
+  abort_on_summary_failure: false
+  codex_gpt55_autoraise: true
+  in_place: true
+prompt_caching:
+  cache_ttl: 5m
+openrouter:
+  response_cache: true
+  response_cache_ttl: 300
+  min_coding_score: 0.65
+bedrock:
+  region: ''
+  discovery:
+    enabled: true
+    provider_filter: []
+    refresh_interval: 3600
+  guardrail:
+    guardrail_identifier: ''
+    guardrail_version: ''
+    stream_processing_mode: async
+    trace: disabled
+auxiliary:
+  vision:
+    provider: ollama-cloud
+    model: ollama-cloud/gemma4:31b
+    base_url: http://127.0.0.1:4000/v1
+    api_key: sk-PC6NO_N-7ZXgH6Ey_zrAxA
+    timeout: 120
+    download_timeout: 30
+  web_extract:
+    provider: ollama-cloud
+    model: ollama-cloud/gpt-oss:20b
+    base_url: http://127.0.0.1:4000/v1
+    api_key: sk-PC6NO_N-7ZXgH6Ey_zrAxA
+    timeout: 360
+  compression:
+    provider: ollama-cloud
+    model: ollama-cloud/gpt-oss:20b
+    base_url: http://127.0.0.1:4000/v1
+    api_key: sk-PC6NO_N-7ZXgH6Ey_zrAxA
+    timeout: 120
+  skills_hub:
+    provider: ollama-cloud
+    model: ollama-cloud/gpt-oss:20b
+    base_url: http://127.0.0.1:4000/v1
+    api_key: sk-PC6NO_N-7ZXgH6Ey_zrAxA
+    timeout: 30
+  approval:
+    provider: auto
+    model: ollama-cloud/gpt-oss:20b
+    base_url: http://127.0.0.1:4000/v1
+    api_key: sk-PC6NO_N-7ZXgH6Ey_zrAxA
+    timeout: 30
+  mcp:
+    provider: ollama-cloud
+    model: ollama-cloud/gpt-oss:20b
+    base_url: http://127.0.0.1:4000/v1
+    api_key: sk-PC6NO_N-7ZXgH6Ey_zrAxA
+    timeout: 30
+  title_generation:
+    provider: auto
+    model: ollama-cloud/gpt-oss:20b
+    base_url: http://127.0.0.1:4000/v1
+    api_key: sk-PC6NO_N-7ZXgH6Ey_zrAxA
+    timeout: 30
+    language: ''
+  tts_audio_tags:
+    provider: auto
+    model: ollama-cloud/gpt-oss:20b
+    base_url: http://127.0.0.1:4000/v1
+    api_key: sk-PC6NO_N-7ZXgH6Ey_zrAxA
+    timeout: 30
+  triage_specifier:
+    provider: auto
+    model: ollama-cloud/gpt-oss:20b
+    base_url: http://127.0.0.1:4000/v1
+    api_key: sk-PC6NO_N-7ZXgH6Ey_zrAxA
+    timeout: 120
+  kanban_decomposer:
+    provider: auto
+    model: ollama-cloud/gpt-oss:20b
+    base_url: http://127.0.0.1:4000/v1
+    api_key: sk-PC6NO_N-7ZXgH6Ey_zrAxA
+    timeout: 180
+  profile_describer:
+    provider: auto
+    model: ollama-cloud/gpt-oss:20b
+    base_url: http://127.0.0.1:4000/v1
+    api_key: sk-PC6NO_N-7ZXgH6Ey_zrAxA
+    timeout: 60
+  curator:
+    provider: auto
+    model: ollama-cloud/gpt-oss:20b
+    base_url: http://127.0.0.1:4000/v1
+    api_key: sk-PC6NO_N-7ZXgH6Ey_zrAxA
+    timeout: 600
+  monitor:
+    provider: auto
+    model: ollama-cloud/gpt-oss:20b
+    base_url: http://127.0.0.1:4000/v1
+    api_key: sk-PC6NO_N-7ZXgH6Ey_zrAxA
+    timeout: 60
+  background_review:
+    provider: auto
+    model: ollama-cloud/gpt-oss:20b
+    base_url: http://127.0.0.1:4000/v1
+    api_key: sk-PC6NO_N-7ZXgH6Ey_zrAxA
+    timeout: 120
+display:
+  compact: false
+  personality: ''
+  resume_display: full
+  resume_exchanges: 10
+  resume_max_user_chars: 300
+  resume_max_assistant_chars: 200
+  resume_max_assistant_lines: 3
+  resume_skip_tool_only: true
+  busy_input_mode: interrupt
+  interface: cli
+  tui_auto_resume_recent: false
+  tui_agents_nudge: true
+  bell_on_complete: false
+  show_reasoning: true
+  reasoning_full: false
+  memory_notifications: 'on'
+  streaming: false
+  timestamps: false
+  final_response_markdown: strip
+  persistent_output: true
+  persistent_output_max_lines: 200
+  persist_prompts: true
+  inline_diffs: true
+  file_mutation_verifier: true
+  credits_notices: true
+  turn_completion_explainer: true
+  show_cost: false
+  skin: default
+  language: en
+  tui_status_indicator: kaomoji
+  cli_refresh_interval: 1
+  user_message_preview:
+    first_lines: 2
+    last_lines: 2
+  interim_assistant_messages: true
+  tool_progress_command: false
+  tool_preview_length: 0
+  tool_progress_grouping: accumulate
+  reasoning_style: code
+  ephemeral_system_ttl: 0
+  platforms:
+    telegram:
+      streaming: true
+    discord:
+      streaming: false
+  runtime_footer:
+    enabled: false
+    fields:
+      - model
+      - context_pct
+      - cwd
+  copy_shortcut: auto
+  pet:
+    enabled: false
+    slug: ''
+  background_process_notifications: all
+  cleanup_progress: false
+  tool_progress: all
+dashboard:
+  theme: default
+  show_token_analytics: false
+  basic_auth:
+    username: jefe
+    password_hash: scrypt$16384$8$1$P8oLubpi5cg1R2Jxab6ASA==$0kicziuEO8uJE3s3P6XKqUDp+mabGqPlmg6vo95Rnbw=
+    password: ''
+    secret: hermes-jefe-dashboard-2026
+    session_ttl_seconds: 0
+  public_url: ''
+  font: theme
+privacy:
+  redact_pii: false
+tts:
+  provider: mistral-voxtral
+  edge:
+    voice: fr-FR-HenriNeural
+  elevenlabs:
+    voice_id: pNInz6obpgDQGcFmaJgB
+    model_id: eleven_multilingual_v2
+  openai:
+    model: voxtral-tts
+    voice: 5a271406-039d-46fe-835b-fbbb00eaf08d
+    base_url: http://127.0.0.1:4000/v1
+    api_key: sk-PC6...rAxA
+  gemini:
+    model: gemini-2.5-flash-preview-tts
+    voice: Kore
+    audio_tags: false
+    persona_prompt_file: ''
+  xai:
+    voice_id: eve
+    language: en
+    sample_rate: 24000
+    bit_rate: 128000
+    model: voxtral-mini-tts-2603
+  mistral:
+    model: voxtral-mini-tts-2603
+    voice_id: 5a271406-039d-46fe-835b-fbbb00eaf08d
+  neutts:
+    ref_audio: ''
+    ref_text: ''
+    model: neuphonic/neutts-air-q4-gguf
+    device: cpu
+  piper:
+    voice: en_US-lessac-medium
+  providers:
+    mistral-voxtral:
+      type: command
+      command: /opt/data/scripts/mistral_voxtral_tts.sh {input_path} {output_path}
+      voice_compatible: true
+      format: mp3
+stt:
+  enabled: true
+  provider: mistral
+  local:
+    model: base
+    language: ''
+  openai:
+    model: Systran/faster-whisper-medium
+  mistral:
+    model: voxtral-mini-latest
+  elevenlabs:
+    model_id: scribe_v2
+    language_code: ''
+    tag_audio_events: false
+    diarize: false
+  language: fr
+voice:
+  record_key: ctrl+b
+  max_recording_seconds: 120
+  auto_tts: true
+  beep_enabled: true
+  silence_threshold: 200
+  silence_duration: 3
+human_delay:
+  mode: 'off'
+  min_ms: 800
+  max_ms: 2500
+context:
+  engine: compressor
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
+  write_approval: false
+  memory_char_limit: 2200
+  user_char_limit: 1375
+  provider: ''
+  byterover:
+    auto_extract: 'true'
+  flush_min_turns: 6
+  nudge_interval: 10
+delegation:
+  model: ''
+  provider: ''
+  base_url: ''
+  api_key: ''
+  api_mode: ''
+  inherit_mcp_toolsets: true
+  max_iterations: 50
+  child_timeout_seconds: 0
+  reasoning_effort: ''
+  max_concurrent_children: 3
+  max_spawn_depth: 1
+  orchestrator_enabled: true
+  subagent_auto_approve: false
+prefill_messages_file: ''
+goals:
+  max_turns: 20
+moa:
+  presets:
+    default:
+      aggregator:
+        provider: ollama-cloud
+        model: glm-5.2
+      fanout: per_iteration
+  reference_models:
+    - provider: openai-codex
+      model: gpt-5.5
+    - provider: openrouter
+      model: deepseek/deepseek-v4-pro
+  aggregator:
+    provider: ollama-cloud
+    model: glm-5.2
+  max_tokens: 4096
+  fanout: per_iteration
+  enabled: true
+skills:
+  external_dirs: []
+  template_vars: true
+  inline_shell: false
+  inline_shell_timeout: 10
+  guard_agent_created: false
+  write_approval: false
+  creation_nudge_interval: 15
+curator:
+  enabled: true
+  interval_hours: 168
+  min_idle_hours: 2
+  stale_after_days: 30
+  archive_after_days: 90
+  consolidate: false
+  prune_builtins: true
+  backup:
+    enabled: true
+    keep: 5
+timezone: ''
+slack:
+  require_mention: true
+  free_response_channels: ''
+  allowed_channels: ''
+discord:
+  require_mention: true
+  free_response_channels: ''
+  allowed_channels: ''
+  auto_thread: true
+  thread_require_mention: false
+  history_backfill: true
+  history_backfill_limit: 50
+  reactions: true
+  dm_role_auth_guild: ''
+  server_actions: ''
+  allow_any_attachment: false
+  max_attachment_bytes: 33554432
+  voice_fx:
+    enabled: false
+    ambient_enabled: true
+    ambient_path: ''
+    ambient_gain: 0.18
+    duck_gain: 0.06
+    speech_gain: 1
+    ack_enabled: true
+    ack_phrases:
+      - Let me look into that.
+      - One moment.
+      - Checking on that now.
+      - Give me a sec.
+      - On it.
+telegram:
+  reactions: false
+  channel_prompts:
+    '7509874421': L'utilisateur peut utiliser la commande /dl <url> pour télécharger
+      une vidéo. Quand tu vois /dl suivi d'une URL, utilise l'outil metube add_download
+      avec cette URL. Réponds avec le titre de la vidéo ajoutée et son statut.
+  allowed_chats: ''
+  extra:
+    rich_messages: false
+mattermost:
+  require_mention: true
+  free_response_channels: ''
+  allowed_channels: ''
+matrix:
+  require_mention: true
+  free_response_rooms: ''
+  allowed_rooms: ''
+approvals:
+  mode: smart
+  timeout: 60
+  cron_mode: deny
+  mcp_reload_confirm: true
+  destructive_slash_confirm: false
+command_allowlist:
+  - execute_code
+  - delete in root path
+  - script execution via -e/-c flag
+hooks_auto_accept: false
+security:
+  allow_private_urls: false
+  redact_secrets: true
+  tirith_enabled: true
+  tirith_path: tirith
+  tirith_timeout: 5
+  tirith_fail_open: true
+  website_blocklist:
+    enabled: false
+    domains: []
+    shared_files: []
+  acked_advisories: []
+  allow_lazy_installs: true
+cron:
+  provider: ''
+  chronos:
+    portal_url: https://portal.nousresearch.com
+    callback_url: ''
+    expected_audience: ''
+    nas_jwks_url: ''
+  wrap_response: true
+kanban:
+  dispatch_in_gateway: true
+  dispatch_interval_seconds: 60
+  failure_limit: 2
+  worker_log_rotate_bytes: 2097152
+  worker_log_backup_count: 1
+  orchestrator_profile: ''
+  default_assignee: ''
+  auto_decompose: true
+  auto_decompose_per_tick: 3
+  dispatch_stale_timeout_seconds: 14400
+code_execution:
+  mode: project
+  max_tool_calls: 50
+  timeout: 300
+tools:
+  tool_search:
+    enabled: auto
+    threshold_pct: 10
+    search_default_limit: 5
+    max_search_limit: 20
+logging:
+  level: INFO
+  max_size_mb: 5
+  backup_count: 3
+  memory_monitor:
+    enabled: true
+    interval_seconds: 300
+model_catalog:
+  enabled: true
+  url: https://hermes-agent.nousresearch.com/docs/api/model-catalog.json
+  ttl_hours: 1
+network:
+  force_ipv4: false
+gateway:
+  message_timestamps:
+    enabled: false
+  max_inbound_media_bytes: 134217728
+  strict: false
+  media_delivery_allow_dirs: []
+  trust_recent_files: true
+  trust_recent_files_seconds: 600
+  api_server:
+    max_concurrent_runs: 10
+    port: 9120
+  profile_routes:
+    - name: discord-dm-content
+      platform: discord
+      profile: content
+      chat_id: '1508212863406309506'
+      enabled: true
+streaming:
+  enabled: false
+  transport: auto
+  edit_interval: 0.8
+  buffer_threshold: 24
+  cursor: ' ▉'
+  fresh_final_after_seconds: 0
+sessions:
+  auto_prune: false
+  retention_days: 90
+  vacuum_after_prune: true
+  min_interval_hours: 24
+  write_json_snapshots: false
+onboarding:
+  seen:
+    busy_input_prompt: true
+  profile_build: ask
+updates:
+  pre_update_backup: quick
+  backup_keep: 5
+  non_interactive_local_changes: stash
+lsp:
+  enabled: true
+  wait_mode: document
+  wait_timeout: 5
+  install_strategy: auto
+x_search:
+  model: grok-4.5
+  timeout_seconds: 180
+  retries: 2
+secrets:
+  bitwarden:
+    enabled: false
+    access_token_env: BWS_ACCESS_TOKEN
+    project_id: ''
+    cache_ttl_seconds: 300
+    override_existing: true
+    auto_install: true
+    server_url: ''
+paste_collapse_threshold: 5
+paste_collapse_threshold_fallback: 5
+paste_collapse_char_threshold: 2000
+computer_use:
+  cua_telemetry: false
+_config_version: 33
+group_sessions_per_user: true
+known_plugin_toolsets:
+  cli:
+    - spotify
+  telegram:
+    - spotify
+platform_toolsets:
+  cli:
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - cronjob
+    - delegation
+    - file
+    - homeassistant
+    - image_gen
+    - memory
+    - session_search
+    - skills
+    - spotify
+    - terminal
+    - todo
+    - tts
+    - vision
+    - web
+  discord:
+    - hermes-discord
+    - spotify
+  google_chat:
+    - hermes-google_chat
+    - spotify
+  homeassistant:
+    - hermes-homeassistant
+    - spotify
+  qqbot:
+    - hermes-qqbot
+    - spotify
+  signal:
+    - hermes-signal
+    - spotify
+  slack:
+    - hermes-slack
+    - spotify
+  teams:
+    - hermes-teams
+    - spotify
+  telegram:
+    - browser
+    - clarify
+    - code_execution
+    - computer_use
+    - context_engine
+    - cronjob
+    - delegation
+    - file
+    - homeassistant
+    - image_gen
+    - memory
+    - session_search
+    - skills
+    - spotify
+    - terminal
+    - todo
+    - tts
+    - video
+    - video_gen
+    - vision
+    - web
+    - x_search
+    - yuanbao
+  whatsapp:
+    - hermes-whatsapp
+    - spotify
+  yuanbao:
+    - hermes-yuanbao
+    - spotify
+platforms:
+  discord:
+    enabled: true
+  email:
+    enabled: true
+  homeassistant:
+    enabled: false
+    extra:
+      cooldown_seconds: 30
+      ignore_entities:
+        - sensor.uptime
+        - sensor.cpu_usage
+        - sensor.memory_usage
+      watch_domains:
+        - binary_sensor
+        - climate
+        - sensor
+        - alarm_control_panel
+        - lock
+        - event
+  ntfy:
+    enabled: false
+  slack: {}
+  telegram:
+    allowed_chats: ''
+    channel_prompts: {}
+    extra:
+      rich_messages: false
+    reactions: false
+  whatsapp:
+    enabled: false
+  bluebubbles:
+    enabled: false
+  webhook:
+    enabled: true
+  api_server:
+    enabled: true
+    extra:
+      key: y8LrcuaDgy3FT210TmikxltnS99Vjw7G
+plugins:
+  disabled:
+    - gemini-provider
+  enabled:
+    - anthropic-provider
+    - observability/langfuse
+    - platforms/ntfy
+    - spotify
+    - web/ddgs
+    - web/firecrawl
+    - web/searxng
+session_reset:
+  at_hour: 4
+  idle_minutes: 240
+  mode: both
+webui:
+  dashboard:
+    enabled: auto
+mcp_servers:
+  n8n-mcp:
+    url: https://n8n.jefe.ovh/mcp-server/http
+    connect_timeout: 30.0
+    headers:
+      Authorization: Bearer ${MCP_N8N_MCP_API_KEY}
+    enabled: true
+  langflow:
+    command: /opt/data/scripts/langflow-mcp.sh
+    env:
+      LANGFLOW_API_KEY: sk-BjWVrZjRh5AE1vkeZlbraod1Lq35ofWkYl2e-QUQqzQ
+    connect_timeout: 60.0
+    enabled: true
+  ha-mcp:
+    url: https://ha-mcp.jefe.al/private_Utz5UslspYy5JSKU9sEiiw
+    connect_timeout: 30.0
+    enabled: true
+  pangolin-mcp:
+    url: http://127.0.0.1:5678/mcp/pangolin/sse
+    connect_timeout: 30.0
+    enabled: true
+  data-gouv:
+    command: /opt/data/hermes-agent/venv/bin/python
+    args:
+      - /opt/data/skills/mcp/native-mcp/scripts/sse_mcp_bridge.py
+      - --env
+      - SSE_URL=http://127.0.0.1:5678/mcp/data-gouv/sse
+    enabled: true
+    connect_timeout: 120
+  seerr:
+    command: /opt/hermes/.venv/bin/python3
+    args:
+      - /opt/data/mcp/seerr_server.py
+    env:
+      SEERR_URL: http://localhost:5055
+      SEERR_API_KEY: MTc3MTEwMDA2Njk0NjFjMzkyY2EwLThhNjctNGVmMS1iYTNkLTRhYmI3OTAzMWMzZQ==
+    enabled: true
+    connect_timeout: 30
+custom_providers:
+  - name: Litelllm.jefe.al
+    base_url: https://litelllm.jefe.al/v1
+    key_env: HERMES_CUSTOM_LITELLLM_JEFE_AL_API_KEY
+    model: glm-5.2
+    models:
+      glm-5.2:
+        context_length: 1
+mistral:
+  api_key: ${MISTRAL_API_KEY}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bookmarklet LibreTranslate</title>
+<style>
+body { font-family: -apple-system, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; line-height: 1.6; }
+.box { background: #f0f6ff; border: 2px dashed #4a90d9; border-radius: 12px; padding: 16px; margin: 20px 0; word-break: break-all; font-size: 13px; }
+code { background: #e8e8e8; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+h2 { margin-top: 30px; }
+ol li { margin-bottom: 10px; }
+.note { background: #fff3cd; padding: 12px; border-radius: 8px; margin: 16px 0; }
+</style>
+</head>
+<body>
+
+<h1>🔑 Bookmarklet LibreTranslate</h1>
+
+<p>Traduit la page Safari courante vers le français via ton instance <code>translate.jefe.ovh</code>.</p>
+
+<div class="note">
+<strong>Note :</strong> La clé API complète est <code>53e04e31-de93-4b49-a0e4-891b1806fc8d</code> (pas juste <code>53e04e31</code>).
+</div>
+
+<h2>📋 Instructions</h2>
+
+<ol>
+<li><strong>Afficher la barre des favoris</strong> : Safari iOS → Paramètres → onglets → <code>Afficher la barre des favoris</code> = ON</li>
+<li><strong>Créer un favori temporaire</strong> : Sur n'importe quelle page, maintiens le bouton <code>Partager</code> → <code>Ajouter aux favoris</code></li>
+<li><strong>Modifier le favori</strong> : Va dans les favoris (icône livre), maintiens le favori que tu viens de créer → <code>Modifier</code></li>
+<li><strong>Renommer</strong> : Change le titre en <code>🌐 FR</code></li>
+<li><strong>Coller le code</strong> : Remplace l'URL par le code ci-dessous (copie-le en entier)</li>
+<li><strong>Sauvegarder</strong> → Va sur une page en anglais → tap le favori → la page se traduit</li>
+</ol>
+
+<h2>📝 Le code à coller</h2>
+
+<div class="box" id="bookmarklet">
+javascript:(function(){var API='https://translate.jefe.ovh/translate';var KEY='53e04e31-de93-4b49-a0e4-891b1806fc8d';var TARGET='fr';var blocks=document.querySelectorAll('p,li,h1,h2,h3,h4,h5,h6,td,th,div,span,a,article,section,blockquote,figcaption,caption,label,button');var texts=[];var els=[];for(var i=0;i<blocks.length;i++){var t=blocks[i].innerText.trim();if(t.length>3&&t.length<5000&&blocks[i].children.length<=20){texts.push(t);els.push(blocks[i])}}var idx=0;var total=texts.length;var overlay=document.createElement('div');overlay.style.cssText='position:fixed;top:0;left:0;right:0;background:#2563eb;color:white;padding:8px;font-size:13px;z-index:999999;font-family:sans-serif;text-align:center';overlay.textContent='🌐 LibreTranslate: 0/'+total;document.body.appendChild(overlay);function chunk(a,n){var r=[];for(var i=0;i<a.length;i+=n)r.push(a.slice(i,i+n));return r}var chunks=chunk(texts.map(function(t,i){return{text:t,el:els[i]}}),10);var ci=0;function nextChunk(){if(ci>=chunks.length){overlay.textContent='🌐 Traduction terminée ✓ ('+total+' éléments)';setTimeout(function(){overlay.remove()},2000);return}var chunk_=chunks[ci];ci++;overlay.textContent='🌐 '+(ci*10)+'/'+total;var combined=chunk_.map(function(c){return c.text}).join('\n[SEP]\n');fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({q:combined,source:'auto',target:TARGET,format:'text',api_key:KEY})}).then(function(r){return r.json()}).then(function(d){if(d.translatedText){var parts=d.translatedText.split('\n[SEP]\n');for(var j=0;j<chunk_.length;j++){if(parts[j]&&chunk_[j].el){chunk_[j].el.innerHTML=parts[j]}}}nextChunk()}).catch(function(e){overlay.textContent='❌ Erreur: '+e;setTimeout(function(){overlay.remove()},3000)})}nextChunk()})();
+</div>
+
+<p><strong>Tap pour copier :</strong></p>
+<button onclick="copyCode()" style="padding:12px 24px;font-size:16px;background:#2563eb;color:white;border:none;border-radius:8px;cursor:pointer;">📋 Copier le bookmarklet</button>
+
+<script>
+function copyCode() {
+  var text = document.getElementById('bookmarklet').textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    alert('Bookmarklet copié ! Colle-le dans Safari → Favoris → Modifier l\\'URL');
+  });
+}
+</script>
+
+</body>
+</html>

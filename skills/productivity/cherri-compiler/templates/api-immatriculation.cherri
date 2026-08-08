@@ -1,0 +1,79 @@
+#include 'actions/web'
+
+#define name "Immatriculation"
+#define glyph car
+#define color blue
+
+action 'is.workflow.actions.getvalueforkey' dictGet(
+    variable input: 'WFInput',
+    text key: 'WFDictionaryKey'
+)
+
+// Demander la plaque
+@plaque = prompt("Plaque d'immatriculation :")
+
+// Construire l'URL avec query params
+// Remplacer TokenDemo2026B par un token valide (apiplaqueimmatriculation.com)
+@url = "https://api.apiplaqueimmatriculation.com/plaque?immatriculation={@plaque}&token=TokenDemo2026B&pays=FR"
+
+// Requete POST avec body et headers vides (params en query string)
+@response = jsonRequest(@url, 'POST', {}, {})
+
+// Extraire l'objet data
+@data = dictGet(@response, "data")
+
+// Extraire tous les champs necessaires
+@marque = dictGet(@data, "marque")
+@modele = dictGet(@data, "modele")
+@version = dictGet(@data, "version")
+@dateCir = dictGet(@data, "date1erCir_fr")
+@co2 = dictGet(@data, "co2")
+@energie = dictGet(@data, "energieNGC")
+@puisFisc = dictGet(@data, "puisFisc")
+@puisCH = dictGet(@data, "puisFiscReelCH")
+@puisKW = dictGet(@data, "puisFiscReelKW")
+@carrosserie = dictGet(@data, "carrosserie")
+@nbPortes = dictGet(@data, "nb_portes")
+@boite = dictGet(@data, "boite_vitesse")
+@couleur = dictGet(@data, "couleur")
+@poids = dictGet(@data, "poids")
+@passagers = dictGet(@data, "nr_passagers")
+@vin = dictGet(@data, "vin")
+@transmission = dictGet(@data, "type_transmission")
+@cylindres = dictGet(@data, "cylindres")
+@ccm = dictGet(@data, "ccm")
+@capacite = dictGet(@data, "capacite_litres")
+@collection = dictGet(@data, "collection")
+@genre = dictGet(@data, "genreVCGNGC")
+@sra = dictGet(@data, "sra_commercial")
+@codeMoteur = dictGet(@data, "code_moteur")
+
+// Formatter la fiche
+// NOTE: pas de condition if sur dictGet() — le compilo ne peut pas inferer le type
+// (voir pitfall #16 dans cherri-compiler SKILL.md)
+@fiche = "MARQUE : {@marque}
+MODELE : {@modele}
+VERSION : {@version}
+FINITION : {@sra}
+
+DATE 1ERE CIRC. : {@dateCir}
+ENERGIE : {@energie}
+PUISSANCE : {@puisCH} ({@puisKW}) - CV {@puisFisc}
+MOTEUR : {@cylindres} cyl. {@ccm} {@capacite}L
+CODE MOTEUR : {@codeMoteur}
+TRANSMISSION : {@transmission}
+BOITE : {@boite}
+
+CARROSSERIE : {@carrosserie}
+PORTES : {@nbPortes}
+PLACES : {@passagers}
+COULEUR : {@couleur}
+POIDS : {@poids}
+
+CO2 : {@co2} g/km
+GENRE : {@genre}
+COLLECTION : {@collection}
+
+VIN : {@vin}"
+
+show(@fiche)

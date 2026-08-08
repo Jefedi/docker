@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>DNSSettings</key>
+            <dict>
+                <key>DNSProtocol</key>
+                <string>HTTPS</string>
+                <key>ServerAddresses</key>
+                <array>
+                    <string>46.62.210.41</string>
+                    <string>45.90.28.0</string>
+                </array>
+                <key>ServerURL</key>
+                <string>https://dns.jefe.al/dns-query</string>
+            </dict>
+            <key>PayloadDescription</key>
+            <string>Configures device to use Technitium DNS over HTTPS via Pangolin</string>
+            <key>PayloadDisplayName</key>
+            <string>Technitium DNS (Jefe)</string>
+            <key>PayloadIdentifier</key>
+            <string>com.apple.dnsSettings.managed.al.jefe.technitium</string>
+            <key>PayloadType</key>
+            <string>com.apple.dnsSettings.managed</string>
+            <key>PayloadUUID</key>
+            <string>095AE5F2-A34C-5A91-9661-F102D0BF6F22</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+            <key>ProhibitDisablement</key>
+            <false/>
+        </dict>
+    </array>
+    <key>PayloadDescription</key>
+    <string>Technitium DNS over HTTPS - Jefe Homelab</string>
+    <key>PayloadDisplayName</key>
+    <string>Technitium DNS - Jefe</string>
+    <key>PayloadIdentifier</key>
+    <string>al.jefe.technitium-dns</string>
+    <key>PayloadRemovalDisallowed</key>
+    <false/>
+    <key>PayloadScope</key>
+    <string>System</string>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>2035BD92-4191-539D-B6B9-28112A9E44DB</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+</dict>
+</plist>

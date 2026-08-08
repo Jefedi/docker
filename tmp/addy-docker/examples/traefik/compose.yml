@@ -1,0 +1,83 @@
+name: addy
+
+services:
+  traefik:
+    image: traefik:v3.6
+    container_name: traefik
+    command:
+      - "--global.checkNewVersion=false"
+      - "--global.sendAnonymousUsage=false"
+      - "--log.level=INFO"
+      - "--entrypoints.http.address=:80"
+      - "--entrypoints.http.http.redirections.entrypoint.to=https"
+      - "--entrypoints.http.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.https.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.email=webmaster@example.com"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http"
+      - "--providers.docker=true"
+      - "--providers.docker.watch=true"
+      - "--providers.docker.exposedbydefault=false"
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+      - target: 443
+        published: 443
+        protocol: tcp
+    volumes:
+      - "./acme.json:/acme.json"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    restart: always
+
+  db:
+    image: mariadb:12
+    container_name: addy_db
+    command:
+      - "mariadbd"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    volumes:
+      - "./db:/var/lib/mysql"
+    environment:
+      - "MARIADB_RANDOM_ROOT_PASSWORD=yes"
+      - "MYSQL_DATABASE"
+      - "MYSQL_USER"
+      - "MYSQL_PASSWORD"
+    restart: always
+
+  redis:
+    image: redis:8-alpine
+    container_name: addy_redis
+    restart: always
+
+  addy:
+    image: anonaddy/anonaddy:latest
+    container_name: addy
+    depends_on:
+      - db
+      - redis
+    ports:
+      - target: 25
+        published: 25
+        protocol: tcp
+    volumes:
+      - "./data:/data"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.addy.entrypoints=https"
+      - "traefik.http.routers.addy.rule=Host(`addy.example.com`)"
+      - "traefik.http.routers.addy.tls=true"
+      - "traefik.http.routers.addy.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.addy.tls.domains[0].main=addy.example.com"
+      - "traefik.http.services.addy.loadbalancer.server.port=8000"
+    env_file:
+      - "./addy.env"
+    environment:
+      - "DB_HOST=db"
+      - "DB_DATABASE=${MYSQL_DATABASE}"
+      - "DB_USERNAME=${MYSQL_USER}"
+      - "DB_PASSWORD=${MYSQL_PASSWORD}"
+      - "REDIS_HOST=redis"
+    restart: always

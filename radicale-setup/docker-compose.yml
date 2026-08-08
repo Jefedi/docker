@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  radicale:
+    image: tomsquest/docker-radicale:latest
+    container_name: radicale
+    restart: unless-stopped
+    ports:
+      - "5232:5232"
+    volumes:
+      - ./data:/data
+      - ./config:/config:ro
+    environment:
+      - TZ=Europe/Paris
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5232"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

@@ -1,0 +1,337 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Contribution Guide
+
+> Set up your local development environment for contributing to Pangolin
+
+<div />
+
+This guide describes how to set up your local development environment for contributing to Pangolin. We recommend using Docker Compose for the most consistent development experience across different environments.
+
+## Prerequisites
+
+* Node 24
+* NPM 11 or similar
+* Go 1.25
+* Git
+* Docker & Docker Compose
+* Python (for NPM builds)
+* Make
+* G++
+
+<Info>
+  For managing multiple versions of Go, you may want to use [gvm](https://github.com/moovweb/gvm).
+  For managing multiple versions of NodeJS, you may want to use [nvm](https://github.com/nvm-sh/nvm).
+</Info>
+
+## Setup Your Repository
+
+Below is an example if you're working on the Pangolin repository.
+
+<Steps>
+  <Step title="Fork and clone">
+    [Fork](https://help.github.com/articles/fork-a-repo/) the repository(ies) to your own GitHub account and [clone](https://help.github.com/articles/cloning-a-repository/) to your local device:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    git clone https://github.com/YOUR_USERNAME/pangolin.git
+    cd pangolin/
+    ```
+  </Step>
+
+  <Step title="Add upstream remote">
+    Add the remote `upstream`:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    git remote add upstream https://github.com/fosrl/pangolin.git
+    ```
+  </Step>
+
+  <Step title="Create feature branch">
+    Create a new branch:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    git checkout -b BRANCH_NAME dev
+    ```
+
+    It is recommended to give your branch a meaningful name, relevant to the feature or fix you are working on.
+
+    **Good examples**:
+
+    * `docs-docker`
+    * `feature-new-system`
+    * `fix-title-cards`
+
+    **Bad examples**:
+
+    * `bug`
+    * `docs`
+    * `feature`
+    * `fix`
+    * `patch`
+  </Step>
+
+  <Step title="Open pull request">
+    If you open a pull request, open it against the `dev` branch of the original repository.
+  </Step>
+</Steps>
+
+## Important Best Practices for PRs
+
+* **Keep PRs small and single-purpose**: One feature, fix, or improvement per PR for easier review and testing.
+* **Prefer improvements over new features**: If you want to propose a net-new feature, contact us by email or on Discord first so we can confirm it fits the roadmap and help scope it.
+* **Frontend consistency**:
+  * Use existing styles, components, and patterns.
+  * Use Credenza for modals and Zod for form validation.
+  * Keep Tailwind classes minimal; prefer component defaults.
+  * Look for an existing example and mirror that pattern. Extract a small reusable component only when it clearly improves reuse.
+* **Stick to established patterns**: Avoid introducing new architectures or abstractions without discussing them with us first.
+* **Auth changes require extra care**:
+  * Pangolin is multi-tenant. Handle user controls at the org level (varies by control) or globally via the server admin panel as appropriate.
+  * Protect all API routes with the correct middleware and verify user permissions and access to referenced entities before performing actions.
+* **Database changes**:
+  * Keep SQLite and Postgres schemas fully in sync and backward compatible.
+  * Use datatypes supported by both databases.
+  * No need to write versioned migrations; maintainers will handle these during releases.
+* **Add visuals**: Include screenshots or short videos when applicable to speed up reviews.
+
+## Databases
+
+Pangolin supports two database types: SQLite and Postgres. You can switch between them with the provided scripts:
+
+Before running these, read local development setup below.
+
+```bash theme={"theme":"gruvbox-light-hard"}
+npm run set:sqlite
+# or
+npm run set:pg
+```
+
+After switching, regenerate and apply the schema using the matching scripts for that database. Keep both SQLite and Postgres schemas fully in sync and backward compatible.
+
+## Private Files and Directories
+
+Pangolin includes both AGPLv3 code and some proprietary code licensed under the Fossorial Commercial License. Proprietary files include a license header and often live in directories whose names start with `private`.
+
+You may edit proprietary files in your PR as long as your PR includes the required CLA.
+
+* Frontend: no proprietary code.
+* Backend: proprietary code exists, primarily under `server/private/`. Subdirectories mirror the structure under `server/`.
+
+To keep the AGPLv3 distribution fully compliant, be careful about imports:
+
+* AGPLv3 files must never import from the private directory. In TypeScript, the alias `#private/` points to proprietary code and should only be used inside other private files.
+* If you must expose proprietary behavior to AGPLv3 code, use a dynamic import pattern. Create a file that mirrors the proprietary file’s relative location between `server/private` and `server`, and ensure the exported APIs have exactly matching function signatures. Dynamic import aliases start with `#dynamic`.
+* At build time, depending on the build flag, `#dynamic` imports are resolved to the appropriate implementation (AGPLv3 or proprietary).
+
+Build flags control which distribution you are working on: `oss`, `enterprise`, or `saas`. Enterprise and SaaS include proprietary code; OSS must be 100% AGPLv3 compliant and excludes proprietary code. Use the existing npm scripts to switch:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+npm run set:oss
+# or npm run set:enterprise
+# or npm run set:saas
+```
+
+Switching distributions updates TypeScript path aliases so `#dynamic` resolves to the correct locations. The build flag is also used in code to conditionally enable or disable features per distribution.
+
+As a rule of thumb, write as much AGPLv3 code as possible. Place only core, distribution-specific functionality in the proprietary layer (Enterprise/SaaS).
+
+Database schemas are never proprietary; all distributions share the same schemas.
+
+If you have any questions about this setup, email us or reach out on Discord.
+
+## Pangolin Development Setup
+
+Choose your preferred development approach. We strongly recommend Docker Compose for the most consistent experience across all platforms.
+
+### Local Development
+
+<Steps>
+  <Step title="Install dependencies">
+    Install package dependencies:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    npm install
+    ```
+  </Step>
+
+  <Step title="Configure environment">
+    Ensure you have a `config/` directory at the root with a `config.yml` inside. Refer to the [Pangolin Configuration docs](/self-host/advanced/config-file) or the `config.example.yml` in the repo for a sample of what to include in that file.
+
+    <Warning>
+      You may need to tweak this to run in dev, such as setting the `dashboard_url` to `http://localhost:3002`.
+    </Warning>
+  </Step>
+
+  <Step title="Set your environment">
+    Choose to build from the oss/enterprise/saas codebase:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    npm run set:oss
+    # or npm run set:enterprise
+    # or npm run set:saas
+    ```
+
+    Then choose your database:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    npm run set:sqlite
+    # or npm run set:pg
+    ```
+  </Step>
+
+  <Step title="Generate database schema">
+    Generate the database schema and push it:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    npm run db:generate
+    npm run db:push
+    ```
+  </Step>
+
+  <Step title="Start development server">
+    Start the development server using Docker Compose:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    docker compose up --build
+    ```
+
+    Or, start the development server directly:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    npm run dev
+    ```
+  </Step>
+</Steps>
+
+## Exit Nodes
+
+When running Pangolin for the first time there will be no exit nodes. This means that there have been no Gerbil "exit nodes" registered in the database, and therefore, you cannot create Newt sites. When Gerbil first starts up and requests its config from Pangolin for the first time it gets registered as an exit node.
+
+The easiest way to resolve this is to run Gerbil and have it register in your dev environment. Download the Gerbil binary and run it with localhost:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+./gerbil \
+--reachableAt=http://localhost:3004 \
+--generateAndSaveKeyTo=/var/config/key \
+--remoteConfig=http://localhost:3001/api/v1/
+```
+
+Or enter in a dummy exit-node manually to the database:
+
+```
+INSERT INTO "exitNodes" (
+    "name", 
+    "address", 
+    "endpoint", 
+    "publicKey", 
+    "listenPort", 
+    "reachableAt", 
+    "type"
+) 
+VALUES (
+    'exit-node-1', 
+    '10.0.0.1/24', 
+    'gerbil.pangolin.net', 
+    'abc123', 
+    1234, 
+    'gerbil.pangolin.net', 
+    'gerbil'
+);
+```
+
+## Windows Development Considerations
+
+<Warning>
+  Windows users with Docker Desktop + WSL2: File change detection may not work properly when project files are stored on the Windows filesystem.
+</Warning>
+
+<Tabs>
+  <Tab title="WSL2 Filesystem (Recommended)">
+    **Best performance and compatibility**
+
+    * **Where to store your project files:**
+      * For best performance, always store your project inside the Linux filesystem of your Docker or Default WSL2 instance, e.g. `/home/<user>/pangolin`.
+      * If other WSL instances are used, ensure the Docker Desktop WSL integration is enabled for that distribution.
+      * For further information, see Link Section below.
+
+    * **Accessing WSL2 files from Windows:**
+      * You can access your WSL2 home directory from Windows using the UNC path: `\\wsl$\<DistroName>\home\<user>\pangolin` (replace `<DistroName>` with your actual WSL distribution, e.g. `Ubuntu-22.04`).
+      * This path works in Windows Explorer, VS Code, and other Windows applications. You can drag & drop files, create shortcuts, or map a network drive for convenience.
+      * **Note:** This UNC path is for Windows tools only. Do not use it for Docker container mounts.
+
+    * **How to mount WSL2 files in Docker containers:**
+      * Always use the absolute Linux path from inside WSL2 for Docker volumes. This is the only method fully supported and recommended by Docker.
+      * **Correct Docker Compose example:**
+        ```yaml theme={"theme":"gruvbox-light-hard"}
+        services:
+          app:
+            volumes:
+              - /home/<user>/pangolin:/app
+        ```
+      * **Correct docker run example:**
+        ```bash theme={"theme":"gruvbox-light-hard"}
+        docker run -v /home/<user>/pangolin:/app my-image
+        ```
+      * **Never use `\\wsl$` or Windows paths** (e.g. `/mnt/c/...`) for Docker volumes when running with the WSL2 backend. This is not supported and can lead to poor performance or errors.
+      * File watchers and hot reload works natively when your project is inside the WSL2 filesystem and mounted using the Linux path.
+
+    <Note> You may want to use the [VS Code Remote - WSL extension](https://code.visualstudio.com/docs/remote/wsl) or [VS Code Remote - SSH Extension](https://code.visualstudio.com/docs/remote/ssh) to open your project folder directly in VSCode from the WSL/Remote Filesystem for seamless Development. </Note>
+
+    **Reference Links**
+
+    * [WSL Docker Best Practices](https://docs.docker.com/desktop/features/wsl/best-practices/)
+    * [Use WSL for Development](https://docs.docker.com/desktop/features/wsl/use-wsl/)
+    * [WSL2 Setup](https://docs.docker.com/desktop/features/wsl/)
+  </Tab>
+
+  <Tab title="Windows Filesystem + Polling (Workaround)">
+    If you need to keep your files on the native Windows filesystem (`C:\Users\...`), enable **Polling Mode** for file watchers.
+
+    Enable polling mode by adding the following environment variables to your `docker-compose.yml` or `.env` file:
+
+    For `.env`:
+
+    ```env theme={"theme":"gruvbox-light-hard"}
+      WATCHPACK_POLLING=true
+      CHOKIDAR_USEPOLLING=true
+    ```
+
+    For `docker-compose.yml`:
+
+    ```yaml theme={"theme":"gruvbox-light-hard"}
+    environment:
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+    ```
+
+    <Note>This increases CPU usage but ensures file watchers work properly. Polling mode is not required when working directly on the WSL filesystem.</Note>
+  </Tab>
+</Tabs>
+
+## Component Development
+
+### Gerbil
+
+* Go 1.25
+
+```bash theme={"theme":"gruvbox-light-hard"}
+make local
+```
+
+### Newt
+
+* Go 1.25
+
+```bash theme={"theme":"gruvbox-light-hard"}
+make local
+```
+
+### Olm
+
+* Go 1.25
+
+```bash theme={"theme":"gruvbox-light-hard"}
+make local
+```

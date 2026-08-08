@@ -1,0 +1,25 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Session Length
+
+> Configure maximum session length and expiration policies for your organization
+
+<div />
+
+By default, Pangolin keeps extending a session indefinitely if a user is actively using it. If a user is not actively using the session, it will expire after 30 days.
+
+However, you can require users to log in at regular intervals by enforcing maximum session lengths on a per‑organization basis.
+
+### Configuration
+
+<Note>
+  Session length enforcement is an [Enterprise Edition](/self-host/enterprise-edition)-only feature.
+</Note>
+
+To enable session length enforcement, go to Organization Settings and set a maximum session length in the Security section. After this amount of time, users will be prompted to log back in to acquire a fresh session.
+
+* Session length enforcement is configured per organization.
+* Session length enforcement applies to both internal Pangolin users and users linked to external identity providers.
+* Users whose session has expired will see a prompt directing them to log in again before proceeding.

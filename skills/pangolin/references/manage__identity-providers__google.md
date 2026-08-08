@@ -1,0 +1,71 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Google
+
+> Configure Google Single Sign-On
+
+<div />
+
+<Note>
+  Google SSO is only available on [Pangolin Cloud](https://app.pangolin.net/auth/signup) and [Enterprise Edition](/self-host/enterprise-edition) deployments. In [Enterprise Edition](/self-host/enterprise-edition), you must set `app.identity_provider_mode: "org"` in your [private config file](/self-host/advanced/private-config-file#param-use-org-only-idp) `privateConfig.yml`.
+</Note>
+
+The following steps will integrate Google SSO using the built in Google identity provider in Pangolin.
+
+<Accordion title="How to create and set up a Google Project from scratch">
+  [Create a new Project](https://console.cloud.google.com/projectcreate), or use an [existing Project](https://console.developers.google.com/) you've already created in the Google Developers Console. Setting the organization isn't required, unless you intend to use SSO for [more than 100 users](https://support.google.com/cloud/answer/13464323) externally (not via Google Workspace).
+
+  Once created, or you've opened an existing Project, you may be on the project dashboard, where you will need to open the sidebar. If you are on the welcome page, continue by selecting [OAuth consent screen](https://console.cloud.google.com/auth/overview) in "APIs and services".
+
+  You should see that Google Auth Platform is not configured. Press "Get started" and fill in the relevant information, such as your "App name" and "User support email". These will be visible when the user is authenticating.
+
+  After continuing, you can select an "Audience". If you are using Pangolin for friends and family, use the "External" Audience. You can only have 100 users authenticated with a "Testing" status.
+
+  <Note>
+    Depending on your use case, you may want to use the "Internal" Audience if you are utilising Google Workspace SSO.
+  </Note>
+
+  Once completed, you will then need to open the [Branding](https://console.cloud.google.com/auth/branding) tab.
+
+  Locate "Authorized domains", then press "Add domain" to add an authorized domain. You'll need to authorize the top private (root) domain here, such as `example.com`. Your SSO *may* function without an authorized domain, though setting this field should guarantee functionality.
+
+  ### Creating an OAuth client ID in your Project
+
+  Go to the [Clients](https://console.cloud.google.com/auth/clients) tab, and click "Create client" below the top bar.
+
+  For "Application type", select `Web application`. Any "Name" can be set. Leave "Authorised JavaScript origins" and "Authorised redirect URIs" empty.
+
+  <Note>
+    We will revisit the "Authorised redirect URIs" field later, as we do not have Pangolin set up for Google yet.
+  </Note>
+
+  After hitting "Create", you will be able to see the "Client ID" and "Client secret", you may want to copy these somewhere as these will be needed momentarily, though they will still be accessible in the future.
+</Accordion>
+
+## Creating a Google IdP in Pangolin
+
+In Pangolin, go to "Identity Providers" and click "Add Identity Provider". Select the Google provider option.
+
+<Frame>
+  <img src="https://mintcdn.com/fossorial/46uJdNaFUIDsUEAs/images/create-google-idp.png?fit=max&auto=format&n=46uJdNaFUIDsUEAs&q=85&s=182addb05d1e71f3b069269d446a83bd" alt="Google identity provider setup in the Pangolin dashboard" width="3134" height="2172" data-path="images/create-google-idp.png" />
+</Frame>
+
+In the "Google Configuration", you'll need the following fields:
+
+<ResponseField name="Client ID" type="string" required>
+  The Client ID from your Web application client.
+</ResponseField>
+
+<ResponseField name="Client Secret" type="string" required>
+  The Client secret from your Web application client.
+</ResponseField>
+
+## Token Configuration
+
+When you're done, click "Create Identity Provider". Then, copy the Redirect URL in the "General" tab as you will now need this for your **Web application client**.
+
+## Returning to Google Developers Console
+
+Lastly, you'll need to return to your "Web application client" in order to add the redirect URI created by Pangolin. Add the URI to "Authorized redirect URIs", then hit "Save"! Your configuration should now be complete. You'll now need to add an external user to Pangolin, or if you have "Auto Provision Users" enabled, you can now log in using Google SSO.

@@ -1,0 +1,33 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Multi-site Routing and High Availability
+
+> Use multiple sites on a private resource for resilient routing and failover
+
+<div />
+
+When you configure a private resource, you can attach more than one site. Pangolin then chooses how to reach the resource’s destination through those sites, similar in spirit to running multiple connectors into the same network: traffic is steered toward whichever path is most suitable at the time.
+
+### How Routing Works
+
+Pangolin evaluates the sites you selected and routes client traffic through the site that is most ideal from the client’s perspective. That decision weighs factors such as latency and whether the site is reachable. If a site becomes unavailable, clients begin using the next best online site without you having to reconfigure the resource.
+
+<Note>
+  Failover may take a few seconds. The site must be registered as offline, routing changes propagated to clients, and only then can failover take effect, so a short gap while that happens is expected.
+</Note>
+
+You are not limited to two sites. You can select as many sites as you need on a single private resource, as long as every selected site can actually reach the resource’s destination on the network.
+
+### Example: Redundant Office Connectors
+
+Suppose your office LAN is reachable from two servers, and you install a Pangolin site connector on each. Both sites act as connectors into the same office network, so either site can route to the same internal hosts.
+
+You create one private resource for an internal service and select both sites. While both connectors are healthy, Pangolin sends traffic through the better path. If one server or connector goes down, clients keep access to the private resource because traffic fails over to the other online site.
+
+### Requirements and Pitfalls
+
+Every site you attach must have routable access to the resource destination (same logical network, correct routes, DNS or IP resolution from that site’s perspective, and so on). The product assumes that any site in the list is a valid path to the same destination.
+
+If you mix sites that live on entirely different networks and one or more of them cannot reach the destination, behavior becomes unpredictable and the resource may not work reliably. Before adding a site, confirm from that site’s network that it can reach the configured destination the same way you expect the primary site to.

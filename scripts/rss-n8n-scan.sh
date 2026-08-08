@@ -1,0 +1,1 @@
+/opt/data/skills/research/rss-veille-filter/scripts/rss-n8n-scan.sh

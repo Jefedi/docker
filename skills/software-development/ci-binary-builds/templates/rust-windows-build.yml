@@ -1,0 +1,57 @@
+name: Build Windows
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      
+      - name: Build release
+        run: cargo build --release
+      
+      - name: Run tests
+        run: cargo test --release
+        continue-on-error: true
+      
+      - name: Package
+        shell: pwsh
+        run: |
+          $exe = "target/release/<BINARY_NAME>.exe"
+          if (Test-Path $exe) {
+            New-Item -ItemType Directory -Force -Path dist
+            Copy-Item $exe dist/
+            # Copy web assets if present
+            Copy-Item web/index.html dist/ -ErrorAction SilentlyContinue
+            Compress-Archive -Path dist/* -DestinationPath <BINARY_NAME>-windows-x64.zip -Force
+          } else {
+            Write-Error "Build output not found at $exe"
+            exit 1
+          }
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: <BINARY_NAME>-windows-x64
+          path: <BINARY_NAME>-windows-x64.zip
+          retention-days: 30

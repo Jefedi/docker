@@ -1,0 +1,25 @@
+{
+  "workflowId": "JAWwQaCUx1mN0IA7",
+  "triggerNodeName": "Every 2 Hours",
+  "pinData": {
+    "Every 2 Hours": [{"json":{}}],
+    "RSS Hacker News": [
+      {"json":{"title":"Our position on open-weights models","link":"https://www.anthropic.com/news/position-open-weights-models","contentSnippet":"Anthropic shares position","pubDate":"Mon, 28 Jul 2026 03:03:49 GMT","isoDate":"2026-07-28T03:03:49Z"}},
+      {"json":{"title":"A $500 RL fine-tune beat frontier models","link":"https://fermisense.com/","contentSnippet":"FermiSense fine-tuned 9B model","pubDate":"Tue, 28 Jul 2026 02:18:53 GMT","isoDate":"2026-07-28T02:18:53Z"}}
+    ],
+    "RSS Korben": [
+      {"json":{"title":"Steam Deck taser","link":"https://korben.info/steam-deck-taser.html","content":"Un taser sur Steam Deck","contentSnippet":"Un taser sur Steam Deck","pubDate":"Mon, 27 Jul 2026 19:20:02 +0200","isoDate":"2026-07-27T17:20:02Z"}}
+    ],
+    "RSS LoKan": [
+      {"json":{"title":"FSD Tesla bloque en France","link":"https://lokan.fr/2026/07/23/france-bloque-fsd-tesla/","content":"Philippe Tabarot refuse le FSD","contentSnippet":"Philippe Tabarot refuse le FSD","pubDate":"Thu, 23 Jul 2026 17:18:06 GMT","isoDate":"2026-07-23T17:18:06Z"}}
+    ],
+    "Translate HN": [
+      {"json":{"translatedText":"Notre position sur les modeles a poids ouverts"}},
+      {"json":{"translatedText":"Un fine-tuning RL de 500$ bat les modeles de pointe"}}
+    ],
+    "Hermes Curation": [
+      {"json":{"id":"resp_test","output":[{"type":"message","content":[{"type":"output_text","text":"{\"articles\":[{\"title\":\"Notre position sur les modeles a poids ouverts\",\"link\":\"https://www.anthropic.com/news/position-open-weights-models\",\"content\":\"Anthropic\",\"source\":\"hackernews\",\"date\":\"2026-07-28T03:03:49Z\"},{\"title\":\"Steam Deck taser\",\"link\":\"https://korben.info/steam-deck-taser.html\",\"content\":\"Un taser sur Steam Deck\",\"source\":\"korben\",\"date\":\"2026-07-27T17:20:02Z\"},{\"title\":\"FSD Tesla bloque en France\",\"link\":\"https://lokan.fr/2026/07/23/france-bloque-fsd-tesla/\",\"content\":\"FSD Tesla refuse\",\"source\":\"lokan\",\"date\":\"2026-07-23T17:18:06Z\"}]}"}]}],"usage":{"input_tokens":500,"output_tokens":200}}}
+    ],
+    "RSS Webhook": [{"json":{"headers":{},"body":{},"query":{}}}]
+  }
+}

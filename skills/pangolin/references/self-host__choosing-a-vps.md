@@ -1,0 +1,86 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Choosing a VPS
+
+> Compare hosting options and find the best VPS for your Pangolin deployment
+
+<div />
+
+Pangolin generally requires minimal resources to run effectively. A basic VPS with **1 vCPU, 2GB RAM, and 8GB SSD** is sufficient for most deployments.
+
+<Note>
+  If you choose a VPS with only 1GB RAM, you may need to create swap space to avoid memory pressure during installation, updates, or periods of higher traffic.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Recommended Specs">
+    * **CPU**: 2 vCPU
+    * **RAM**: 2GB
+    * **Storage**: 20GB SSD
+  </Card>
+
+  <Card title="More Users or Sites">
+    * **CPU**: 4 vCPU
+    * **RAM**: 4GB
+    * **Storage**: 40GB SSD
+  </Card>
+
+  <Card title="Large Deployment">
+    * **CPU**: 8 vCPU
+    * **RAM**: 8GB
+    * **Storage**: 80GB SSD
+  </Card>
+</CardGroup>
+
+## Provider Options
+
+Most general-purpose VPS providers will work well for Pangolin. Look for a provider with reliable uptime, a data center near your users, clear bandwidth limits, snapshots or backups, and the ability to open inbound TCP ports 80 and 443 plus the WireGuard UDP ports configured during installation.
+
+<Info>
+  If you prefer a guided deployment, Pangolin is also available on the <a href="https://marketplace.digitalocean.com/apps/pangolin-ce-1?refcode=edf0480eeb81">DigitalOcean Marketplace</a>. The marketplace image can create a droplet with Pangolin pre-installed and firewall rules configured.
+</Info>
+
+<AccordionGroup>
+  <Accordion title="Performance Requirements">
+    **Resource usage depends on several key factors:**
+
+    **Primary factors:**
+
+    * **Number of connected sites**: More sites = higher CPU and memory usage
+    * **Data throughput**: Amount of traffic transiting through the server
+
+    **Secondary factors:**
+
+    * **Dashboard UI usage**: Active admin sessions and configuration changes
+    * **Database activity**: User management, logging, and analytics queries
+  </Accordion>
+
+  <Accordion title="Geographic Location">
+    **Choose a data center close to your users:**
+
+    * **North America examples**: DigitalOcean, Vultr, Linode, RackNerd
+    * **Europe examples**: Hetzner, OVHcloud, UpCloud
+    * **Asia Pacific examples**: Vultr, Linode, DigitalOcean
+    * **Global examples**: AWS, Google Cloud, Azure
+  </Accordion>
+
+  <Accordion title="Support and Reliability">
+    **Consider these factors:**
+
+    * **Uptime guarantees**: Most providers offer 99.9%+
+    * **Support quality**: 24/7 support vs. community forums
+    * **Backup options**: Automated backups vs. manual
+    * **Monitoring**: Built-in monitoring tools
+  </Accordion>
+
+  <Accordion title="Cost Considerations">
+    **Hidden costs to watch for:**
+
+    * **Bandwidth overages**: Most plans include 1-2TB/month
+    * **Backup storage**: Additional charges for automated backups
+    * **IPv4 addresses**: Some providers charge extra
+    * **Support tiers**: Premium support may cost extra
+  </Accordion>
+</AccordionGroup>

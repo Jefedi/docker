@@ -1,0 +1,103 @@
+{
+  "views": [
+    {
+      "type": "sections",
+      "title": "Accueil",
+      "path": "accueil",
+      "icon": "mdi:home",
+      "max_columns": 4,
+      "badges": [
+        { "type": "entity", "entity": "sensor.jefe_place", "name": "Zef", "icon": "mdi:account", "color": "blue",
+          "show_name": true, "show_state": true, "tap_action": {"action": "more-info", "entity": "person.jefe"} },
+        { "type": "entity", "entity": "sensor.alex_place", "name": "Alex", "icon": "mdi:account", "color": "green",
+          "show_name": true, "show_state": true, "tap_action": {"action": "more-info", "entity": "person.alex"} },
+        { "type": "entity", "entity": "binary_sensor.capteur_de_journee_de_travail", "name": "Travail",
+          "icon": "mdi:briefcase", "color": "amber", "show_name": true, "show_state": true }
+      ],
+      "header": {
+        "card": { "type": "markdown", "content": "# Bienvenue a la Maison", "text_only": true }
+      },
+      "sections": [
+        {
+          "type": "grid",
+          "cards": [
+            {"type": "custom:clock-weather-card", "entity": "weather.le_havre",
+             "weather_icon_type": "line", "animated_icon": true, "forecast_rows": 5, "locale": "fr"},
+            {"type": "custom:marees-france-card", "device_id": "", "show_header": true, "card_type": "full"}
+          ]
+        },
+        {
+          "type": "grid",
+          "cards": [
+            {"type": "heading", "heading": "Musique", "icon": "mdi:music"},
+            {"type": "tile", "entity": "media_player.spotify_jefe", "name": "Spotify", "icon": "mdi:spotify", "color": "green"}
+          ]
+        },
+        {
+          "type": "grid",
+          "column_span": 4,
+          "cards": [
+            {"type": "heading", "heading": "Etat de la maison", "icon": "mdi:lightning-bolt"},
+            {"type": "tile", "entity": "vacuum.petit_filou", "name": "Aspirateur", "icon": "mdi:robot-vacuum", "color": "blue", "show_entity_picture": true},
+            {"type": "tile", "entity": "light.tapo_l530", "name": "Lumiere", "icon": "mdi:lightbulb", "color": "yellow"},
+            {"type": "tile", "entity": "light.wled", "name": "WLED", "icon": "mdi:led-strip", "color": "amber"},
+            {"type": "tile", "entity": "switch.freebox_wifi", "name": "Freebox Wi-Fi", "icon": "mdi:wifi", "color": "blue"}
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sections",
+      "title": "Controle",
+      "path": "controle",
+      "icon": "mdi:tune-vertical",
+      "max_columns": 4,
+      "sections": [
+        {
+          "type": "grid",
+          "column_span": 4,
+          "cards": [
+            {"type": "heading", "heading": "Reseau", "icon": "mdi:shield-account"},
+            {"type": "tile", "entity": "switch.jefe_bloquer_instagram", "name": "Instagram", "icon": "mdi:instagram", "color": "red"},
+            {"type": "tile", "entity": "switch.jefe_bloquer_youtube", "name": "YouTube", "icon": "mdi:youtube", "color": "red"}
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sections",
+      "title": "Serveurs",
+      "path": "serveurs",
+      "icon": "mdi:server",
+      "max_columns": 4,
+      "sections": [
+        {
+          "type": "grid",
+          "column_span": 4,
+          "cards": [
+            {"type": "heading", "heading": "Etat des machines", "icon": "mdi:monitor-dashboard"},
+            {"type": "tile", "entity": "binary_sensor.jlaptop_status_2", "name": "jLaptop", "icon": "mdi:laptop", "color": "blue"},
+            {"type": "tile", "entity": "binary_sensor.hermes_agent_status", "name": "Hermes", "icon": "mdi:robot", "color": "cyan"}
+          ]
+        }
+      ]
+    },
+    {
+      "type": "sections",
+      "title": "Courses",
+      "path": "courses",
+      "icon": "mdi:cart",
+      "max_columns": 4,
+      "sections": [
+        {
+          "type": "grid",
+          "column_span": 4,
+          "cards": [
+            {"type": "heading", "heading": "Liste d'achats", "icon": "mdi:clipboard-list"},
+            {"type": "todo-list", "entity": "todo.liste_dachats", "title": "Liste d'achats"}
+          ]
+        }
+      ]
+    }
+  ]
+}

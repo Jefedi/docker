@@ -1,0 +1,17 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Security Keys
+
+> Use security keys for passwordless login to your Pangolin account
+
+<div />
+
+You can log in with security keys, also known as passwordless login. On the login page, there is an option below the login button to Log in with security key.
+
+### Add a Security Key
+
+To add a security key, you must first be logged in. Then click your profile menu (top right) and select Add Security Keys. Follow the steps to add your key.
+
+Once a security key is added to your account, you can select the Continue with security key option the next time you log in.

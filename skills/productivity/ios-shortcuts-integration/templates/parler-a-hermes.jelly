@@ -1,0 +1,19 @@
+import Shortcuts
+#Color: blue, #Icon: shortcuts
+
+// Raccourci "Parler à Hermes" — questionne l'API server Hermes
+// Template : remplacer HERMES_API_URL et API_KEY par vos valeurs
+// Usage : copier-coller dans Jellycuts (gratuit) → Build & Export
+// Après export : activer la feuuille de partage dans Shortcuts pour usage depuis Safari/Partager
+
+var question = ShortcutInput.as(Text)
+
+dictionary(json: "{\"input\": \"${question}\"}") >> body
+
+downloadURL(url: "HERMES_API_URL/v1/responses", method: POST, headers: {"Authorization": "Bearer API_KEY", "Content-Type": "application/json"}, requestType: Json, requestJSON: body, requestVar: response) >> response
+
+valueFor(key: "output", dictionary: response) >> output
+
+valueFor(key: "text", dictionary: output) >> text
+
+showResult(text: "${text}")

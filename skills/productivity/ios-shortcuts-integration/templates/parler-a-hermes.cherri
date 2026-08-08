@@ -1,0 +1,35 @@
+#include 'actions/web'
+
+/* Parler a Hermes — raccourci iOS signé
+ * Compile avec: cherri parler_hermes.cherri (dans conteneur Docker cherri-builder)
+ * Endpoint API: https://hermes.jefe.al/api/v1/responses (via Pangolin)
+ * Clé API: API_SERVER_KEY du .env (pas config.yaml)
+ *
+ * IMPORTANT (confirmé juillet 2026):
+ * - Utiliser dictGet() (action definition avec type variable) pour extraire les clés
+ * - NE PAS utiliser @dict['key'] (compile en setvariable, pas getvalueforkey)
+ * - NE PAS utiliser getValue() avec une variable (erreur de compilation type dictionary)
+ * - NE PAS utiliser getDictionary() entre les étapes (corrompt les données, retourne vide)
+ * - show("{@text}") fonctionne avec des espaces — le problème était l'extraction, pas l'affichage
+ */
+
+#define name "Parler a Hermes"
+#define glyph shortcuts
+#define color blue
+
+action 'is.workflow.actions.getvalueforkey' dictGet(
+    variable input: 'WFInput',
+    text key: 'WFDictionaryKey'
+)
+
+@question = prompt("Pose ta question a Hermes :")
+
+@response = jsonRequest("https://hermes.jefe.al/api/v1/responses", 'POST', {"input": "{@question}"}, {"Authorization": "Bearer REMPLACER_PAR_API_SERVER_KEY", "Content-Type": "application/json"})
+
+@output = dictGet(@response, "output")
+@first = getFirstItem(@output)
+@content = dictGet(@first, "content")
+@firstContent = getFirstItem(@content)
+@text = dictGet(@firstContent, "text")
+
+show("{@text}")

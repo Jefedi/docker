@@ -1,0 +1,90 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Geo-blocking
+
+> Configure geo-blocking to restrict access based on geographic location
+
+<div />
+
+<Note>
+  Geo-blocking is available in Pangolin Community Edition. It depends on Pangolin's geo-location database, which is also used by other location-aware features such as analytics. Follow [Enable Geo-location](/self-host/advanced/enable-geolocation) before creating country or region rules.
+</Note>
+
+## Benefits of Geo-blocking
+
+Geo-blocking provides several important security and compliance advantages:
+
+### Security Benefits
+
+* **Reduce Attack Surface**: Block access from regions with high levels of malicious activity or where you don't expect legitimate users
+* **Prevent Unauthorized Access**: Limit exposure to threat actors operating from specific geographic locations
+* **Compliance Requirements**: Meet regulatory requirements that restrict data access based on geographic location
+* **Resource Protection**: Prevent unnecessary load on your services from regions where you don't operate
+
+## Implementing Geo-blocking with Bypass Rules
+
+Geo-blocking in Pangolin is implemented using [bypass rules](/manage/access-control/rules) with country-based matching. You can create rules that either allow or deny access based on the visitor's country. To apply the same geo-blocking rules to multiple public resources, define them in a [resource policy](/manage/resources/public/resource-policies) and attach that policy to each resource.
+
+<Frame caption="Screenshot of resources rules from the Pangolin Dashboard.">
+  <img src="https://mintcdn.com/fossorial/Q8zHyI8PHlGty9PM/images/country_rules.png?fit=max&auto=format&n=Q8zHyI8PHlGty9PM&q=85&s=bf402f45fd986ccf154fd9d0ab299bef" alt="Pangolin Dashboard" width="1746" height="590" data-path="images/country_rules.png" />
+</Frame>
+
+### Setting Up Geo-blocking Rules
+
+1. Navigate to your target resource and select the **Rules** tab
+2. Create a new rule and select **Country** as the match type
+3. Choose your rule action:
+   * **Allow**: Bypass authentication for users from specific countries
+   * **Deny**: Block all access from specific countries
+   * **Pass to Auth**: Let users from specific countries proceed to authentication
+
+### Common Geo-blocking Patterns
+
+#### Allow Only Specific Countries
+
+Create a "Deny" rule that blocks all countries except those you want to allow:
+
+1. Create a **Deny** rule
+2. Select **Country** match type
+3. Choose "ALL" to match all countries
+4. Add priority: 100 (lower priority)
+
+Then create specific allow rules for your approved countries:
+
+1. Create **Allow** rules for each approved country
+2. Set higher priority (e.g., 10, 20, 30) so they process first
+
+#### Block Specific High-Risk Countries
+
+Create targeted deny rules for specific countries while allowing all others:
+
+1. Create **Deny** rules for each country you want to block
+2. Select the specific countries from the dropdown
+3. Set appropriate priorities
+
+#### Regional Access Control
+
+Combine geo-blocking with other rule types for sophisticated access control:
+
+1. **Path + Country**: Block admin paths (`/admin/*`) from all countries except your headquarters
+2. **IP + Country**: Allow specific IPs from restricted countries (for VPN users or partners)
+3. **CIDR + Country**: Combine network-based and geography-based restrictions
+
+### Best Practices
+
+<Warning>
+  IP geolocation is not always 100% accurate. Users with VPNs, proxies, or mobile networks may appear to be from different countries than expected.
+</Warning>
+
+### Rule Priority Example
+
+```
+Priority 1: Allow - Country: United States
+Priority 2: Allow - Country: Canada  
+Priority 3: Allow - Country: United Kingdom
+Priority 4: Deny - Country: ALL
+```
+
+This configuration allows access only from the US, Canada, and UK while blocking all other countries.

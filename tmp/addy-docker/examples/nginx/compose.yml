@@ -1,0 +1,58 @@
+name: addy
+
+services:
+  db:
+    image: mariadb:12
+    container_name: addy_db
+    command:
+      - "mariadbd"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    volumes:
+      - "./db:/var/lib/mysql"
+    environment:
+      - "MARIADB_RANDOM_ROOT_PASSWORD=yes"
+      - "MYSQL_DATABASE"
+      - "MYSQL_USER"
+      - "MYSQL_PASSWORD"
+    restart: always
+
+  redis:
+    image: redis:8-alpine
+    container_name: addy_redis
+    restart: always
+
+  addy:
+    image: anonaddy/anonaddy:latest
+    container_name: addy
+    depends_on:
+      - db
+      - redis
+    ports:
+      - target: 25
+        published: 25
+        protocol: tcp
+    volumes:
+      - "./data:/data"
+    env_file:
+      - "./addy.env"
+    environment:
+      - "DB_HOST=db"
+      - "DB_DATABASE=${MYSQL_DATABASE}"
+      - "DB_USERNAME=${MYSQL_USER}"
+      - "DB_PASSWORD=${MYSQL_PASSWORD}"
+      - "REDIS_HOST=redis"
+    restart: always
+
+  nginx:
+    image: nginx:1.29-alpine
+    container_name: addy_nginx
+    restart: unless-stopped
+    ports:
+      - '443:443'
+    volumes:
+      - /etc/ssl/dhparam.pem:/etc/ssl/dhparam.pem
+      - ./nginx/templates:/etc/nginx/templates
+      - /etc/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - addy

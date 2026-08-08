@@ -1,0 +1,61 @@
+name: sync-upstream
+
+on:
+  schedule:
+    # Check every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get latest upstream release
+        id: upstream
+        run: |
+          LATEST=$(gh release view --repo anonaddy/anonaddy --json tagName -q .tagName)
+          VERSION="${LATEST#v}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=$LATEST" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get current version from Dockerfile
+        id: current
+        run: |
+          CURRENT=$(grep '^ARG ANONADDY_VERSION=' Dockerfile | head -1 | sed 's/ARG ANONADDY_VERSION=//')
+          echo "version=$CURRENT" >> "$GITHUB_OUTPUT"
+
+      - name: Compare versions
+        id: check
+        run: |
+          UPSTREAM="${{ steps.upstream.outputs.version }}"
+          CURRENT="${{ steps.current.outputs.version }}"
+          if [ "$UPSTREAM" != "$CURRENT" ]; then
+            echo "updated=true" >> "$GITHUB_OUTPUT"
+            echo "version=$UPSTREAM" >> "$GITHUB_OUTPUT"
+          else
+            echo "updated=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update Dockerfile
+        if: steps.check.outputs.updated == 'true'
+        run: |
+          sed -i "s/^ARG ANONADDY_VERSION=.*/ARG ANONADDY_VERSION=${{ steps.check.outputs.version }}/" Dockerfile
+
+      - name: Commit and tag
+        if: steps.check.outputs.updated == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Dockerfile
+          git commit -m "addy ${{ steps.check.outputs.version }}"
+          git tag "v${{ steps.check.outputs.version }}-r"
+          git push origin master
+          git push origin "v${{ steps.check.outputs.version }}-r"

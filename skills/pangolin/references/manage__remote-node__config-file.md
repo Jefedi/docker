@@ -1,0 +1,85 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Configuration File
+
+> Configure your remote node using the config.yml file
+
+<div />
+
+The `config.yml` file includes basic config variable for your remote node. This file is mounted at `config/config.yml` in your Docker container.
+
+Minimal configuration file:
+
+```yaml title="config.yml" theme={"theme":"gruvbox-light-hard"}
+gerbil:
+    start_port: 51820
+    base_endpoint: "154.123.45.67" # REPLACE WITH YOUR IP OR DOMAIN
+
+managed:
+    id: "he4g78wevj25msf"
+    secret: "n7sd18twfko0q0vrb7wyclqzbvvnx1fqt7ezv8xewhdb9s7d"
+```
+
+### Gerbil Tunnel Controller
+
+<ResponseField name="gerbil" type="object" required>
+  Gerbil tunnel controller settings for WireGuard tunneling.
+
+  <Expandable title="Gerbil">
+    <ResponseField name="base_endpoint" type="string" required>
+      Domain name included in WireGuard configuration for tunnel connections.
+
+      **Example**: `pangolin.example.com`
+    </ResponseField>
+
+    <ResponseField name="start_port" type="integer">
+      Starting port for WireGuard tunnels.
+
+      **Example**: `51820`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Remote Node Configuration
+
+<ResponseField name="managed" type="object">
+  Settings for connecting the remote node to the Pangolin head server.
+
+  <Expandable title="Managed">
+    <ResponseField name="id" type="string">
+      Unique identifier for the managed deployment. Generated from the installer or the [Pangolin dashboard](https://app.pangolin.net).
+
+      **Example**: `he4g78wevj25msf`
+    </ResponseField>
+
+    <ResponseField name="secret" type="string">
+      Secret key for authenticating with the managed service. Generated from the installer or the [Pangolin dashboard](https://app.pangolin.net).
+
+      **Example**: `n7sd18twfko0q0vrb7wyclqzbvvnx1fqt7ezv8xewhdb9s7d`
+
+      <Warning>
+        Keep this secret secure and do not share it publicly.
+      </Warning>
+    </ResponseField>
+
+    <ResponseField name="endpoint" type="string">
+      The managed service endpoint to connect to. This can only change with enterprise deployments.
+
+      **Example**: `https://app.pangolin.net`
+
+      **Default**: `https://app.pangolin.net`
+    </ResponseField>
+
+    <ResponseField name="redirect_endpoint" type="string">
+      Custom redirect endpoint for authentication flows. This can only change for enterprise deployments.
+
+      **Example**: `https://my-pangolin.example.com`
+
+      <Note>
+        If not specified, the default dashboard URL will be used.
+      </Note>
+    </ResponseField>
+  </Expandable>
+</ResponseField>

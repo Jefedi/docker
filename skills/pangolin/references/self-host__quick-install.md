@@ -1,0 +1,144 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Quick Install Guide
+
+> Deploy your own fully self-hosted instance of Pangolin Community Edition
+
+<div />
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+* **Linux server** with root access and public IP address
+* **Domain name** pointing to your server's IP address for the dashboard
+* **Email address** for Let's Encrypt SSL certificates and admin log in
+* **Open ports on firewall** for 80 (TCP), 443 (TCP), 51820 (UDP), and 21820 (UDP for clients)
+
+<Tip>
+  **Recommended**: Ubuntu 20.04+ or Debian 11+ for best compatibility and performance.
+</Tip>
+
+## Choose Your Server
+
+Need help choosing? See our [complete VPS guide](/self-host/choosing-a-vps) for suggestions.
+
+## DNS & Networking
+
+Before installing Pangolin, ensure you've set up DNS for your domain(s) and opened the required port on your firewall. See our guide on [DNS & networking](/self-host/dns-and-networking) for more information.
+
+## Installation Process
+
+<Steps>
+  <Step title="Download the installer">
+    Connect to your server via SSH and download the installer:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    curl -fsSL https://static.pangolin.net/get-installer.sh | bash
+    ```
+
+    The installer supports both AMD64 (x86\_64) and ARM64 architectures.
+  </Step>
+
+  <Step title="Run the installer">
+    Execute the installer with root privileges:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    sudo ./installer
+    ```
+
+    The installer places all files in the current directory. Move the installer to your desired installation directory before running it.
+  </Step>
+
+  <Step title="Configure basic settings">
+    The installer will prompt you for essential configuration:
+
+    * **Edition**: Choose Community Edition or [Enterprise Edition](/self-host/enterprise-edition). Review the edition differences before continuing.
+    * **Base Domain**: Enter your root domain without subdomains (e.g., `example.com`)
+    * **Dashboard Domain**: Press Enter to accept the default `pangolin.example.com` or enter a custom domain
+    * **Let's Encrypt Email**: Provide an email for SSL certificates and admin login
+    * **Tunneling**: Choose whether to install Gerbil for tunneled connections (default: yes). You can run Pangolin without tunneling. It will function as a standard reverse proxy.
+  </Step>
+
+  <Step title="Configure email (optional)">
+    <Tip>
+      Email functionality is optional and can be added later.
+    </Tip>
+
+    Choose whether to enable SMTP email functionality:
+
+    * **Default**: No (recommended for initial setup)
+    * **If enabled**: You'll need SMTP server details (host, port, username, password)
+  </Step>
+
+  <Step title="Start installation">
+    Confirm that you want to install and start the containers:
+
+    * The installer will pull Docker images (pangolin, gerbil, traefik)
+    * Containers will be started automatically
+    * This process takes 2-3 minutes depending on your internet connection
+
+    You'll see progress indicators as each container is pulled and started.
+  </Step>
+</Steps>
+
+## Post-Installation Setup
+
+Once installation completes successfully, you'll see:
+
+```
+Installation complete!
+
+To complete the initial setup, please visit:
+https://pangolin.example.com/auth/initial-setup
+```
+
+<Steps>
+  <Step title="Access the dashboard">
+    Navigate to the URL shown in the installer output and enter the setup token displayed by the installer. If you chose not to start the containers during installation, retrieve the token from the Pangolin container logs when it first starts.
+
+    ```
+    https://<your-dashboard-domain>/auth/initial-setup
+    ```
+
+    <Check>
+      The dashboard should load with SSL certificate automatically configured. It might take a few minutes for the first cert to validate, so don't worry if the browser throws an insecure warning.
+    </Check>
+  </Step>
+
+  <Step title="Get the setup token from the Pangolin logs">
+    Check the Pangolin container logs and copy the setup token printed to stdout:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    sudo docker compose logs pangolin
+    ```
+
+    You will need that token on the initial setup page to register the first admin account.
+  </Step>
+
+  <Step title="Create admin account">
+    Complete the initial admin user setup:
+
+    * Paste the setup token from the Pangolin logs
+    * Enter your admin email address
+    * Set a strong password
+    * Verify your email (if email is configured)
+
+    <Warning>
+      Use a strong, unique password for your admin account. This account has full system access.
+    </Warning>
+  </Step>
+
+  <Step title="Create your first organization">
+    After logging in:
+
+    1. Enter organization name and description
+    2. Click "Create Organization"
+
+    <Check>
+      You're now ready to start adding applications and configuring your reverse proxy!
+    </Check>
+  </Step>
+</Steps>

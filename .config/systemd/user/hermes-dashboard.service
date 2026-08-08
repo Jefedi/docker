@@ -1,0 +1,15 @@
+[Unit]
+Description=Hermes Agent Dashboard (port 9120)
+After=hermes-gateway.service
+Wants=hermes-gateway.service
+
+[Service]
+Type=simple
+ExecStart=/opt/hermes/bin/hermes dashboard --port 9120 --host 0.0.0.0 --no-open --skip-build
+Restart=on-failure
+RestartSec=3
+Environment=HERMES_HOME=/opt/data
+EnvironmentFile=/opt/data/.env
+
+[Install]
+WantedBy=default.target

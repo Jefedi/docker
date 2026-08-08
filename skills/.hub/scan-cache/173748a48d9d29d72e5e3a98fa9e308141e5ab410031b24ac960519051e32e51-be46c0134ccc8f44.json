@@ -1,0 +1,13 @@
+{
+  "source": "ai-seo-optimizer-pro",
+  "source_url": "ai-seo-optimizer-pro",
+  "bundle_hash": "sha256:173748a48d9d29d72e5e3a98fa9e308141e5ab410031b24ac960519051e32e51",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "safe",
+  "trust_level": "community",
+  "findings": [],
+  "rules": [],
+  "scanned_at": "2026-07-22T18:47:43.219633+00:00",
+  "summary": "ai-seo-optimizer-pro: clean scan, no threats detected",
+  "fresh": true
+}

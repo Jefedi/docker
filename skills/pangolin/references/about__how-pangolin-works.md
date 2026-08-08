@@ -1,0 +1,98 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# How Pangolin Works
+
+> Learn about the fundamentals of Pangolin and how they work together to provide simple and secure remote access.
+
+<div />
+
+## Basic Steps
+
+<Steps>
+  <Step title="Link remote networks with sites">
+    Join remote networks together using site connectors. Pangolin's lightweight connectors use intelligent routing and NAT traversal to make any network anywhere available.
+  </Step>
+
+  <Step title="Define resources">
+    Create resources that represent services or entire network ranges available for remote access. Resources can be public or fully private.
+  </Step>
+
+  <Step title="Users access resources">
+    Authenticated users access resources through a web browser (public resources) or when connected with a Pangolin client (private resources). The same users, roles, and policies apply across both—users never pick a site; Pangolin routes to the right connector automatically.
+  </Step>
+</Steps>
+
+## Key Concepts
+
+Pangolin relies on several components that work together to provide secure remote access. Each component has a specific role in ensuring that only authenticated users can access the resources they are authorized to use.
+
+### Pangolin Server
+
+The Pangolin server is the central coordination component for your network. It stores configuration changes, manages access policies, and coordinates connections between clients and sites. The server handles user authentication and generates access control lists that determine what resources each user can reach.
+
+You can use [Pangolin Cloud](https://app.pangolin.net/auth/signup), which is fully managed, or you can self-host your own Pangolin server for complete control over your infrastructure and data.
+
+<Card title="Try free on Pangolin Cloud" icon="cloud" href="https://app.pangolin.net/auth/signup" arrow="true" cta="Sign up free">
+  Fastest way to get started with the fully managed control plane. No credit card required.
+</Card>
+
+<Card title="Read about how to self-host Pangolin" icon="server" href="/self-host/quick-install">
+  Learn how to deploy your own self-hosted Pangolin server.
+</Card>
+
+### Sites
+
+Sites connect remote networks to your Pangolin server. They use Newt connectors to create secure tunnels from remote networks back to Pangolin. Sites let you expose resources on those networks to authorized users.
+
+Sites run behind firewalls on remote networks. They maintain outbound connections to the Pangolin server. By default, sites block all traffic until you define resources and grant access. This ensures that just deploying a site does not expose any network resources.
+
+The Newt connector handles tunnel creation, NAT traversal, and routing. It makes remote networks available without requiring complex firewall rules or public IP addresses. Newt sites also unlock browser-based SSH, RDP, and VNC resources, private HTTP with edge TLS termination, and intelligent multi-site routing when the same resource is reachable from more than one location.
+
+<Card title="Read more about sites" icon="plug" href="/manage/sites/understanding-sites">
+  Learn about sites, how they work, and how to install and configure them.
+</Card>
+
+### Resources
+
+Resources are the applications, hosts, or network ranges you make available to users. They exist on sites and represent what users can access. Users connect to resources, not to sites directly.
+
+There are two types of resources. [Public resources](/manage/resources/understanding-resources#public-resource-types) work through web browsers and act as reverse proxies—or protocol-specific proxies—for backend services. [Private resources](/manage/resources/understanding-resources#private-resource-types) require a client connection and function like a zero-trust VPN.
+
+What sets Pangolin apart is the breadth of resource types on one platform:
+
+* **Public HTTP/HTTPS** — authenticated reverse proxies with SSO, access rules, and automatic TLS. No client required.
+* **Public SSH, RDP, and VNC** — full terminal, desktop, or display sessions rendered in the browser. No SSH client or remote desktop software needed.
+* **Public TCP/UDP** — raw port proxies for protocols that do not need a domain name or authentication layer.
+* **Private host and CIDR** — route traffic to specific machines or entire subnets over the tunnel, with per-resource port restrictions.
+* **Private HTTP/HTTPS** — reverse proxy with TLS terminated at your network edge over the tunnel. The app is never exposed on the public internet; only connected clients can reach it.
+* **Private SSH** — traditional terminal access via `pangolin ssh`, with optional automatic user provisioning from Pangolin identity.
+
+You must define resources and assign access before users can reach them. By default, no resources are available on sites. This ensures that only explicitly defined resources can be accessed.
+
+<Card title="Read more about resources" icon="link" href="/manage/resources/understanding-resources">
+  Learn about public and private resources and how to create them.
+</Card>
+
+### Clients
+
+Clients are software components installed on user devices or machines. They let users and automated systems connect to your Pangolin network and access private resources through a secure tunnel.
+
+Users authenticate through the client using their accounts. Machines connect with credentials. Once connected, users can reach all resources their account has access to. The client handles routing decisions and establishes encrypted tunnels to the appropriate sites.
+
+Clients are available for Mac, Windows, and Linux. They work transparently with applications, so no application configuration is required.
+
+<Card title="Read more about clients" icon="desktop" href="/manage/clients/understanding-clients">
+  Learn about clients and where to download them for Mac, Windows, and Linux.
+</Card>
+
+### Remote Nodes
+
+Remote nodes are self-hosted Pangolin servers that you control while using Pangolin Cloud for management and coordination. You maintain complete control over your infrastructure and data flow, while the cloud handles the control plane, DNS, certificate management, and backups.
+
+You can deploy multiple remote nodes for high availability and automatic failover. If your nodes become unavailable, traffic can optionally fail over to cloud infrastructure until you restore service.
+
+<Card title="Read more about remote nodes" icon="circle-nodes" href="/manage/remote-node/understanding-nodes">
+  Learn about remote nodes and how they provide high availability and simplified operations.
+</Card>

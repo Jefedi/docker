@@ -1,0 +1,889 @@
+{
+  "version": 1,
+  "installed": {
+    "sherlock": {
+      "source": "official",
+      "identifier": "official/security/sherlock",
+      "trust_level": "builtin",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:5c1da13887269a5e",
+      "install_path": "security/sherlock",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {},
+      "installed_at": "2026-05-29T18:21:56.653204+00:00",
+      "updated_at": "2026-05-29T18:21:56.653227+00:00"
+    },
+    "osint-investigation": {
+      "source": "official",
+      "identifier": "official/research/osint-investigation",
+      "trust_level": "builtin",
+      "scan_verdict": "dangerous",
+      "content_hash": "sha256:01b0ee0066867704",
+      "install_path": "research/osint-investigation",
+      "files": [
+        "SKILL.md",
+        "references/sources/nyc-acris.md",
+        "references/sources/gdelt.md",
+        "references/sources/senate-ld.md",
+        "references/sources/usaspending.md",
+        "references/sources/courtlistener.md",
+        "references/sources/ofac-sdn.md",
+        "references/sources/wayback.md",
+        "references/sources/wikipedia.md",
+        "references/sources/icij-offshore.md",
+        "references/sources/opencorporates.md",
+        "references/sources/sec-edgar.md",
+        "templates/source-template.md",
+        "scripts/fetch_senate_ld.py",
+        "scripts/fetch_wikipedia.py",
+        "scripts/fetch_usaspending.py",
+        "scripts/fetch_wayback.py",
+        "scripts/fetch_gdelt.py",
+        "scripts/fetch_nyc_acris.py",
+        "scripts/fetch_icij_offshore.py",
+        "scripts/entity_resolution.py",
+        "scripts/_http.py",
+        "scripts/fetch_opencorporates.py",
+        "scripts/fetch_sec_edgar.py",
+        "scripts/fetch_ofac_sdn.py",
+        "scripts/build_findings.py",
+        "scripts/timing_analysis.py",
+        "scripts/_normalize.py",
+        "scripts/fetch_courtlistener.py"
+      ],
+      "metadata": {},
+      "installed_at": "2026-06-07T20:50:11.169094+00:00",
+      "updated_at": "2026-06-07T20:50:11.169111+00:00"
+    },
+    "api-docs-gen-pro": {
+      "source": "clawhub",
+      "identifier": "api-docs-gen-pro",
+      "trust_level": "community",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:7c19b841fba99e66",
+      "install_path": "api-docs-gen-pro",
+      "files": [
+        "skill-card.md",
+        "SKILL.md",
+        "_meta.json"
+      ],
+      "metadata": {},
+      "installed_at": "2026-05-30T20:31:13.497607+00:00",
+      "updated_at": "2026-05-30T20:31:13.497620+00:00"
+    },
+    "fastmcp": {
+      "source": "official",
+      "identifier": "official/mcp/fastmcp",
+      "trust_level": "builtin",
+      "scan_verdict": "dangerous",
+      "content_hash": "sha256:aab61057773e7288",
+      "install_path": "mcp/fastmcp",
+      "files": [
+        "SKILL.md",
+        "references/fastmcp-cli.md",
+        "templates/api_wrapper.py",
+        "templates/database_server.py",
+        "templates/file_processor.py",
+        "scripts/scaffold_fastmcp.py"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/mcp/fastmcp",
+        "bundle_hash": "sha256:aab61057773e72887d004c3d68cb046d68d12e26662e1843fca94431a4b1c924",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "dangerous",
+        "trust_level": "builtin",
+        "findings": [
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 155,
+            "match": "fastmcp list http://127.0.0.1:8000/mcp --json",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 156,
+            "match": "fastmcp call http://127.0.0.1:8000/mcp search_resources query=router --json",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "unpinned_pip_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "SKILL.md",
+            "line": 39,
+            "match": "pip install fastmcp",
+            "description": "pip install without version pinning"
+          },
+          {
+            "pattern_id": "unpinned_pip_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "SKILL.md",
+            "line": 46,
+            "match": "pip install httpx",
+            "description": "pip install without version pinning"
+          },
+          {
+            "pattern_id": "unpinned_pip_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "SKILL.md",
+            "line": 271,
+            "match": "pip install fastmcp",
+            "description": "pip install without version pinning"
+          },
+          {
+            "pattern_id": "hermes_config_mod",
+            "severity": "critical",
+            "category": "persistence",
+            "file": "SKILL.md",
+            "line": 175,
+            "match": "- configure the server in `~/.hermes/config.yaml` using the `native-mcp` skill, or",
+            "description": "references Hermes configuration files directly"
+          },
+          {
+            "pattern_id": "hermes_config_mod",
+            "severity": "critical",
+            "category": "persistence",
+            "file": "SKILL.md",
+            "line": 296,
+            "match": "The server-building part may be correct while the Hermes config is not. Load the `native-mcp` skill and configure the...",
+            "description": "references Hermes configuration files directly"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "references/fastmcp-cli.md",
+            "line": 49,
+            "match": "fastmcp list http://127.0.0.1:8000/mcp --json",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "unpinned_pip_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references/fastmcp-cli.md",
+            "line": 8,
+            "match": "pip install fastmcp",
+            "description": "pip install without version pinning"
+          },
+          {
+            "pattern_id": "unpinned_pip_install",
+            "severity": "medium",
+            "category": "supply_chain",
+            "file": "references/fastmcp-cli.md",
+            "line": 12,
+            "match": "FastMCP documents `pip install fastmcp` and `fastmcp version` as the baseline installation and verification path.",
+            "description": "pip install without version pinning"
+          },
+          {
+            "pattern_id": "python_getenv_secret",
+            "severity": "critical",
+            "category": "exfiltration",
+            "file": "templates/api_wrapper.py",
+            "line": 13,
+            "match": "API_TOKEN = os.getenv(\"API_TOKEN\")",
+            "description": "reads secret via os.getenv()"
+          }
+        ],
+        "rules": [
+          "hardcoded_ip_port",
+          "hermes_config_mod",
+          "python_getenv_secret",
+          "unpinned_pip_install"
+        ],
+        "scanned_at": "2026-07-22T18:20:11.851101+00:00",
+        "summary": "fastmcp: dangerous — 11 finding(s) in exfiltration, network, persistence, supply_chain",
+        "fresh": true
+      },
+      "installed_at": "2026-07-22T18:20:11.856242+00:00",
+      "updated_at": "2026-07-22T18:20:11.856249+00:00"
+    },
+    "baoyu-article-illustrator": {
+      "source": "official",
+      "identifier": "official/creative/baoyu-article-illustrator",
+      "trust_level": "builtin",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:49c09a0ee50b2e59",
+      "install_path": "creative/baoyu-article-illustrator",
+      "files": [
+        "PORT_NOTES.md",
+        "SKILL.md",
+        "references/prompt-construction.md",
+        "references/style-presets.md",
+        "references/styles.md",
+        "references/workflow.md",
+        "references/usage.md",
+        "prompts/system.md",
+        "references/palettes/warm.md",
+        "references/palettes/mono-ink.md",
+        "references/palettes/macaron.md",
+        "references/palettes/neon.md",
+        "references/styles/screen-print.md",
+        "references/styles/flat-doodle.md",
+        "references/styles/fantasy-animation.md",
+        "references/styles/flat.md",
+        "references/styles/watercolor.md",
+        "references/styles/chalkboard.md",
+        "references/styles/warm.md",
+        "references/styles/elegant.md",
+        "references/styles/sketch.md",
+        "references/styles/scientific.md",
+        "references/styles/vintage.md",
+        "references/styles/playful.md",
+        "references/styles/pixel-art.md",
+        "references/styles/blueprint.md",
+        "references/styles/notion.md",
+        "references/styles/nature.md",
+        "references/styles/intuition-machine.md",
+        "references/styles/vector-illustration.md",
+        "references/styles/ink-notes.md",
+        "references/styles/editorial.md",
+        "references/styles/sketch-notes.md",
+        "references/styles/minimal.md",
+        "references/styles/retro.md"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/creative/baoyu-article-illustrator",
+        "bundle_hash": "sha256:49c09a0ee50b2e59857ba4b5e414e3b6abfcce4a1f037ef248df39abe3bb1ac1",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "builtin",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-07-13T09:47:05.957024+00:00",
+        "summary": "baoyu-article-illustrator: clean scan, no threats detected",
+        "fresh": true
+      },
+      "installed_at": "2026-07-13T09:47:05.978018+00:00",
+      "updated_at": "2026-07-13T09:47:05.978028+00:00"
+    },
+    "baoyu-comic": {
+      "source": "official",
+      "identifier": "official/creative/baoyu-comic",
+      "trust_level": "builtin",
+      "scan_verdict": "backfilled",
+      "content_hash": "sha256:4378c8ba82fd3649",
+      "install_path": "creative/baoyu-comic",
+      "files": [
+        "PORT_NOTES.md",
+        "SKILL.md",
+        "references/analysis-framework.md",
+        "references/art-styles/chalk.md",
+        "references/art-styles/ink-brush.md",
+        "references/art-styles/ligne-claire.md",
+        "references/art-styles/manga.md",
+        "references/art-styles/minimalist.md",
+        "references/art-styles/realistic.md",
+        "references/auto-selection.md",
+        "references/base-prompt.md",
+        "references/character-template.md",
+        "references/layouts/cinematic.md",
+        "references/layouts/dense.md",
+        "references/layouts/four-panel.md",
+        "references/layouts/mixed.md",
+        "references/layouts/splash.md",
+        "references/layouts/standard.md",
+        "references/layouts/webtoon.md",
+        "references/ohmsha-guide.md",
+        "references/partial-workflows.md",
+        "references/presets/concept-story.md",
+        "references/presets/four-panel.md",
+        "references/presets/ohmsha.md",
+        "references/presets/shoujo.md",
+        "references/presets/wuxia.md",
+        "references/storyboard-template.md",
+        "references/tones/action.md",
+        "references/tones/dramatic.md",
+        "references/tones/energetic.md",
+        "references/tones/neutral.md",
+        "references/tones/romantic.md",
+        "references/tones/vintage.md",
+        "references/tones/warm.md",
+        "references/workflow.md"
+      ],
+      "metadata": {
+        "backfilled_from": "optional-skills"
+      },
+      "installed_at": "2026-06-07T18:53:41.891787+00:00",
+      "updated_at": "2026-06-07T18:53:41.891787+00:00"
+    },
+    "creative-ideation": {
+      "source": "official",
+      "identifier": "official/creative/creative-ideation",
+      "trust_level": "builtin",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:7fe271b209c35bf2",
+      "install_path": "creative/creative-ideation",
+      "files": [
+        "SKILL.md",
+        "references/full-prompt-library.md",
+        "references/heuristics.md",
+        "references/method-catalog.md",
+        "references/exercises.md",
+        "references/anti-slop.md",
+        "references/methods/story-skeletons.md",
+        "references/methods/oblique-strategies.md",
+        "references/methods/biomimicry.md",
+        "references/methods/triz-principles.md",
+        "references/methods/defamiliarization.md",
+        "references/methods/oulipo.md",
+        "references/methods/volume-generation.md",
+        "references/methods/lateral-provocations.md",
+        "references/methods/derive-and-mapping.md",
+        "references/methods/first-principles.md",
+        "references/methods/affinity-diagrams.md",
+        "references/methods/analogy-and-blending.md",
+        "references/methods/leverage-points.md",
+        "references/methods/chance-and-remix.md",
+        "references/methods/pataphysics.md",
+        "references/methods/polya.md",
+        "references/methods/premortem-and-inversion.md",
+        "references/methods/jobs-to-be-done.md",
+        "references/methods/pattern-languages.md",
+        "references/methods/scamper.md",
+        "references/methods/compression-progress.md",
+        "references/methods/creative-discipline.md"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/creative/creative-ideation",
+        "bundle_hash": "sha256:7fe271b209c35bf2a87d8d1e490e375894a1d90df7897f9615859cb2f3badb96",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "builtin",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-07-13T09:47:06.253977+00:00",
+        "summary": "creative-ideation: clean scan, no threats detected",
+        "fresh": true
+      },
+      "installed_at": "2026-07-13T09:47:06.256506+00:00",
+      "updated_at": "2026-07-13T09:47:06.256512+00:00"
+    },
+    "pixel-art": {
+      "source": "official",
+      "identifier": "official/creative/pixel-art",
+      "trust_level": "builtin",
+      "scan_verdict": "backfilled",
+      "content_hash": "sha256:b7ae08576dac501e",
+      "install_path": "creative/pixel-art",
+      "files": [
+        "ATTRIBUTION.md",
+        "SKILL.md",
+        "references/palettes.md",
+        "scripts/__init__.py",
+        "scripts/palettes.py",
+        "scripts/pixel_art.py",
+        "scripts/pixel_art_video.py"
+      ],
+      "metadata": {
+        "backfilled_from": "optional-skills"
+      },
+      "installed_at": "2026-06-07T18:53:41.904446+00:00",
+      "updated_at": "2026-06-07T18:53:41.904446+00:00"
+    },
+    "minecraft-modpack-server": {
+      "source": "official",
+      "identifier": "official/gaming/minecraft-modpack-server",
+      "trust_level": "builtin",
+      "scan_verdict": "backfilled",
+      "content_hash": "sha256:b10f2b1258e9012b",
+      "install_path": "gaming/minecraft-modpack-server",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {
+        "backfilled_from": "optional-skills"
+      },
+      "installed_at": "2026-06-07T18:53:41.906857+00:00",
+      "updated_at": "2026-06-07T18:53:41.906857+00:00"
+    },
+    "pokemon-player": {
+      "source": "official",
+      "identifier": "official/gaming/pokemon-player",
+      "trust_level": "builtin",
+      "scan_verdict": "backfilled",
+      "content_hash": "sha256:c1bc96fc9bb270c0",
+      "install_path": "gaming/pokemon-player",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {
+        "backfilled_from": "optional-skills"
+      },
+      "installed_at": "2026-06-07T18:53:41.907821+00:00",
+      "updated_at": "2026-06-07T18:53:41.907821+00:00"
+    },
+    "dspy": {
+      "source": "official",
+      "identifier": "official/mlops/research/dspy",
+      "trust_level": "builtin",
+      "scan_verdict": "backfilled",
+      "content_hash": "sha256:bbbe1148d27953a8",
+      "install_path": "mlops/research/dspy",
+      "files": [
+        "SKILL.md",
+        "references/examples.md",
+        "references/modules.md",
+        "references/optimizers.md"
+      ],
+      "metadata": {
+        "backfilled_from": "optional-skills"
+      },
+      "installed_at": "2026-06-07T18:53:41.922868+00:00",
+      "updated_at": "2026-06-07T18:53:41.922868+00:00"
+    },
+    "ui-ux-pro-max": {
+      "source": "skills.sh",
+      "identifier": "skills-sh/nextlevelbuilder/ui-ux-pro-max-skill/ui-ux-pro-max",
+      "trust_level": "community",
+      "scan_verdict": "caution",
+      "content_hash": "sha256:ba076440020f7d9b",
+      "install_path": "ui-ux-pro-max",
+      "files": [
+        "SKILL.md",
+        "data",
+        "scripts"
+      ],
+      "metadata": {},
+      "installed_at": "2026-06-08T20:14:59.379034+00:00",
+      "updated_at": "2026-06-08T20:14:59.379055+00:00"
+    },
+    "xurl": {
+      "source": "clawhub",
+      "identifier": "xurl",
+      "trust_level": "community",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:3adbf39afb7b54bf",
+      "install_path": "xurl",
+      "files": [
+        "skill-card.md",
+        "SKILL.md",
+        "_meta.json"
+      ],
+      "metadata": {},
+      "installed_at": "2026-07-10T19:21:27.453499+00:00",
+      "updated_at": "2026-07-10T19:21:27.453508+00:00"
+    },
+    "siyuan": {
+      "source": "official",
+      "identifier": "official/productivity/siyuan",
+      "trust_level": "builtin",
+      "scan_verdict": "dangerous",
+      "content_hash": "sha256:822840419c6a7fa4",
+      "install_path": "productivity/siyuan",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/productivity/siyuan",
+        "bundle_hash": "sha256:822840419c6a7fa4d49173370793fc9f00d609afcdc66034e5db4c644e459d6f",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "dangerous",
+        "trust_level": "builtin",
+        "findings": [
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 21,
+            "match": "prompt: SiYuan instance URL (default http://127.0.0.1:6806)",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 36,
+            "match": "SIYUAN_URL=http://127.0.0.1:6806",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 38,
+            "match": "`SIYUAN_URL` defaults to `http://127.0.0.1:6806` if not set.",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 45,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/...\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 86,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/search/fullTextSearchBlock\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 97,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/query/sql\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 110,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/block/getBlockKramdown\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 119,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/block/getChildBlocks\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 128,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/filetree/getHPathByID\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 137,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/attr/getBlockAttrs\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 146,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/notebook/lsNotebooks\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 155,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/filetree/listDocsByPath\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 164,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/filetree/createDocWithMd\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 177,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/notebook/createNotebook\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 186,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/block/appendBlock\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 201,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/block/updateBlock\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 214,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/filetree/renameDocByID\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 225,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/attr/setBlockAttrs\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 240,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/block/deleteBlock\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 252,
+            "match": "curl -s -X POST \"${SIYUAN_URL:-http://127.0.0.1:6806}/api/export/exportMdContent\" \\",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hardcoded_ip_port",
+            "severity": "medium",
+            "category": "network",
+            "file": "SKILL.md",
+            "line": 297,
+            "match": "SIYUAN_URL: \"http://127.0.0.1:6806\"",
+            "description": "hardcoded IP address with port"
+          },
+          {
+            "pattern_id": "hermes_config_mod",
+            "severity": "critical",
+            "category": "persistence",
+            "file": "SKILL.md",
+            "line": 290,
+            "match": "# In ~/.hermes/config.yaml under mcp_servers:",
+            "description": "references Hermes configuration files directly"
+          }
+        ],
+        "rules": [
+          "hardcoded_ip_port",
+          "hermes_config_mod"
+        ],
+        "scanned_at": "2026-07-22T17:40:59.129906+00:00",
+        "summary": "siyuan: dangerous — 22 finding(s) in network, persistence",
+        "fresh": false
+      },
+      "installed_at": "2026-07-22T17:41:05.425743+00:00",
+      "updated_at": "2026-07-22T17:41:05.425751+00:00"
+    },
+    "antigravity-cli": {
+      "source": "official",
+      "identifier": "official/autonomous-ai-agents/antigravity-cli",
+      "trust_level": "builtin",
+      "scan_verdict": "dangerous",
+      "content_hash": "sha256:7c5c9609254e7d2f",
+      "install_path": "autonomous-ai-agents/antigravity-cli",
+      "files": [
+        "SKILL.md",
+        "references/cli-docs.md"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "official",
+        "source_url": "official/autonomous-ai-agents/antigravity-cli",
+        "bundle_hash": "sha256:7c5c9609254e7d2f077791f1a51340f4ade522ca9459a2fc06b38f8fbd457e90",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "dangerous",
+        "trust_level": "builtin",
+        "findings": [
+          {
+            "pattern_id": "curl_pipe_shell",
+            "severity": "critical",
+            "category": "supply_chain",
+            "file": "references/cli-docs.md",
+            "line": 9,
+            "match": "- macOS/Linux: `curl -fsSL https://antigravity.google/cli/install.sh | bash`",
+            "description": "curl piped to shell (download-and-execute)"
+          }
+        ],
+        "rules": [
+          "curl_pipe_shell"
+        ],
+        "scanned_at": "2026-07-22T18:23:27.816840+00:00",
+        "summary": "antigravity-cli: dangerous — 1 finding(s) in supply_chain",
+        "fresh": false
+      },
+      "installed_at": "2026-07-22T18:23:33.138409+00:00",
+      "updated_at": "2026-07-22T18:23:33.138417+00:00"
+    },
+    "discord-admin-plugin": {
+      "source": "clawhub",
+      "identifier": "discord-admin-plugin",
+      "trust_level": "community",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:a83f569b2f0a610f",
+      "install_path": "discord-admin-plugin",
+      "files": [
+        "index.ts",
+        "openclaw.plugin.json",
+        "package.json",
+        "skill-card.md",
+        "SKILL.md",
+        "_meta.json"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "discord-admin-plugin",
+        "source_url": "discord-admin-plugin",
+        "bundle_hash": "sha256:a83f569b2f0a610f9f0c2dc699d26012dcd020aa69227ff040e20ec3682a6fff",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "community",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-07-22T18:30:02.143767+00:00",
+        "summary": "discord-admin-plugin: clean scan, no threats detected",
+        "fresh": true
+      },
+      "installed_at": "2026-07-22T18:30:02.149281+00:00",
+      "updated_at": "2026-07-22T18:30:02.149288+00:00"
+    },
+    "discord-admin-elite": {
+      "source": "clawhub",
+      "identifier": "discord-admin-elite",
+      "trust_level": "community",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:0d1ec7c1dc045e5e",
+      "install_path": "discord-admin-elite",
+      "files": [
+        "skill-card.md",
+        "SKILL.md",
+        "TEST-DRIVE.md",
+        "_meta.json"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "discord-admin-elite",
+        "source_url": "discord-admin-elite",
+        "bundle_hash": "sha256:0d1ec7c1dc045e5eea100ab45f18038ebfb21cdc75f7f4fbb4c4cd47b60e5a9e",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "community",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-07-22T18:30:10.368747+00:00",
+        "summary": "discord-admin-elite: clean scan, no threats detected",
+        "fresh": true
+      },
+      "installed_at": "2026-07-22T18:30:10.374096+00:00",
+      "updated_at": "2026-07-22T18:30:10.374101+00:00"
+    },
+    "ai-seo-optimizer-pro": {
+      "source": "clawhub",
+      "identifier": "ai-seo-optimizer-pro",
+      "trust_level": "community",
+      "scan_verdict": "safe",
+      "content_hash": "sha256:173748a48d9d29d7",
+      "install_path": "ai-seo-optimizer-pro",
+      "files": [
+        "clawhub.json",
+        "index.js",
+        "package.json",
+        "README.md",
+        "skill-card.md",
+        "SKILL.md",
+        "src/content-analyzer.js",
+        "src/internal-linker.js",
+        "src/keyword-research.js",
+        "src/rank-tracker.js",
+        "src/seo-engine.js",
+        "src/web-search.js",
+        "test.js",
+        "_meta.json"
+      ],
+      "metadata": {},
+      "scan_provenance": {
+        "source": "ai-seo-optimizer-pro",
+        "source_url": "ai-seo-optimizer-pro",
+        "bundle_hash": "sha256:173748a48d9d29d72e5e3a98fa9e308141e5ab410031b24ac960519051e32e51",
+        "scanner_version": "skills-guard-v1",
+        "verdict": "safe",
+        "trust_level": "community",
+        "findings": [],
+        "rules": [],
+        "scanned_at": "2026-07-22T18:47:43.219633+00:00",
+        "summary": "ai-seo-optimizer-pro: clean scan, no threats detected",
+        "fresh": true
+      },
+      "installed_at": "2026-07-22T18:47:43.233801+00:00",
+      "updated_at": "2026-07-22T18:47:43.233808+00:00"
+    },
+    "yuanbao": {
+      "source": "official",
+      "identifier": "official/yuanbao",
+      "trust_level": "builtin",
+      "scan_verdict": "backfilled",
+      "content_hash": "sha256:881625ad1581ec37",
+      "install_path": "yuanbao",
+      "files": [
+        "SKILL.md"
+      ],
+      "metadata": {
+        "backfilled_from": "optional-skills"
+      },
+      "installed_at": "2026-07-24T17:23:00.401405+00:00",
+      "updated_at": "2026-07-24T17:23:00.401405+00:00"
+    },
+    "polymarket": {
+      "source": "official",
+      "identifier": "official/research/polymarket",
+      "trust_level": "builtin",
+      "scan_verdict": "backfilled",
+      "content_hash": "sha256:9d3cf3fc5173e3ea",
+      "install_path": "research/polymarket",
+      "files": [
+        "SKILL.md",
+        "references/api-endpoints.md",
+        "scripts/polymarket.py"
+      ],
+      "metadata": {
+        "backfilled_from": "optional-skills"
+      },
+      "installed_at": "2026-08-08T11:22:39.563405+00:00",
+      "updated_at": "2026-08-08T11:22:39.563405+00:00"
+    }
+  }
+}

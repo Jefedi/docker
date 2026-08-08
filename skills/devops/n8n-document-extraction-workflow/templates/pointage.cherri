@@ -1,0 +1,32 @@
+#include 'actions/web'
+#include 'actions/calendar'
+
+#define name "Pointage"
+#define glyph clock
+#define color orange
+
+menu "Pointage" {
+    item "🏢 Debut journee":
+        @eventCode = "start_boite"
+    item "🚗 Depart vers client":
+        @eventCode = "start_route"
+    item "🏗️ Arrivee client":
+        @eventCode = "arrivee_client"
+    item "🍽️ Debut pause":
+        @eventCode = "start_pause"
+    item "▶️ Fin pause":
+        @eventCode = "end_pause"
+    item "🚗 Depart vers boite":
+        @eventCode = "start_route_retour"
+    item "🏢 Arrivee boite":
+        @eventCode = "arrivee_boite"
+    item "🏠 Fin journee":
+        @eventCode = "end_journee"
+}
+
+@now = CurrentDate
+@isoDate = formatDate(@now, "Custom", "yyyy-MM-dd'T'HH:mm:ssXXX")
+
+@response = jsonRequest("https://n8n.jefe.ovh/webhook/pointage", 'POST', {"event": "{@eventCode}", "timestamp": "{@isoDate}"}, {"Content-Type": "application/json"})
+
+show("✅ Pointage enregistré")

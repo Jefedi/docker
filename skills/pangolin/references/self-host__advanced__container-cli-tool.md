@@ -1,0 +1,192 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Internal CLI (pangctl)
+
+> Command-line tool for managing your Pangolin instance
+
+<div />
+
+The Pangolin container includes a CLI tool called `pangctl` that provides commands to help you manage your Pangolin instance.
+
+## Accessing the CLI
+
+Run the following command on the host where the Pangolin container is running:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+docker exec -it pangolin pangctl <command>
+```
+
+## Available Commands
+
+To see all available commands:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+docker exec -it pangolin pangctl --help
+```
+
+## Set Admin Credentials
+
+Set or reset admin credentials for your Pangolin instance:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+docker exec -it pangolin pangctl set-admin-credentials --email "admin@example.com" --password "Password123!"
+```
+
+<Warning>
+  Use a strong password and keep your admin credentials secure.
+</Warning>
+
+## Set Server Admin
+
+Add or remove server admin status for a user by email address:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+docker exec -it pangolin pangctl set-server-admin --email "admin@example.com"
+```
+
+To remove server admin status:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+docker exec -it pangolin pangctl set-server-admin --email "admin@example.com" --remove
+```
+
+### Options
+
+* `--email` (required): User email address
+* `--remove` (optional, default: `false`): Remove server admin status from the user
+
+<Warning>
+  At least one server admin must always exist. The command fails if you try to remove server admin status from the last remaining server admin.
+</Warning>
+
+## Clear Exit Nodes
+
+Clear all exit nodes from the database:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+docker exec -it pangolin pangctl clear-exit-nodes
+```
+
+<Warning>
+  This command permanently deletes all exit nodes from the database. This action cannot be undone.
+</Warning>
+
+## Reset User Security Keys
+
+Reset a user's security keys (passkeys) by deleting all their webauthn credentials:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+docker exec -it pangolin pangctl reset-user-security-keys --email "user@example.com"
+```
+
+<Warning>
+  This command permanently deletes all security keys for the specified user. The user will need to re-register their security keys to use passkey authentication again.
+</Warning>
+
+## Disable User 2FA
+
+Disable two-factor authentication for a user by email address. Sets `twoFactorEnabled` to false and clears the user's 2FA secret:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+docker exec -it pangolin pangctl disable-user-2fa --email "user@example.com"
+```
+
+### Options
+
+* `--email` (required): User email address
+
+<Warning>
+  This command disables 2FA for the specified user and clears their stored 2FA secret. The user can re-enable 2FA from their account settings after signing in.
+</Warning>
+
+## Rotate Server Secret
+
+Rotate the server secret by decrypting all encrypted values with the old secret and re-encrypting with a new secret. This command updates OIDC IdP configurations and license keys in the database, as well as the config file.
+
+```bash theme={"theme":"gruvbox-light-hard"}
+docker exec -it pangolin pangctl rotate-server-secret --old-secret "current-secret" --new-secret "new-secret"
+```
+
+### Options
+
+* `--old-secret` (required): The current server secret (for verification)
+* `--new-secret` (required): The new server secret to use (must be at least 8 characters long)
+* `--force` (optional): Force rotation even if the old secret doesn't match the config file. Use this if you know the old secret is correct but the config file is out of sync.
+
+<Warning>
+  This command performs a critical operation that affects all encrypted data in your database. Ensure you have a backup before running this command.
+
+  **Important considerations:**
+
+  * The new secret must be at least 8 characters long
+  * The new secret must be different from the old secret
+  * The command verifies the old secret matches the config file (unless `--force` is used)
+  * After rotation, you must restart the server for the new secret to take effect
+  * Using `--force` with an incorrect old secret will cause the rotation to fail or corrupt encrypted data
+</Warning>
+
+## Clear License Keys
+
+Clear all license keys from the database:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+docker exec -it pangolin pangctl clear-license-keys
+```
+
+<Warning>
+  This command permanently deletes all license keys from the database. This action cannot be undone.
+</Warning>
+
+## Delete Client
+
+Delete a client and all associated data (OLMs, current fingerprint, userClients, approvals). Snapshots are preserved.
+
+```bash theme={"theme":"gruvbox-light-hard"}
+docker exec -it pangolin pangctl delete-client --orgId "org-123" --niceId "client-identifier"
+```
+
+### Options
+
+* `--orgId` (required): The organization ID
+* `--niceId` (required): The client niceId (identifier)
+
+<Warning>
+  This command permanently deletes the client and its associated data:
+
+  * All OLMs (One-time Login Mechanisms) associated with the client
+  * Current fingerprint entries
+  * Approval records
+  * UserClient associations
+
+  **Note:** Snapshots are preserved and will not be deleted.
+
+  This action cannot be undone. Ensure you have backups if needed.
+</Warning>
+
+## Generate Org CA Keys
+
+Generate an SSH CA public/private key pair for an organization and store them in the database. The private key is encrypted with the server secret.
+
+```bash theme={"theme":"gruvbox-light-hard"}
+docker exec -it pangolin pangctl generate-org-ca-keys --orgId "org-123"
+```
+
+## Clear Certificates
+
+Clear all certificates from the database to be reinserted by the server when syncing from acme.json files or using Pangolin DNS.
+
+```bash theme={"theme":"gruvbox-light-hard"}
+docker exec -it pangolin pangctl clear-certificates
+```
+
+### Options
+
+* `--orgId` (required): The organization ID
+* `--secret` (optional): Server secret used to encrypt the CA private key. If omitted, the secret is read from the config file (`config.yml` or `config.yaml` in the config directory).
+* `--force` (optional, default: `false`): Overwrite existing CA keys for the organization if they already exist
+
+<Warning>
+  If the organization already has CA keys, the command fails unless you pass `--force`. Using `--force` overwrites the existing keys; ensure you have a backup or understand the impact before overwriting.
+</Warning>

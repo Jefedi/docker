@@ -1,0 +1,239 @@
+---
+title: Sonarr Supported
+description: Comprehensive list of supported indexers, download clients, and services for Sonarr
+tags:
+  - sonarr
+  - supported
+  - indexers
+  - download-clients
+  - services
+  - compatibility
+---
+
+!!! warning
+    This page is a work in progress and requires additional effort.
+
+This page is the disambiguation page for all "supported" wiki links (i.e. typically `More Info` in the UI).
+
+# Download Clients
+
+{#downloadclient}
+
+- Aria2 {#aria2}
+  - [Refer to the Settings Page](settings.md#download-clients)
+- Deluge {#deluge}
+  - [Refer to the Settings Page](settings.md#download-clients)
+- Download Station {#torrentdownloadstation}
+  - [Refer to the Settings Page](settings.md#download-clients)
+- Download Station {#usenetdownloadstation}
+  - [Refer to the Settings Page](settings.md#download-clients)
+- Flood {#flood}
+  - [Refer to the Settings Page](settings.md#download-clients)
+- Hadouken {#hadouken}
+  - [Refer to the Settings Page](settings.md#download-clients)
+- NZBGet {#nzbget}
+  - [Refer to the Settings Page](settings.md#download-clients)
+- NZBVortex {#nzbvortex}
+  - [Refer to the Settings Page](settings.md#download-clients)
+- Pneumatic {#pneumatic}
+  - [Refer to the Settings Page](settings.md#download-clients)
+- qBittorrent {#qbittorrent}
+  - [Refer to the Settings Page](settings.md#download-clients)
+- rTorrent {#rtorrent}
+  - [Refer to the Settings Page](settings.md#download-clients)
+- SABnzbd {#sabnzbd}
+  - [Refer to the Settings Page](settings.md#download-clients)
+- Freebox Download {#torrentfreeboxdownload}
+  - [Refer to the Settings Page](settings.md#download-clients)
+- Torrent Blackhole {#torrentblackhole}
+  - [Refer to the Settings Page](settings.md#download-clients)
+- Transmission {#transmission}
+  - [Refer to the Settings Page](settings.md#download-clients)
+- Usenet Blackhole {#usenetblackhole}
+  - [Refer to the Settings Page](settings.md#download-clients)
+- uTorrent {#utorrent}
+  - [Refer to the Settings Page](settings.md#download-clients)
+  - Due to uTorrent being adware and formerly spyware, it is not recommended. Most users use Qbittorrent
+- Vuze {#vuze}
+  - [Refer to the Settings Page](settings.md#download-clients)
+
+# Indexers
+
+{#indexer}
+
+## Usenet
+
+- Fanzub {#fanzub}
+  - Usenet Indexer for Japanese Media (Anime) exclusively.
+  - [Refer to the Settings Page](settings.md#indexer-settings)
+- Newznab {#newznab}
+  - [Refer to the Settings Page](settings.md#indexer-settings)
+  - Newznab is a standardized API used by many usenet indexing sites. Many presets are available, but all require an API key to be accessible.
+  - Indexer Applications like [Prowlarr](../prowlarr.md) and [NZBHydra2](https://github.com/theotherp/nzbhydra2) can provide advanced capabilities such as stat tracking.
+- omgwtfnzbs {#omgwtfnzbs}
+  - A defunct legacy implementation of a private usenet indexer. Use Newznab instead.
+  - [Refer to the Settings Page](settings.md#indexer-settings)
+
+## Torrents
+
+- BroadcasTheNet (BTN) {#broadcasthenet}
+  - Private Tracker
+  - [Refer to the Settings Page](settings.md#indexer-settings)
+- FileList {#filelist}
+  - Private Tracker
+  - [Refer to the Settings Page](settings.md#indexer-settings)
+- HDBits {#hdbits}
+  - Private Tracker
+  - [Refer to the Settings Page](settings.md#indexer-settings)
+- IP Torrents {#iptorrents}
+  - Private Tracker
+  !!! info
+      IP Torrents' native implementation does not support Search. Use it via Prowlarr or Jackett as torznab instead
+  - [Refer to the Settings Page](settings.md#indexer-settings)
+- Nyaa {#nyaa}
+  - Torrent Tracker for Japanese Media (Anime) exclusively.
+  - Nyaa only supports search for Anime Series Types
+  - Known Issues exist with the native Sonarr version
+    - [Nyaa seeders/leechers not parsed properly anymore. #4614](https://github.com/Sonarr/Sonarr/issues/4614)
+      - This can be fixed when / if [Pull Request #4637](https://github.com/Sonarr/Sonarr/pull/4637) is merged
+  !!! warning
+      - > Nyaa frowns upon automation and frequently will ban your IP.
+  - [Refer to the Settings Page](settings.md#indexer-settings)
+- Torrent RSS Feed {#torrentrssindexer}
+  - Generic torrent RSS feed parser.
+  !!! info
+      The RSS feed must contain a `pubdate`. The release size is recommended as well.
+  - [Refer to the Settings Page](settings.md#indexer-settings)
+- TorrentLeech {#torrentleech}
+  - Private Indexer
+  - [Refer to the Settings Page](settings.md#indexer-settings)
+- Torznab {#torznab}
+  - Torznab is a wordplay on Torrent and Newznab. It uses the same structure and syntax as the Newznab API specification, but exposing torrent-specific attributes and .torrent files. Thus supports a recent RSS feed AND backlog searching capabilities. The specification is not maintained nor supported by the Newznab organization. (The same API  specification is shared with nZEDb)
+  - This is primarily only supported by [Prowlarr](../prowlarr.md) and [Jackett](https://github.com/Jackett/Jackett)
+  - [Refer to the Settings Page](settings.md#indexer-settings)
+
+!!! warning
+    Many torrent trackers thrive on the community and may have rules in place that mandate site visits, karma, votes, comments, etc.
+    Please review your tracker rules and etiquette, keep your community alive.
+    We’re not responsible if your account is banned for disobeying rules or accruing Hit and Runs (HnRs)/low-ratio.
+
+# Notifications
+
+{#notification}
+
+- Apprise {#apprise}
+- Custom Script {#customscript}
+  - This allows you to make a custom script for when a particular action happens this script will run. See [Custom Scripts](custom-scripts.md) for more details.
+- Discord {#discord}
+  - By far one of the most common ways to push notifications of actions happening on your Sonarr
+  - Supported field types:
+  `Overview, Rating, Genres, Quality, Group, Size, Links, Release, Poster, Fanart, CustomFormats, CustomFormatScore, Indexer`
+- Email {#email}
+  - Simply send yourself or somebody you want to annoy with email. If you're using Gmail, you need to enable less secure apps. If you're using Gmail and have 2-factor authentication enabled you need to use an App Specific password.
+
+!!! info
+    You can use a "pretty address" like `SomePrettyName <email@example.org>`
+
+- Emby / Jellyfin {#mediabrowser}
+- Gotify {#gotify}
+- Join {#join}
+- Kodi {#xbmc}
+  - Kodi spawned from the love of media. It is an entertainment hub that brings all your digital media together into a beautiful and user friendly package. It is 100% free and open source, very customizable and runs on a wide variety of devices. It is supported by a dedicated team of volunteers and a huge community. By adding Kodi as a connection you can update Kodi's library when a new episode has been added to Sonarr.
+- Mailgun {#mailgun}
+- Notifiarr {#notifiarr}
+- Ntfy.sh {#ntfy}
+
+- Plex Media Server {#plexserver}
+  - The server for your self hosted Plex system, Enabling this is much like Kodi will allow you to push an update to your plex server notifying it that a new/upgraded episode is available.
+  - This is rarely needed and is only required if Plex is unable to watch the file system for changes.
+  - In the handful of situations where Plex is unable to watch the file system using ionotify - such as certain types of remote mounts and a handful of older network mounts - it is suggested to use the app plexautoscan rather than the Plex connection
+
+!!! warning
+    Note that this may trigger a full library scan for the library/root folder the series is in.  It is strongly suggested to use the native Plex functionality that just watches the file system or to use a tool like [plexautoscan](https://github.com/l3uddz/plex_autoscan)
+
+- Prowl {#prowl}
+- Pushbullet {#pushbullet}
+- Pushcut {#pushcut}
+- Pushover {#pushover}
+- SendGrid {#sendgrid}
+- Signal {#signal}
+  - Requires [Signal-CLI](https://github.com/AsamK/signal-cli)
+- Simplepush {#simplepush}
+- Slack {#slack}
+- Synology Indexer {#synologyindexer}
+- Telegram {#telegram}
+- Trakt {#trakt}
+- Twitter {#twitter}
+  - See this [Tips and Tricks entry](../useful-tools.md#twitter-connect)
+- Webhook {#webhook}
+
+## Deprecated Notifications
+
+- Boxcar {#boxcar}
+- Plex Home Theater {#plexhometheater}
+- Plex Media Center {#plexclient}
+
+# Lists
+
+{#importlist}
+
+- AniList {#anilistimport}
+  - [Refer to the Settings Page](settings.md#import-lists)
+- Custom Lists {#customimport}
+  - [Refer to the Settings Page](settings.md#import-lists)
+- IMDb Lists {#imdblistimport}
+  - [Refer to the Settings Page](settings.md#import-lists)
+- MyAnimeList {#myanimelistimport}
+  - [Refer to the Settings Page](settings.md#import-lists)
+- Plex Watchlist {#pleximport}
+  - Simply add a Plex watchlist for the authenticated Plex user to Sonarr. Note that it's required that your list contain shows on it.
+  - To have multiple user's watchlists you'll need to add each user's lists and authenticate with their Plex user.
+- Plex Watchlist RSS {#plexrssimport}
+  - [Refer to the Settings Page](settings.md#import-lists)
+- Simkl {#simkluserimport}
+  - [Refer to the Settings Page](settings.md#import-lists)
+- Sonarr {#sonarrimport}
+  - TRaSH has [a guide](https://trash-guides.info/Sonarr/Tips/Sync-2-radarr-sonarr/) for syncing two instances
+- Trakt List {#traktlistimport}
+  - Username - Ensure you enter the actual username of the user and not the user's name
+  - List - Ensure you use the list name as presented in the list URL
+  - Example: `https://trakt.tv/users/some-user-name/lists/trakt-list-name?sort=rank,asc`
+    - Username: `some-user-name`
+    - List: `trakt-list-name`
+- Trakt Popular List {#traktpopularimport}
+- Trakt User {#traktuserimport}
+
+!!! info
+    Trakt lists should contain shows, not individual episodes. Sonarr will only match and add shows.
+
+# Metadata
+
+{#metadata}
+
+- Kometa {#kometametadata}
+  - Enable - Enable metadata file creation for this metadata type
+  !!! warning
+      Kometa metadata is deprecated.
+- Kodi (XBMC) / Emby {#xbmcmetadata}
+  - Enable - Enable metadata file creation for this metadata type
+  - Series Metadata - Create a `tvshow.nfo` with full series metadata
+  - (Advanced Option) Series Metadata URL - Create tvshow.nfo with TheTVDb series URL
+  - Episode Metadata - Create `<filename>.nfo` for each episode
+  - Series Images - Create various Series images including posters and banners named as `poster.jpg` and `banner.jpg`
+  - Season Images - Create various Season images including posters and banners named as `season##-poster.jpg` and `season##-banner.jpg`
+  - Episode Images - Create various Episode images such as thumnbnails named as named as `<filename>-thumb.jpg`
+- Plex {#plexmetadata}
+  - Enable - Enable metadata file creation for this metadata type
+  - Series Metadata - Create a `.plexmatch` file in the series root folder
+- Roksbox {#roksboxmetadata}
+  - Enable - Enable metadata file creation for this metadata type
+  - Episode Metadata - Create `Season##\<filename>.xml` for each episode
+  - Series Images - Create `Series Title.jpg`
+  - Season Images - Create `Season ##.jpg`
+  - Episode Images - Create `Season##\<filename>.jpg`
+- WDTV {#wdtvmetadata}
+  - Enable - Enable metadata file creation for this metadata type
+  - Episode Metadata - Create `Season##\<filename>.xml` for each episode
+  - Series Images - Create `folder.jpg`
+  - Season Images - Create `Season ##\folder.jpg`
+  - Episode Images - Create `Season##\<filename>.metathumb`

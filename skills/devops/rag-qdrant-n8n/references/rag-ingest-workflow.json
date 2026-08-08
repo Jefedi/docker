@@ -1,0 +1,67 @@
+{
+  "name": "RAG - HA Docs Ingestion",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "rag-ingest",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-ingest",
+      "name": "Webhook Ingest",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "rag-ingest-webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.17.0.1:9200/embed",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"texts\": [$json.body.content] } }}",
+        "options": { "timeout": 30000 }
+      },
+      "id": "embed-request",
+      "name": "Generate Embedding",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "http://172.17.0.1:6333/collections/ha-docs/points",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"points\": [ { \"id\": $now.toMillis(), \"vector\": $json.embeddings[0], \"payload\": { \"title\": $('Webhook Ingest').item.json.body.title, \"content\": $('Webhook Ingest').item.json.body.content, \"source\": $('Webhook Ingest').item.json.body.source || 'manual', \"category\": $('Webhook Ingest').item.json.body.category || 'general', \"ingested_at\": $now.toISO() } } ] } }}",
+        "options": {}
+      },
+      "id": "qdrant-store",
+      "name": "Store in Qdrant",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"status\": \"ok\", \"message\": \"Document ingested\", \"title\": $('Webhook Ingest').item.json.body.title, \"vector_dim\": $json.dim || 384 } }}",
+        "options": { "responseCode": 200 }
+      },
+      "id": "respond-ingest",
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "Webhook Ingest": { "main": [ [{ "node": "Generate Embedding", "type": "main", "index": 0 }] ] },
+    "Generate Embedding": { "main": [ [{ "node": "Store in Qdrant", "type": "main", "index": 0 }] ] },
+    "Store in Qdrant": { "main": [ [{ "node": "Respond", "type": "main", "index": 0 }] ] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

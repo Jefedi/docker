@@ -1,0 +1,92 @@
+[
+  {
+    "file": "/opt/data/tmp/veille/ja_f2_1.html",
+    "title": "A louer location Appartement de 2 pi\u00e8ces \u00e0 Le Havre 76",
+    "price": 595,
+    "surface": 45,
+    "cuisine_sep": true,
+    "cuisine_ouverte": false,
+    "chambre": true,
+    "desc": "Visite virtuelle de ce bien disponible sur notre site internet. A louer appartement de type F2 d\u2019une superficie de 45,54m\u00b2 au 2\u00e8me \u00e9tage sans"
+  },
+  {
+    "file": "/opt/data/tmp/veille/ja_f2_2.html",
+    "title": "A louer location Appartement de 2 pi\u00e8ces \u00e0 Le Havre 76",
+    "price": 380,
+    "surface": 23,
+    "cuisine_sep": false,
+    "cuisine_ouverte": false,
+    "chambre": true,
+    "desc": "Visite virtuelle disponible sur notre site.R\u00e9fection compl\u00e8te de l\u2019appartement avec isolation et convecteurs basse consommation.A louer appartement de"
+  },
+  {
+    "file": "/opt/data/tmp/veille/ja_f2_3.html",
+    "title": "A louer location Appartement de 2 pi\u00e8ces \u00e0 Le havre 76",
+    "price": 530,
+    "surface": 46,
+    "cuisine_sep": false,
+    "cuisine_ouverte": true,
+    "chambre": true,
+    "desc": "A louer appartement de type F2 d&#039;une surface de 46.20 m\u00b2 avec balcon au 4\u00e8me \u00e9tage d&#039;une r\u00e9sidence r\u00e9cente avec ascenseur.Appartement comprenant : une"
+  },
+  {
+    "file": "/opt/data/tmp/veille/ja_f2_4.html",
+    "title": "A louer location Appartement de 2 pi\u00e8ces \u00e0 Le Havre 76",
+    "price": 520,
+    "surface": 42,
+    "cuisine_sep": false,
+    "cuisine_ouverte": false,
+    "chambre": true,
+    "desc": "Visite virtuelle de ce bien disponible sur notre site Internet.A louer appartement de type F2 enti\u00e8rement r\u00e9nov\u00e9 d\u2019une superficie de 42,45m\u00b2 au 2\u00e8me \u00e9tage"
+  },
+  {
+    "file": "/opt/data/tmp/veille/ja_f2_5.html",
+    "title": "A louer location Appartement de 2 pi\u00e8ces \u00e0 Le havre 76",
+    "price": 482,
+    "surface": 41,
+    "cuisine_sep": false,
+    "cuisine_ouverte": false,
+    "chambre": true,
+    "desc": "A louer appartement de type F2 d&#039;une superficie de 41,37m\u00b2 au 3\u00e8me \u00e9tage sans ascenseur. Appartement comprenant : une entr\u00e9e, un s\u00e9jour avec balcon, une"
+  },
+  {
+    "file": "/opt/data/tmp/veille/ja_f2_6.html",
+    "title": "A louer location Appartement de 2 pi\u00e8ces \u00e0 Le Havre 76",
+    "price": 574,
+    "surface": 46,
+    "cuisine_sep": false,
+    "cuisine_ouverte": false,
+    "chambre": true,
+    "desc": "Logement soumis au r\u00e9gime de la loi PINEL.A louer appartement de type F2 dans la R\u00e9sidence LES JARDINS D&#039;OSTARA d&#039;une superficie de 46,66m\u00b2 au 3\u00e8me \u00e9tage"
+  },
+  {
+    "file": "/opt/data/tmp/veille/ja_f2_7.html",
+    "title": "A louer location Appartement de 2 pi\u00e8ces \u00e0 Le havre 76",
+    "price": 400,
+    "surface": 33,
+    "cuisine_sep": false,
+    "cuisine_ouverte": true,
+    "chambre": true,
+    "desc": "A louer appartement de type F2 MEUBLE, d&#039;une superficie de 33,96m\u00b2 au 2\u00e8me \u00e9tage sans ascenseur.Appartement comprenant : une entr\u00e9e, un s\u00e9jour, une"
+  },
+  {
+    "file": "/opt/data/tmp/veille/ja_f2_8.html",
+    "title": "A louer location Appartement de 2 pi\u00e8ces \u00e0 Le Havre 76",
+    "price": 650,
+    "surface": 48,
+    "cuisine_sep": false,
+    "cuisine_ouverte": false,
+    "chambre": true,
+    "desc": "Visite virtuelle de ce bien disponible sur notre site Internet.A louer appartement de type F2 d&#039;une superficie de 48,83m\u00b2 au rez-de-chauss\u00e9e.Appartement"
+  },
+  {
+    "file": "/opt/data/tmp/veille/ja_f2_joffre.html",
+    "title": "A louer location Appartement de 2 pi\u00e8ces \u00e0 Le havre 76",
+    "price": 400,
+    "surface": 33,
+    "cuisine_sep": false,
+    "cuisine_ouverte": true,
+    "chambre": true,
+    "desc": "A louer appartement de type F2 MEUBLE, d&#039;une superficie de 33,96m\u00b2 au 2\u00e8me \u00e9tage sans ascenseur.Appartement comprenant : une entr\u00e9e, un s\u00e9jour, une"
+  }
+]

@@ -1,0 +1,53 @@
+services:
+  hermes:
+    image: nousresearch/hermes-agent:latest
+    container_name: hermes
+    restart: unless-stopped
+    command: gateway run
+    network_mode: host
+    environment:
+      - HERMES_DASHBOARD=true
+      - HERMES_DASHBOARD_HOST=0.0.0.0
+      - HERMES_DASHBOARD_PORT=9120
+    volumes:
+      - /srv/docker/hermes/.hermes:/opt/data
+    depends_on:
+      - camofox
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  camofox:
+    image: ghcr.io/jo-inc/camofox-browser:latest
+    container_name: camofox-browser
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:9377:9377"
+    environment:
+      - CAMOFOX_PORT=9377
+    volumes:
+      - /srv/docker/hermes/camofox:/home/node/.camofox
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  siyuan:
+    image: b3log/siyuan:latest
+    container_name: siyuan
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6806:6806"
+    volumes:
+      - /srv/docker/siyuan/workspace:/siyuan/workspace
+    environment:
+      - PUID=0
+      - PGID=0
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "3"

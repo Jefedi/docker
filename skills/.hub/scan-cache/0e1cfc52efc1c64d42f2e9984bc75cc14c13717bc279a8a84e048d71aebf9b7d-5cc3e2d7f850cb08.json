@@ -1,0 +1,25 @@
+{
+  "source": "skills-sh/nextlevelbuilder/ui-ux-pro-max-skill/ui-ux-pro-max",
+  "source_url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/0468898265b1552e19f96e9da448e971b6d325fd/.claude/skills/ui-ux-pro-max",
+  "bundle_hash": "sha256:0e1cfc52efc1c64d42f2e9984bc75cc14c13717bc279a8a84e048d71aebf9b7d",
+  "scanner_version": "skills-guard-v1",
+  "verdict": "caution",
+  "trust_level": "community",
+  "findings": [
+    {
+      "pattern_id": "sudo_usage",
+      "severity": "high",
+      "category": "privilege_escalation",
+      "file": "SKILL.md",
+      "line": 316,
+      "match": "If Python is not installed, **do not install it yourself**. Stop and ask the user to install Python 3 using their pre...",
+      "description": "uses sudo (privilege escalation)"
+    }
+  ],
+  "rules": [
+    "sudo_usage"
+  ],
+  "scanned_at": "2026-07-13T09:47:07.565271+00:00",
+  "summary": "ui-ux-pro-max: caution \u2014 1 finding(s) in privilege_escalation",
+  "fresh": true
+}

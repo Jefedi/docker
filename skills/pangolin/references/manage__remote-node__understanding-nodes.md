@@ -1,0 +1,50 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Remote Nodes
+
+> Control your own Pangolin node with cloud management
+
+<div />
+
+<Note>
+  Remote Nodes are available in [Pangolin Cloud](https://app.pangolin.net/auth/signup).
+</Note>
+
+Remote nodes, you run your own Pangolin node - your tunnels, SSL termination, and traffic all stay on your server and use your bandwidth. The difference is that management and monitoring are handled through our cloud. The node just handles terminating Wireguard tunnels, serving HTTP(S) traffic, and routing relayed client connections - it is essentially a remote networking hub.
+
+Think of different nodes as the "front doors" to your applications - users connect to the closest one, and it securely routes their requests to your backend services.
+
+<Tip>
+  You can deploy a remote Pangolin node [using the installer](/manage/remote-node/quick-install-remote).
+</Tip>
+
+## How It Works
+
+* **Host the Node**: Run Gerbil, Traefik, and a light weight agent on your server that communicates with the central Pangolin control plane with a websocket connection.
+* **Delegate the DNS**: Your domain and DNS config is still controlled by the Pangolin control plane and the central DNS server routes to the right node when connecting.
+* **Certificates and Config**: The control plane pushes down WireGuard configs, SSL certificates, and routing rules to your node as you create resources and sites.
+* **Failover**: If you have multiple nodes, the control plane will failover between them. If one node becomes unavailable, traffic can optionally fail over to our cloud infrastructure or other nodes until you restore service.
+
+<Frame>
+  <img src="https://mintcdn.com/fossorial/f8U-9JgXCHvjFAGc/images/ha.png?fit=max&auto=format&n=f8U-9JgXCHvjFAGc&q=85&s=458a18d12d328d083de06b2c1e3eb1d9" alt="Diagram of high availability failover across remote nodes" width="400" centered data-path="images/ha.png" />
+</Frame>
+
+## Some Benefits
+
+### Automatic Updates and Less Maintenance
+
+The cloud dashboard evolves quickly, so you get new features and bug fixes without having to manually pull new containers every time. Because the remote node is just handling the networking you do not need to do database migrations, or backups.
+
+### Cloud Failover
+
+If your nodes goes down, your tunnels can temporarily fail over to our cloud points of presence or another node until you bring it back online. This ensures continuous availability.
+
+### High Availability (PoPs)
+
+You can attach multiple nodes to your account for redundancy and better performance. For example, deploy nodes across different regions or providers for decreased latency.
+
+### Better Bandwidth
+
+Since all tunnel traffic flows through your own server, you benefit from your own network's bandwidth capacity. This means you are not constrained by shared cloud infrastructure limits - if your server has high-throughput connectivity, your tunnels will too.

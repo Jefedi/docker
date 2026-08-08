@@ -1,0 +1,73 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Remove GeoBlock Plugin
+
+<div />
+
+<Note>
+  This is a community guide and is not officially supported. If you have any issues, please reach out to the community on [Discord](https://pangolin.net/discord) or [Github discussions](https://github.com/orgs/fosrl/discussions).
+</Note>
+
+Pangolin now supports native geo-blocking. If you previously installed the Traefik GeoBlock plugin, remove it before enabling native geo-blocking to avoid duplicate blocking or startup errors.
+
+<Note>
+  After cleanup, follow [Enable Geo-location](/self-host/advanced/enable-geolocation) to configure the geo-location database used by native geo-blocking in Pangolin.
+</Note>
+
+## Remove the GeoBlock plugin
+
+<Steps>
+  <Step title="Remove GeoBlock middleware references">
+    Remove any references to `geoblock@file` from your Traefik entry points, routers, or labels.
+
+    Example removal in `/config/traefik/traefik_config.yml`:
+
+    ```yaml theme={"theme":"gruvbox-light-hard"}
+    entryPoints:
+      websecure:
+        http:
+          middlewares:
+            # Remove this line
+            - geoblock@file
+    ```
+  </Step>
+
+  <Step title="Remove the plugin definition from Traefik static config">
+    Delete the GeoBlock plugin block from `/config/traefik/traefik_config.yml`:
+
+    ```yaml theme={"theme":"gruvbox-light-hard"}
+    experimental:
+      plugins:
+        geoblock:
+          moduleName: github.com/PascalMinder/geoblock
+          version: v0.3.2
+    ```
+  </Step>
+
+  <Step title="Remove the middleware configuration from dynamic config">
+    Delete the GeoBlock middleware section from `/config/traefik/dynamic_config.yml`:
+
+    ```yaml theme={"theme":"gruvbox-light-hard"}
+    http:
+      middlewares:
+        geoblock:
+          plugin:
+            geoblock:
+              ...
+    ```
+  </Step>
+
+  <Step title="Restart Traefik">
+    Restart Traefik to apply the changes:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    docker restart traefik
+    ```
+  </Step>
+</Steps>
+
+## Next steps
+
+Follow [Enable Geo-location](/self-host/advanced/enable-geolocation) to configure the geo-location database used by native geo-blocking in Pangolin.

@@ -1,0 +1,37 @@
+{
+  "voxtral": {
+    "tts_tokens": 0,
+    "stt_tokens": 0,
+    "total_tokens": 0,
+    "tts_calls": 0,
+    "stt_calls": 0,
+    "tts_chars": 0,
+    "stt_chars": 0,
+    "quota": 4000000,
+    "remaining": 4000000,
+    "pct_used": 0.0,
+    "month": "2026-07"
+  },
+  "litellm": {
+    "available": true,
+    "spend": 0.0,
+    "max_budget": 10000.0,
+    "pct_budget_used": 0.0,
+    "rpm_limit": 30,
+    "tpm_limit": null,
+    "models": [
+      "glm-5.2",
+      "minimax-m3",
+      "gemma4-vision",
+      "gpt-oss-20b",
+      "deepseek-v4-flash",
+      "local-aux"
+    ],
+    "model_spend": {},
+    "budget_duration": "30d",
+    "budget_reset_at": "2026-08-01T00:00:00+00:00",
+    "key_alias": "hermes-agent",
+    "version": "1.93.0"
+  },
+  "timestamp": "2026-07-30T10:25:39.064823+00:00"
+}

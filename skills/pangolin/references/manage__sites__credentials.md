@@ -1,0 +1,59 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Site Credentials
+
+> Understanding how site credentials work and how they can be rotated & regenerated
+
+<div />
+
+## Understanding Credentials
+
+Every site is provisioned with a unique identifier (ID), secret, and endpoint. The site uses the combination of these three to establish a secure, encrypted connection to the server.
+
+### ID
+
+Example: `ln8yqs6w85la5zg`
+
+The ID represents the site connection type in the system. Every Newt site has an ID.
+
+This value is not a secret and it is okay if made publically available.
+
+### Secret
+
+Example: `tfpwoc580jf1l1glfagix0o97p8kirjogdflqg604n0tr3to`
+
+The secret represents the "password" of the site. This secret must match the secret hashed in the system for the relevant ID.
+
+<Note>
+  This is a *secret*! Only share it with trusted people and be sure to store it safely and securely.
+</Note>
+
+When the site connects, it uses this secret as a first handshake with the server. The server then passes temporary session credentials back to the site before it can initiate a websocket connection. Once the websocket connection is established, ephemeral keys are used to establish tunnels using WireGuard.
+
+### Endpoint
+
+Example: `https://app.pangolin.net` or `https://pangolin.my-server.com`
+
+The endpoint is how the site knows which server to connect to. This is the fully qualified hostname of the Pangolin server (the URL you use to access the dashboard). For Pangolin cloud, the endpoint is `https://app.pangolin.net`. The site uses this endpoint to establish a websocket connection and receive control messages from the server.
+
+## Provisioning keys at scale
+
+If you deploy many sites (for example IoT devices, golden images, or scripted installs), managing a unique ID and secret per host before first boot can be awkward. **[Site provisioning keys](/manage/sites/site-provisioning)** let each Newt instance exchange a single long-lived token for its own ID and secret on first connect, so you do not have to pre-create and distribute credentials for every machine individually.
+
+## Rotating and Regenerating Credentials
+
+<Note>
+  This is an [Enterprise Edition](/self-host/enterprise-edition)-only feature.
+</Note>
+
+Site credentials can be regenerated. Regenerating credentials will completely invalidate the previous ID and secret. Use this feature if you have lost the secret and need to reset the credentials, or if you wish to rotate credentials on a regular basis for extra security.
+
+To regenerate credentials, visit Sites > Your Site > Credentials in the Pangolin admin dashboard.
+
+### Regenerate vs. Regenerate and Disconnect
+
+Regenerate simply recreates the credentials and invalidates the old ones. The site will remain connected until you restart it with the new credentials.
+
+Regenerate and Disconnect recreates the credentials and invalides the old ones. The site will instantly disconnect and will require you to restart it with the new credentials.

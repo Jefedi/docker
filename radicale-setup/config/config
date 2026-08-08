@@ -1,0 +1,33 @@
+; Radicale configuration
+; CalDAV + CardDAV server for Hermes homelab
+
+[server]
+hosts = 0.0.0.0:5232
+max_connections = 20
+max_content_length = 10000000
+timeout = 60
+ssl = false  ; TLS handled by Pangolin reverse proxy
+
+[auth]
+type = htpasswd
+htpasswd_filename = /config/users
+htpasswd_encryption = bcrypt
+auth_delay = 3s
+
+[storage]
+type = multifilesystem
+filesystem_folder = /data/collections
+max_sync_token_age = 2592000  ; 30 days
+filesystem_fsync = True
+
+[rights]
+type = authenticated
+; Each authenticated user can access their own collections only
+
+[logging]
+level = info
+
+[headers]
+Access-Control-Allow-Origin = *
+Access-Control-Allow-Methods = GET, POST, PUT, DELETE, OPTIONS, PROPFIND, REPORT
+Access-Control-Allow-Headers = Authorization, Content-Type, Depth, If-Match, If-None-Match

@@ -1,0 +1,10 @@
+model:
+  provider: custom
+  default: mistral-medium-latest
+  base_url: https://api.mistral.ai/v1
+  api_key_env: MISTRAL_API_KEY
+fallback_providers:
+- provider: custom
+  model: open-mistral-nemo
+  base_url: https://api.mistral.ai/v1
+  key_env: MISTRAL_API_KEY

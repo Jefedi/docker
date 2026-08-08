@@ -1,0 +1,99 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Quick Install Guide
+
+> Deploy your own remote Pangolin node in under 10 minutes with our automated installer
+
+<div />
+
+## Prerequisites
+
+Before you begin, ensure you have:
+
+* **Pangolin Cloud** account. You can [create a free account here](https://app.pangolin.net/auth/signup). No subscription required.
+* **Linux server** with root access and public IP address.
+* **Open ports on firewall** for 80 (TCP), 443 (TCP), 51820 (UDP), and 21820 (UDP for clients).
+
+<Tip>
+  **Recommended**: Ubuntu 20.04+ or Debian 11+ for best compatibility and performance.
+</Tip>
+
+## Choose Your Server
+
+Need help choosing? See our [complete VPS guide](/self-host/choosing-a-vps) for suggestions.
+
+## Networking
+
+Before installing Pangolin, ensure you've opened the required port on your firewall. See our guide on [networking](/self-host/dns-and-networking#port-configuration) for more information.
+
+## Installation Process
+
+<Steps>
+  <Step title="Download the installer">
+    Connect to your server via SSH and download the installer:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    curl -fsSL https://static.pangolin.net/get-node-installer.sh | bash
+    ```
+
+    The installer supports both AMD64 (x86\_64) and ARM64 architectures.
+  </Step>
+
+  <Step title="Run the installer">
+    Execute the installer with root privileges:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    sudo ./installer
+    ```
+
+    The installer places all files in the current directory. Move the installer to your desired installation directory before running it.
+  </Step>
+
+  <Step title="Do you already have credentials from the dashboard?">
+    If you are on your game and have already generated credentials for this node in the dashboard enter them here.
+
+    <Tip>
+      If you don't have them yet you can just select no when asked and we will create it in a later step.
+    </Tip>
+  </Step>
+
+  <Step title="The public addressable IP address for this node">
+    Enter either the public IP address of your server or a domain name that resolves to it.
+
+    <Note>
+      The installer will attempt resolve and prefill your public IP address. Verify this is correct before preceding.
+    </Note>
+
+    <Warning>
+      If you choose to use a domain keep in mind this just resolves your node on the internet while the actual subdomains for resources will be managed in the cloud.
+    </Warning>
+  </Step>
+
+  <Step title="Generate credentials">
+    If you did not enter credentials earlier then you should see something like the following:
+
+    ```
+    Your managed credentials have been obtained successfully.
+            ID:     he4g78wevj25msf
+            Secret: n7sd18twfko0q0vrb7wyclqzbvvnx1fqt7ezv8xewhdb9s7d
+    ```
+
+    Go to the [Pangolin dashboard](https://app.pangolin.net/) and log in. Navigate to the "Self-hosted" section and add a new node. Select the adopt method. Use this ID and secret to register your node.
+
+    <Tip>
+      More than one account can use the same node credentials. This is useful for teams.
+    </Tip>
+  </Step>
+</Steps>
+
+## Post-Installation Setup
+
+Once installation completes successfully, you'll see:
+
+```
+Installation complete!
+```
+
+Navigate to the [Pangolin dashboard](https://app.pangolin.net/) and create sites, resources, and targets for your remote node.

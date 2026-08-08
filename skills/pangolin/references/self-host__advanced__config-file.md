@@ -1,0 +1,880 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Configuration File
+
+> Configure Pangolin using the config.yml file with detailed settings for all components
+
+<div />
+
+The `config.yml` file controls all aspects of your Pangolin deployment, including server settings, domain configuration, email setup, and security options. This file is mounted at `config/config.yml` in your Docker container.
+
+## Setting up your `config.yml`
+
+To get started, create a basic configuration file with the essential settings:
+
+Minimal Pangolin configuration:
+
+```yaml title="config.yml" theme={"theme":"gruvbox-light-hard"}
+# To see all available options, please visit the docs:
+# https://docs.pangolin.net/
+
+gerbil:
+    start_port: 51820
+    base_endpoint: "pangolin.example.com" # REPLACE WITH YOUR DOMAIN
+    # Optional network settings (defaults shown):
+    # subnet_group: "100.89.137.0/20"
+    # block_size: 24
+    # site_block_size: 30
+
+app:
+    dashboard_url: "https://pangolin.example.com" # REPLACE WITH YOUR DOMAIN
+    log_level: "info"
+    telemetry:
+        anonymous_usage: true
+
+domains:
+    domain1:
+        base_domain: "example.com" # REPLACE WITH YOUR DOMAIN
+        cert_resolver: "letsencrypt"
+
+server:
+    secret: "your-strong-secret" # REPLACE
+    cors:
+        origins: ["https://pangolin.example.com"] # REPLACE WITH YOUR DOMAIN
+        methods: ["GET", "POST", "PUT", "DELETE", "PATCH"]
+        allowed_headers: ["X-CSRF-Token", "Content-Type"]
+        credentials: false
+
+# Optional organization network settings (defaults shown):
+# orgs:
+#     block_size: 24
+#     subnet_group: "100.90.128.0/20"
+#     utility_subnet_group: "100.96.128.0/20"
+
+flags:
+    require_email_verification: false
+    disable_signup_without_invite: true
+    disable_user_create_org: false
+    allow_raw_resources: true
+```
+
+<Warning>
+  Generate a strong secret for `server.secret`. Use at least 32 characters with a mix of letters, numbers, and special characters.
+
+  If you need to CHANGE the server secret after the server has been started you must use the `pangctl rotate-server-secret` command to re-encrypt sensitive data. [Follow docs here](/self-host/advanced/container-cli-tool#rotate-server-secret).
+</Warning>
+
+## Reference
+
+This section contains the complete reference for all configuration options in `config.yml`.
+
+### Application Settings
+
+<ResponseField name="app" type="object" required>
+  Core application configuration including dashboard URL, logging, and general settings.
+
+  <Expandable title="App">
+    <ResponseField name="dashboard_url" type="string" required>
+      The URL where your Pangolin dashboard is hosted.
+
+      **Examples**: `https://example.com`, `https://pangolin.example.com`
+
+      This URL is used for generating links, redirects, and authentication flows. You can run Pangolin on a subdomain or root domain.
+    </ResponseField>
+
+    <ResponseField name="log_level" type="string">
+      The logging level for the application.
+
+      **Options**: `debug`, `info`, `warn`, `error`
+
+      **Default**: `info`
+    </ResponseField>
+
+    <ResponseField name="save_logs" type="boolean">
+      Whether to save logs to files in the `config/logs/` directory.
+
+      **Default**: `false`
+
+      <Note>
+        When enabled, logs rotate automatically:
+
+        * Max file size: 20MB
+        * Max files: 7 days
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="log_failed_attempts" type="boolean">
+      Whether to log failed authentication attempts for security monitoring.
+
+      **Default**: `false`
+    </ResponseField>
+
+    <ResponseField name="telemetry" type="object">
+      Telemetry configuration settings.
+
+      <Expandable title="Telemetry">
+        <ResponseField name="anonymous_usage" type="boolean">
+          Whether to enable anonymous usage telemetry.
+
+          **Default**: `true`
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="notifications" type="object">
+      Notification configuration settings.
+
+      <Expandable title="Notification">
+        <ResponseField name="product_updates" type="boolean">
+          Whether to enable showing product updates notifications on the UI.
+
+          **Default**: `true`
+        </ResponseField>
+
+        <ResponseField name="new_releases" type="boolean">
+          Whether to enable showing new releases notifications on the UI.
+
+          **Default**: `true`
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Server Configuration
+
+<ResponseField name="server" type="object" required>
+  Server ports, networking, and authentication settings.
+
+  <Expandable title="Server">
+    <ResponseField name="external_port" type="integer">
+      The port for the front-end API that handles external requests.
+
+      **Example**: `3000`
+    </ResponseField>
+
+    <ResponseField name="internal_port" type="integer">
+      The port for the internal private-facing API.
+
+      **Example**: `3001`
+    </ResponseField>
+
+    <ResponseField name="next_port" type="integer">
+      The port for the frontend server (Next.js).
+
+      **Example**: `3002`
+    </ResponseField>
+
+    <ResponseField name="integration_port" type="integer">
+      The port for the integration API (optional).
+
+      **Example**: `3003`
+    </ResponseField>
+
+    <ResponseField name="internal_hostname" type="string">
+      The hostname of the Pangolin container for internal communication.
+
+      **Example**: `pangolin`
+
+      <Tip>
+        If using Docker Compose, this should match your container name.
+      </Tip>
+    </ResponseField>
+
+    <ResponseField name="session_cookie_name" type="string">
+      The name of the session cookie for storing authentication tokens.
+
+      **Example**: `p_session_token`
+
+      **Default**: `p_session_token`
+    </ResponseField>
+
+    <ResponseField name="resource_access_token_param" type="string">
+      Query parameter name for passing access tokens in requests.
+
+      **Example**: `p_token`
+
+      **Default**: `p_token`
+    </ResponseField>
+
+    <ResponseField name="resource_access_token_headers" type="object">
+      HTTP headers for passing access tokens in requests.
+
+      <Expandable title="Headers">
+        <ResponseField name="id" type="string">
+          Header name for access token ID.
+
+          **Example**: `P-Access-Token-Id`
+        </ResponseField>
+
+        <ResponseField name="token" type="string">
+          Header name for access token.
+
+          **Example**: `P-Access-Token`
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="resource_session_request_param" type="string">
+      Query parameter for session request tokens.
+
+      **Example**: `p_session_request`
+
+      **Default**: `p_session_request`
+    </ResponseField>
+
+    <ResponseField name="cors" type="object">
+      Cross-Origin Resource Sharing (CORS) configuration.
+
+      <Expandable title="CORS">
+        <ResponseField name="origins" type="array of strings">
+          Allowed origins for cross-origin requests.
+
+          **Example**: `["https://pangolin.example.com"]`
+        </ResponseField>
+
+        <ResponseField name="methods" type="array of strings">
+          Allowed HTTP methods for CORS requests.
+
+          **Example**: `["GET", "POST", "PUT", "DELETE", "PATCH"]`
+        </ResponseField>
+
+        <ResponseField name="allowed_headers" type="array of strings">
+          Allowed HTTP headers in CORS requests.
+
+          **Example**: `["X-CSRF-Token", "Content-Type"]`
+        </ResponseField>
+
+        <ResponseField name="credentials" type="boolean">
+          Whether to allow credentials in CORS requests.
+
+          **Default**: `true`
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="trust_proxy" type="integer">
+      Number of proxy headers to trust for client IP detection.
+
+      **Example**: `1`
+
+      **Default**: `1`
+
+      <Tip>
+        Use `1` if running behind a single reverse proxy like Traefik.
+      </Tip>
+    </ResponseField>
+
+    <ResponseField name="dashboard_session_length_hours" type="integer">
+      Dashboard session duration in hours.
+
+      **Example**: `720` (30 days)
+
+      **Default**: `720`
+    </ResponseField>
+
+    <ResponseField name="resource_session_length_hours" type="integer">
+      Resource session duration in hours.
+
+      **Example**: `720` (30 days)
+
+      **Default**: `720`
+    </ResponseField>
+
+    <ResponseField name="secret" type="string" required>
+      Secret key for encrypting sensitive data.
+
+      **Environment Variable**: `SERVER_SECRET`
+
+      **Minimum Length**: 8 characters
+
+      **Example**: `"d28@a2b.2HFTe2bMtZHGneNYgQFKT2X4vm4HuXUXBcq6aVyNZjdGt6Dx-_A@9b3y"`
+
+      <Warning>
+        Generate a strong, random secret. This is used for encrypting sensitive data and should be kept secure.
+
+        If you need to CHANGE the server secret after the server has been started you must use the `pangctl rotate-server-secret` command to re-encrypt sensitive data. [Follow docs here](/self-host/advanced/container-cli-tool#rotate-server-secret).
+      </Warning>
+    </ResponseField>
+
+    <ResponseField name="maxmind_db_path" type="string">
+      Path to the MaxMind GeoIP database file for geolocation features.
+
+      **Example**: `./config/GeoLite2-Country.mmdb`
+
+      <Note>
+        Used for IP geolocation functionality. Requires a MaxMind GeoLite2 or GeoIP2 database file.
+      </Note>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Domain Configuration
+
+<ResponseField name="domains" type="object" required>
+  Domain settings for SSL certificates and routing.
+
+  At least one domain must be configured.
+
+  It is best to add it in the UI for ease of use or when you want the
+  domain to *only be present in the org it was created in*.
+
+  You should create it in the config file for permanence across installs
+  and if you want the domain to be present in all orgs.
+
+  <Expandable title="Domains">
+    <ResponseField name="<domain_key>" type="object">
+      Domain configuration with a unique key of your choice.
+
+      <Expandable title="Domain Settings">
+        <ResponseField name="base_domain" type="string" required>
+          The base domain for this configuration.
+
+          **Example**: `example.com`
+        </ResponseField>
+
+        <ResponseField name="cert_resolver" type="string" required>
+          The Traefik certificate resolver name.
+
+          **Example**: `letsencrypt`
+
+          <Note>
+            This must match the certificate resolver name in your Traefik configuration.
+          </Note>
+        </ResponseField>
+
+        <ResponseField name="prefer_wildcard_cert" type="boolean">
+          Whether to prefer wildcard certificates for this domain.
+
+          **Example**: `true`
+
+          <Tip>
+            Useful for domains with many subdomains to reduce certificate management overhead.
+          </Tip>
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Traefik Integration
+
+<ResponseField name="traefik" type="object">
+  Traefik reverse proxy configuration settings.
+
+  <Expandable title="Traefik">
+    <ResponseField name="http_entrypoint" type="string">
+      The Traefik entrypoint name for HTTP traffic.
+
+      **Example**: `web`
+
+      <Note>
+        Must match the entrypoint name in your Traefik configuration.
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="https_entrypoint" type="string">
+      The Traefik entrypoint name for HTTPS traffic.
+
+      **Example**: `websecure`
+
+      <Note>
+        Must match the entrypoint name in your Traefik configuration.
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="cert_resolver" type="string">
+      The default certificate resolver for domains created through the UI.
+
+      **Example**: `letsencrypt`
+
+      <Note>
+        This only applies to domains created through the Pangolin dashboard.
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="prefer_wildcard_cert" type="boolean">
+      Whether to prefer wildcard certificates for UI-created domains.
+
+      **Example**: `true`
+
+      <Note>
+        This only applies to domains created through the Pangolin dashboard.
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="additional_middlewares" type="array of strings">
+      Additional Traefik middlewares to apply to resource routers.
+
+      **Example**: `["middleware1", "middleware2"]`
+
+      <Note>
+        These middlewares must be defined in your Traefik dynamic configuration.
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="certificates_path" type="string">
+      Path where SSL certificates are stored. This is used only with managed Pangolin deployments.
+
+      **Example**: `/var/certificates`
+
+      **Default**: `/var/certificates`
+    </ResponseField>
+
+    <ResponseField name="monitor_interval" type="integer">
+      Interval in milliseconds for monitoring configuration changes.
+
+      **Example**: `5000`
+
+      **Default**: `5000`
+    </ResponseField>
+
+    <ResponseField name="dynamic_cert_config_path" type="string">
+      Path to the dynamic certificate configuration file. This is used only with managed Pangolin deployments.
+
+      **Example**: `/var/dynamic/cert_config.yml`
+
+      **Default**: `/var/dynamic/cert_config.yml`
+    </ResponseField>
+
+    <ResponseField name="dynamic_router_config_path" type="string">
+      Path to the dynamic router configuration file.
+
+      **Example**: `/var/dynamic/router_config.yml`
+
+      **Default**: `/var/dynamic/router_config.yml`
+    </ResponseField>
+
+    <ResponseField name="site_types" type="array of strings">
+      Supported site types for Traefik configuration.
+
+      **Example**: `["newt", "wireguard", "local"]`
+
+      **Default**: `["newt", "wireguard", "local"]`
+    </ResponseField>
+
+    <ResponseField name="file_mode" type="boolean">
+      Whether to use file-based configuration mode for Traefik.
+
+      **Example**: `false`
+
+      **Default**: `false`
+
+      <Note>
+        When enabled, uses file-based dynamic configuration instead of API-based updates.
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="pp_transport_prefix" type="string">
+      Prefix used for transport-related configurations. References servers transport config in dynamic Traefik file.
+
+      **Example**: `pp-transport-v`
+
+      **Default**: `pp-transport-v`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Gerbil Tunnel Controller
+
+<ResponseField name="gerbil" type="object" required>
+  Gerbil tunnel controller settings for WireGuard tunneling.
+
+  <Expandable title="Gerbil">
+    <ResponseField name="base_endpoint" type="string" required>
+      Domain name included in WireGuard configuration for tunnel connections.
+
+      **Example**: `pangolin.example.com`
+    </ResponseField>
+
+    <ResponseField name="start_port" type="integer">
+      Starting port for WireGuard tunnels.
+
+      **Example**: `51820`
+    </ResponseField>
+
+    <ResponseField name="clients_start_port" type="integer">
+      Starting port for client WireGuard relay and hole punch port.
+
+      **Example**: `21820`
+    </ResponseField>
+
+    <ResponseField name="subnet_group" type="string">
+      IP address CIDR range for Gerbil exit node subnets.
+
+      **Default**: `100.89.137.0/20`
+
+      <Note>
+        The default uses the CGNAT range to avoid conflicts with typical private networks.
+      </Note>
+
+      <Tip>
+        If you change this on an existing install you will need to delete the exit node to refresh it in the database which is best practice. Use the [pangctl command to clear the exit nodes](https://docs.pangolin.net/self-host/advanced/container-cli-tool#clear-exit-nodes).
+      </Tip>
+    </ResponseField>
+
+    <ResponseField name="block_size" type="integer">
+      Block size for Gerbil exit node CIDR ranges.
+
+      **Default**: `24`
+
+      <Note>
+        A /24 block provides 256 IP addresses for the Gerbil network.
+      </Note>
+
+      <Tip>
+        If you change this on an existing install you will need to delete the exit node to refresh it in the database which is best practice. Use the [pangctl command to clear the exit nodes](https://docs.pangolin.net/self-host/advanced/container-cli-tool#clear-exit-nodes).
+      </Tip>
+    </ResponseField>
+
+    <ResponseField name="site_block_size" type="integer">
+      Block size for site CIDR ranges connected to Gerbil.
+
+      **Default**: `30`
+
+      <Note>
+        A /30 block provides 4 IP addresses per site. Consider using /29 (8 IPs) or /28 (16 IPs) for sites with heavy WireGuard usage.
+      </Note>
+
+      <Tip>
+        If you change this on an existing install you will need to delete the exit node to refresh it in the database which is best practice. Use the [pangctl command to clear the exit nodes](https://docs.pangolin.net/self-host/advanced/container-cli-tool#clear-exit-nodes).
+      </Tip>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Organization Settings
+
+<ResponseField name="orgs" type="object">
+  Organization network configuration settings.
+
+  <Expandable title="Organizations">
+    <ResponseField name="block_size" type="integer">
+      Block size for organization CIDR ranges.
+
+      **Default**: `24`
+
+      <Note>
+        A /24 block provides 256 IP addresses per organization. Determines the subnet size allocated to each organization for network isolation.
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="subnet_group" type="string">
+      IP address CIDR range for organization subnets.
+
+      **Default**: `100.90.128.0/20`
+
+      **Example**: `100.90.128.0/20`
+
+      <Note>
+        Base subnet from which organization-specific subnets are allocated. Uses CGNAT range by default.
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="utility_subnet_group" type="string">
+      IP address CIDR range for utility subnets used by organizations.
+
+      **Default**: `100.96.128.0/20`
+
+      <Note>
+        Separate subnet range for utility network functions within organizations.
+      </Note>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Rate Limiting
+
+<ResponseField name="rate_limits" type="object">
+  Rate limiting configuration for API requests.
+
+  <Expandable title="Rate Limits">
+    <ResponseField name="global" type="object">
+      Global rate limit settings for all external API requests.
+
+      <Expandable title="Global">
+        <ResponseField name="window_minutes" type="integer">
+          Time window for rate limiting in minutes.
+
+          **Example**: `1`
+        </ResponseField>
+
+        <ResponseField name="max_requests" type="integer">
+          Maximum number of requests allowed in the time window.
+
+          **Example**: `100`
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="auth" type="object">
+      Rate limit settings specifically for authentication endpoints.
+
+      <Expandable title="Auth Rate Limits">
+        <ResponseField name="window_minutes" type="integer">
+          Time window for authentication rate limiting in minutes.
+
+          **Example**: `1`
+
+          **Default**: `1`
+        </ResponseField>
+
+        <ResponseField name="max_requests" type="integer">
+          Maximum number of authentication requests allowed in the time window.
+
+          **Example**: `10`
+
+          **Default**: `500`
+
+          <Note>
+            Consider setting this lower than global limits for security.
+          </Note>
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Email Configuration
+
+<ResponseField name="email" type="object">
+  SMTP settings for sending transactional emails.
+
+  <Expandable title="Email">
+    <ResponseField name="smtp_host" type="string">
+      SMTP server hostname.
+
+      **Example**: `smtp.gmail.com`
+    </ResponseField>
+
+    <ResponseField name="smtp_port" type="integer">
+      SMTP server port.
+
+      **Example**: `587` (TLS) or `465` (SSL)
+    </ResponseField>
+
+    <ResponseField name="smtp_user" type="string">
+      SMTP username.
+
+      **Environment Variable**: `EMAIL_SMTP_USER`
+
+      **Example**: `no-reply@example.com`
+    </ResponseField>
+
+    <ResponseField name="smtp_pass" type="string">
+      SMTP password.
+
+      **Environment Variable**: `EMAIL_SMTP_PASS`
+    </ResponseField>
+
+    <ResponseField name="smtp_secure" type="boolean">
+      Whether to use secure connection (SSL/TLS).
+
+      **Default**: `false`
+
+      <Tip>
+        Enable this when using port 465 (SSL).
+      </Tip>
+    </ResponseField>
+
+    <ResponseField name="no_reply" type="string">
+      From address for sent emails.
+
+      **Example**: `no-reply@example.com`
+
+      <Note>
+        Usually the same as `smtp_user`.
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="smtp_tls_reject_unauthorized" type="boolean">
+      Whether to fail on invalid server certificates.
+
+      **Default**: `true`
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Feature Flags
+
+<ResponseField name="flags" type="object">
+  Feature flags to control application behavior.
+
+  <Expandable title="Flags">
+    <ResponseField name="require_email_verification" type="boolean">
+      Whether to require email verification for new users.
+
+      **Default**: `false`
+
+      <Warning>
+        Only enable this if you have email configuration set up.
+      </Warning>
+    </ResponseField>
+
+    <ResponseField name="disable_signup_without_invite" type="boolean">
+      Whether to disable public user registration.
+
+      **Default**: `false`
+
+      <Note>
+        Users can still sign up with valid invites when enabled.
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="disable_user_create_org" type="boolean">
+      Whether to prevent users from creating organizations.
+
+      **Default**: `false`
+
+      <Note>
+        Server admins can always create organizations.
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="allow_raw_resources" type="boolean">
+      Whether to allow raw TCP/UDP resource creation.
+
+      **Default**: `true`
+
+      <Note>
+        If set to `false`, users will only be able to create http/https resources.
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="enable_integration_api" type="boolean">
+      Whether to enable the integration API.
+
+      **Default**: `false`
+    </ResponseField>
+
+    <ResponseField name="disable_local_sites" type="boolean">
+      Whether to disable local site creation and management.
+
+      **Default**: `false`
+
+      <Note>
+        When enabled, users cannot create sites that connect to local networks.
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="disable_basic_wireguard_sites" type="boolean">
+      Whether to disable basic WireGuard site functionality.
+
+      **Default**: `false`
+
+      <Note>
+        When enabled, only advanced WireGuard configurations are allowed.
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="disable_product_help_banners" type="boolean">
+      Whether to disable product help banners in the UI at the top of screens.
+
+      **Default**: `false`
+    </ResponseField>
+
+    <ResponseField name="disable_config_managed_domains" type="boolean">
+      Whether to disable domains managed through the configuration file.
+
+      **Default**: `false`
+
+      <Note>
+        When enabled, only domains created through the UI are allowed.
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="disable_enterprise_features" type="boolean">
+      Whether to disable features that are only available in the Enterprise Edition from showing in the UI.
+
+      **Default**: `false`
+
+      <Note>
+        When enabled, Enterprise-only features are hidden from the UI.
+      </Note>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Database Configuration
+
+<ResponseField name="postgres" type="object">
+  PostgreSQL database configuration (optional).
+
+  <Expandable title="PostgreSQL">
+    <ResponseField name="connection_string" type="string" required>
+      PostgreSQL connection string.
+
+      **Example**: `postgresql://user:password@host:port/database`
+
+      <Note>
+        See [PostgreSQL documentation](/self-host/advanced/database-options#postgresql) for setup instructions.
+      </Note>
+    </ResponseField>
+
+    <ResponseField name="replicas" type="array of objects">
+      Read-only replica database configurations for load balancing.
+
+      <Expandable title="Replica Configuration">
+        <ResponseField name="connection_string" type="string" required>
+          Connection string for the read replica database.
+
+          **Example**: `postgresql://user:password@replica-host:port/database`
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+
+    <ResponseField name="pool" type="object">
+      Database connection pool settings.
+
+      <Expandable title="Pool Settings">
+        <ResponseField name="max_connections" type="integer">
+          Maximum number of connections to the primary database.
+
+          **Default**: `20`
+
+          **Example**: `50`
+        </ResponseField>
+
+        <ResponseField name="max_replica_connections" type="integer">
+          Maximum number of connections to replica databases.
+
+          **Default**: `10`
+
+          **Example**: `25`
+        </ResponseField>
+
+        <ResponseField name="idle_timeout_ms" type="integer">
+          Time in milliseconds before idle connections are closed.
+
+          **Default**: `30000` (30 seconds)
+
+          **Example**: `60000`
+        </ResponseField>
+
+        <ResponseField name="connection_timeout_ms" type="integer">
+          Time in milliseconds to wait for a database connection.
+
+          **Default**: `5000` (5 seconds)
+
+          **Example**: `10000`
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Environment Variables
+
+Some configuration values can be set using environment variables for enhanced security:
+
+| Name                                  | Variable                              | Config                                                                                                              |
+| ------------------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Server Secret                         | `SERVER_SECRET`                       | `server.secret`                                                                                                     |
+| Email Username                        | `EMAIL_SMTP_USER`                     | `email.smtp_user`                                                                                                   |
+| Email Password                        | `EMAIL_SMTP_PASS`                     | `email.smtp_pass`                                                                                                   |
+| PostgreSQL Connection String          | `POSTGRES_CONNECTION_STRING`          | `postgres.connection_string`                                                                                        |
+| PostgreSQL Replica Connection Strings | `POSTGRES_REPLICA_CONNECTION_STRINGS` | `postgres.replicas` (comma-separated list of connection strings)                                                    |
+| PostgreSQL Logs Connection String     | `POSTGRES_LOGS_CONNECTION_STRING`     | `postgres_logs.connection_string`                                                                                   |
+| Enable SQLite WAL Mode                | `ENABLE_SQLITE_WAL_MODE`              | *(SQLite only)* Set to `true` to enable [WAL mode](https://www.sqlite.org/wal.html) for improved SQLite concurrency |

@@ -1,0 +1,63 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Understanding Clients
+
+> Create a client to connect to your Pangolin network from a remote computer
+
+<div />
+
+A client is a way to access resources on sites remotely and privately via a virtual private network. Clients are used with private resources to faciliate zero-trust network access.
+
+By default a client does not have access to any hosts on the local network of the site. Admins must explicitly define resources on the site and give specific users and roles access to the resources.
+
+Users must log in and connect from a Pangolin client available on [Windows, Mac, Linux, iOS/iPadOS, and Android](/manage/clients/install-client). Machines (automated systems and servers) connect with an ID and secret.
+
+## Client Types
+
+There are two types of clients: user devices and machines.
+
+<CardGroup cols={2}>
+  <Card title="User Devices">
+    * Associated with a user in your Pangolin organization
+    * Requires login to connect (password, 2fa, etc)
+    * Available for download on Mac, Windows, and Linux
+  </Card>
+
+  <Card title="Machines">
+    * Represent a server or automated system instead of a user
+    * Connect with an ID and secret
+    * Available in CLI form with Pangolin CLI
+  </Card>
+</CardGroup>
+
+### User Devices
+
+A user may download a client for their specific system. Before they can connect, they must select a Pangolin server to authenticate to using their provided Pangolin account. Users can log in as a Pangolin user or with your attached external identity provider.
+
+Examples include:
+
+* **SSH**: Admins and developers can connect with their client to specific hosts for SSH.
+* **RDP**: Users can connect to a remote host using familiar remote desktop software.
+
+Then, just like in the Pangolin dashboard, a user selects the organization to connect to. Once connected, all resources made available to the user in that organization become available via the tunnel.
+
+### Machines
+
+Machine clients are for servers and automated systems that are not associated with a specific user.
+
+Examples include:
+
+* **CICD**: Access remote resources like a database in an automated deployment pipeline.
+* **Servers**: Provide a VPS with access to a resource running in a different network.
+
+Though you may connect a server via a user account using a CLI client, we recommend you specifically use a machine client.
+
+Machine clients authenticate with an ID and secret string. These credentials are passed via arguments into one of the supported Pangolin CLI clients. They can be revoked and rotated.
+
+## Client Modalities
+
+Clients connect to sites using NAT hole punching or relaying. A client first attempts a direct peer-to-peer tunnel, then falls back to relaying through your Pangolin server if hole punching fails.
+
+See [NAT Traversal](/manage/clients/nat-traversal) for how each modality works, how to check whether a site is relayed, and tips for improving hole punching reliability.

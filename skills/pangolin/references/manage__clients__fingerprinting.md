@@ -1,0 +1,82 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Client Fingerprinting
+
+> A summary of device information that is collected during the connection
+
+<div />
+
+## Device Fingerprinting
+
+Pangolin clients collect device fingerprinting information and can perform
+security posture checks to help determine trusted devices. This information is
+used to enforce security policies, audit device configurations, and monitor
+compliance with organizational requirements. Snapshots of device information are
+collected periodically on each platform when clients are connected.
+
+## Collected Fingerprint Information
+
+The following device attributes are collected on each device when available:
+
+* Username
+* Hostname
+* OS version
+* Kernel version
+* Architecture
+* Device model
+* Serial number
+
+## Available Posture Checks
+
+<Note>
+  Posture checks are only collected on [Pangolin Cloud](https://app.pangolin.net/auth/signup) and self-hosted [Enterprise Edition](/self-host/enterprise-edition).
+</Note>
+
+Posture checks are also collected on each platform; this is device state that
+could potentially change, such as biometric availability, firewall settings, and
+other related information if it is available.
+
+Posture checks are supported on a per-platform basis.
+
+### Windows
+
+| Posture Check         | What It Reports                                                   |
+| --------------------- | ----------------------------------------------------------------- |
+| Hard drive encryption | Whether the system disk and other disks are encrypted (BitLocker) |
+| Firewall              | If the firewall (Windows or third party) is enabled               |
+| Antivirus             | If antivirus (Windows or third party) is installed and active     |
+| TPM availability      | If a Trusted Platform Module is available                         |
+
+### macOS
+
+| Posture Check                     | What It Reports                          |
+| --------------------------------- | ---------------------------------------- |
+| Hard drive encryption             | Whether the system disk is encrypted     |
+| Biometric configuration           | If Touch ID or Face ID is configured     |
+| Firewall                          | If the macOS firewall is enabled         |
+| System Integrity Protection (SIP) | Whether SIP is active                    |
+| Gatekeeper                        | Whether Gatekeeper is active             |
+| Firewall stealth mode             | Whether firewall stealth mode is enabled |
+| Auto updates                      | If automatic updates are enabled         |
+
+### Linux
+
+| Posture Check         | What It Reports                                  |
+| --------------------- | ------------------------------------------------ |
+| Hard drive encryption | If LUKS devices are detected on the system       |
+| Firewall              | Whether UFW, firewalld, or iptables are enabled  |
+| AppArmor              | If AppArmor is active                            |
+| SELinux               | If SELinux is active                             |
+| TPM availability      | If a Trusted Platform Module device is available |
+
+### iOS
+
+No posture checks are currently supported on iOS.
+
+### Android
+
+| Posture Check         | What It Reports                     |
+| --------------------- | ----------------------------------- |
+| Hard drive encryption | If File-Based Encryption is enabled |

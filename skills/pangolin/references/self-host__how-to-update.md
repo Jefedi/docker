@@ -1,0 +1,116 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# How to Update
+
+> Keep your Pangolin deployment up to date with the latest features and security patches
+
+<div />
+
+Updating Pangolin is straightforward since it's a collection of Docker images. Simply pull the latest images and restart the stack. Migration scripts run automatically to update your database and configuration files when needed.
+
+## Before You Update
+
+<Warning>
+  **Always backup your data before updating.** Copy your `config` directory to a safe location so you can roll back if needed.
+</Warning>
+
+<Tip>
+  **Recommended**: Update incrementally between major versions. For example, update from 1.0.0 → 1.1.0 → 1.2.0 instead of jumping directly from 1.0.0 → 1.2.0.
+</Tip>
+
+## Update Process
+
+<Steps>
+  <Step title="Stop the stack">
+    Stop all running containers:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    sudo docker compose down
+    ```
+  </Step>
+
+  <Step title="Check latest versions">
+    Find the latest version numbers:
+
+    * **Pangolin**: [GitHub Releases](https://github.com/fosrl/pangolin/releases)
+    * **Gerbil**: [GitHub Releases](https://github.com/fosrl/gerbil/releases)
+    * **Traefik**: [Docker Hub](https://hub.docker.com/_/traefik)
+    * **Badger**: [GitHub Releases](https://github.com/fosrl/badger/releases)
+
+    <Info>
+      Look for the latest stable release (not pre-release or beta versions).
+    </Info>
+  </Step>
+
+  <Step title="Update version numbers">
+    Edit your `docker-compose.yml` file and update the image versions:
+
+    ```yaml title="docker-compose.yml" theme={"theme":"gruvbox-light-hard"}
+    services:
+      pangolin:
+          image: fosrl/pangolin:1.7.3  # Update to latest version
+          # ... rest of config
+
+      gerbil:
+          image: fosrl/gerbil:1.2.1   # Update to latest version
+          # ... rest of config
+      
+        traefik:
+          image: traefik:v3.4.0       # Update if needed
+          # ... rest of config
+    ```
+
+    Increase the Badger version number in `config/traefik/traefik_config.yml`:
+
+    ```yaml title="traefik_config.yml" theme={"theme":"gruvbox-light-hard"}
+    experimental:
+      plugins:
+        badger:
+          moduleName: github.com/fosrl/badger
+          version: v1.4.1 # Update to latest version
+    ```
+
+    <Warning>
+      Update each service you want to upgrade. You can update them individually or all at once.
+    </Warning>
+  </Step>
+
+  <Step title="Pull new images">
+    Download the updated Docker images:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    sudo docker compose pull
+    ```
+  </Step>
+
+  <Step title="Start the stack">
+    Start the updated containers:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    sudo docker compose up -d
+    ```
+  </Step>
+
+  <Step title="Monitor the update">
+    Watch the logs to ensure everything starts correctly:
+
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    sudo docker compose logs -f
+    ```
+  </Step>
+
+  <Step title="Verify functionality">
+    Test that everything is working:
+
+    1. Access your Pangolin dashboard
+    2. Check that all sites are accessible
+    3. Verify tunnel connections (if using Gerbil)
+    4. Test any custom configurations
+
+    <Check>
+      If everything works, your update is complete!
+    </Check>
+  </Step>
+</Steps>

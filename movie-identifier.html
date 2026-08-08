@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎬 Movie Shazam — Identifie n'importe quel film ou série</title>
+<style>
+:root {
+  --bg: #0a0a0f;
+  --card: #14141f;
+  --border: #2a2a3e;
+  --accent: #6c5ce7;
+  --accent2: #00cec9;
+  --text: #e8e8f0;
+  --dim: #8888aa;
+  --ok: #00b894;
+  --err: #e74c3c;
+  --warn: #fdcb6e;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  padding: 20px;
+}
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 {
+  font-size: 2em;
+  text-align: center;
+  margin-bottom: 4px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.subtitle {
+  text-align: center;
+  color: var(--dim);
+  font-size: 0.9em;
+  margin-bottom: 30px;
+}
+
+/* Drop zone */
+.dropzone {
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+  padding: 50px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: var(--card);
+}
+.dropzone:hover, .dropzone.dragover {
+  border-color: var(--accent);
+  background: #1a1a2e;
+  transform: scale(1.01);
+}
+.dropzone-icon { font-size: 3em; margin-bottom: 12px; }
+.dropzone p { color: var(--dim); font-size: 1.1em; }
+.dropzone .hint { font-size: 0.8em; color: #555570; margin-top: 8px; }
+
+/* Video preview */
+.video-wrap {
+  margin-top: 20px;
+  display: none;
+  text-align: center;
+}
+.video-wrap video {
+  max-width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+#fileName {
+  color: var(--dim);
+  font-size: 0.85em;
+  margin-top: 8px;
+}
+
+/* Action button */
+.btn {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 20px;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: white;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(108,92,231,0.4); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* Progress */
+.progress-wrap { margin-top: 20px; display: none; }
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  width: 0%;
+  transition: width 0.3s;
+}
+.progress-text {
+  text-align: center;
+  color: var(--dim);
+  font-size: 0.85em;
+  margin-top: 10px;
+}
+
+/* Frames grid */
+.frames-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+.frame-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.frame-card img { width: 100%; display: block; }
+.frame-card .frame-info {
+  padding: 8px;
+  font-size: 0.75em;
+  color: var(--dim);
+}
+.frame-card .frame-status {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.7em;
+  margin-top: 4px;
+}
+.frame-card .frame-status.pending { background: #333; color: var(--dim); }
+.frame-card .frame-status.analyzing { background: #2d2d4f; color: var(--accent); }
+.frame-card .frame-status.done { background: #1a3a2a; color: var(--ok); }
+.frame-card .frame-status.error { background: #3a1a1a; color: var(--err); }
+
+/* Result */
+.result-card {
+  margin-top: 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  display: none;
+}
+.result-card h2 {
+  font-size: 1.4em;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.result-badge {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-size: 0.7em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.badge-film { background: #2d4a2d; color: #6fdc6f; }
+.badge-serie { background: #2d3a4a; color: #6fb8fc; }
+.badge-unknown { background: #4a2d2d; color: #fc6f6f; }
+
+.result-title {
+  font-size: 1.8em;
+  font-weight: 700;
+  margin: 12px 0;
+}
+.result-meta {
+  color: var(--dim);
+  font-size: 0.9em;
+  margin-bottom: 16px;
+}
+.result-desc {
+  line-height: 1.7;
+  color: #c8c8d8;
+}
+.result-confidence {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.confidence-bar {
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.confidence-fill { height: 100%; border-radius: 2px; transition: width 0.5s; }
+.confidence-text { font-size: 0.85em; color: var(--dim); white-space: nowrap; }
+
+/* Error */
+.error-msg {
+  margin-top: 20px;
+  padding: 16px;
+  background: #2a1515;
+  border: 1px solid #5a2020;
+  border-radius: 10px;
+  color: #ff8888;
+  display: none;
+  font-size: 0.9em;
+}
+
+/* Config */
+.config-toggle {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 0.8em;
+  color: var(--dim);
+  cursor: pointer;
+}
+.config-panel {
+  margin-top: 12px;
+  padding: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: none;
+}
+.config-panel label { display: block; font-size: 0.85em; color: var(--dim); margin-bottom: 4px; margin-top: 12px; }
+.config-panel input {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.9em;
+  font-family: monospace;
+}
+.config-panel .note { font-size: 0.75em; color: #555570; margin-top: 12px; }
+
+/* Hidden */
+.hidden { display: none !important; }
+
+/* Spinner */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Responsive */
+@media (max-width: 600px) {
+  h1 { font-size: 1.5em; }
+  .dropzone { padding: 30px 15px; }
+  .frames-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🎬 Movie Shazam</h1>
+  <p class="subtitle">Upload une vidéo — l'IA identifie le film ou la série automatiquement</p>
+
+  <!-- Drop zone -->
+  <div class="dropzone" id="dropzone">
+    <div class="dropzone-icon">📹</div>
+    <p><strong>Clique ou glisse une vidéo ici</strong></p>
+    <p class="hint">MP4, WebM, MOV — extrait TikTok, Instagram, X…</p>
+  </div>
+  <input type="file" id="fileInput" accept="video/*" style="display:none">
+
+  <!-- Video preview -->
+  <div class="video-wrap" id="videoWrap">
+    <video id="video" controls muted></video>
+    <div id="fileName"></div>
+  </div>
+
+  <!-- Analyze button -->
+  <button class="btn btn-primary" id="analyzeBtn" style="display:none">
+    🔍 Identifier le film / série
+  </button>
+
+  <!-- Progress -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText">Préparation…</div>
+  </div>
+
+  <!-- Frames -->
+  <div class="frames-grid" id="framesGrid"></div>
+
+  <!-- Result -->
+  <div class="result-card" id="resultCard">
+    <h2>✨ Résultat</h2>
+    <div id="resultContent"></div>
+  </div>
+
+  <!-- Error -->
+  <div class="error-msg" id="errorMsg"></div>
+
+  <!-- Config -->
+  <div class="config-toggle" id="configToggle">⚙️ Paramètres avancés</div>
+  <div class="config-panel" id="configPanel">
+    <label>URL API Vision</label>
+    <input type="text" id="apiUrl" value="http://127.0.0.1:4000/v1/chat/completions">
+    <label>Modèle Vision</label>
+    <input type="text" id="apiModel" value="gemma4-vision">
+    <label>Clé API (base64 encodée)</label>
+    <input type="text" id="apiKey" value="c2stUEM2Tk9fTi03WlhnSDZFeV96ckF4QQ==">
+    <label>Nombre de frames à extraire</label>
+    <input type="number" id="frameCount" value="6" min="3" max="12">
+    <p class="note">⚠️ La clé API est encodée en base64. Cet outil fonctionne en local sur ta machine.</p>
+  </div>
+</div>
+
+<script>
+// === Config ===
+const DEFAULT_KEY_B64 = 'c2stUEM2Tk9fTi03WlhnSDZFeV96ckF4QQ==';
+
+function getConfig() {
+  return {
+    apiUrl: document.getElementById('apiUrl').value,
+    model: document.getElementById('apiModel').value,
+    apiKey: atob(document.getElementById('apiKey').value),
+    frameCount: parseInt(document.getElementById('frameCount').value) || 6,
+  };
+}
+
+// === Elements ===
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('fileInput');
+const videoWrap = document.getElementById('videoWrap');
+const video = document.getElementById('video');
+const fileName = document.getElementById('fileName');
+const analyzeBtn = document.getElementById('analyzeBtn');
+const progressWrap = document.getElementById('progressWrap');
+const progressFill = document.getElementById('progressFill');
+const progressText = document.getElementById('progressText');
+const framesGrid = document.getElementById('framesGrid');
+const resultCard = document.getElementById('resultCard');
+const resultContent = document.getElementById('resultContent');
+const errorMsg = document.getElementById('errorMsg');
+const configToggle = document.getElementById('configToggle');
+const configPanel = document.getElementById('configPanel');
+
+let currentFile = null;
+let extractedFrames = [];
+
+// === Drop zone events ===
+dropzone.addEventListener('click', () => fileInput.click());
+dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
+dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropzone.classList.remove('dragover');
+  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', e => {
+  if (e.target.files.length) handleFile(e.target.files[0]);
+});
+
+// === Config toggle ===
+configToggle.addEventListener('click', () => {
+  configPanel.style.display = configPanel.style.display === 'none' ? 'block' : 'none';
+});
+
+// === Handle file ===
+function handleFile(file) {
+  if (!file.type.startsWith('video/')) {
+    showError('Format non supporté. Sélectionne un fichier vidéo (MP4, WebM, MOV…).');
+    return;
+  }
+  currentFile = file;
+  const url = URL.createObjectURL(file);
+  video.src = url;
+  videoWrap.style.display = 'block';
+  fileName.textContent = `📁 ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
+  analyzeBtn.style.display = 'block';
+  errorMsg.style.display = 'none';
+  resultCard.style.display = 'none';
+  framesGrid.innerHTML = '';
+  extractedFrames = [];
+}
+
+// === Extract frames ===
+async function extractFrames(videoEl, count) {
+  return new Promise((resolve, reject) => {
+    const frames = [];
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    videoEl.pause();
+    videoEl.muted = true;
+    
+    const duration = videoEl.duration;
+    if (!duration || isNaN(duration)) {
+      reject(new Error('Impossible de lire la durée de la vidéo'));
+      return;
+    }
+    
+    // Calculate timestamps (spread across the video, avoiding very start/end)
+    const timestamps = [];
+    for (let i = 0; i < count; i++) {
+      const t = duration * (i + 0.5) / count;
+      timestamps.push(Math.min(t, duration - 0.1));
+    }
+    
+    let idx = 0;
+    
+    function extractNext() {
+      if (idx >= timestamps.length) {
+        resolve(frames);
+        return;
+      }
+      
+      const ts = timestamps[idx];
+      videoEl.currentTime = ts;
+      
+      videoEl.addEventListener('seeked', function onSeeked() {
+        videoEl.removeEventListener('seeked', onSeeked);
+        
+        // Set canvas size to video dimensions (downscale if too large)
+        const maxW = 512;
+        const scale = Math.min(1, maxW / videoEl.videoWidth);
+        canvas.width = videoEl.videoWidth * scale;
+        canvas.height = videoEl.videoHeight * scale;
+        
+        ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
+        
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        frames.push({
+          timestamp: ts,
+          dataUrl: dataUrl,
+          index: idx
+        });
+        
+        // Update progress
+        const progress = ((idx + 1) / count) * 30; // frames extraction = 30% of total
+        progressFill.style.width = progress + '%';
+        progressText.textContent = `Extraction frame ${idx + 1}/${count}…`;
+        
+        // Display frame thumbnail
+        const card = framesGrid.children[idx];
+        if (card) {
+          const img = card.querySelector('img');
+          if (img) img.src = dataUrl;
+          const status = card.querySelector('.frame-status');
+          if (status) {
+            status.className = 'frame-status pending';
+            status.textContent = 'En attente…';
+          }
+        }
+        
+        idx++;
+        setTimeout(extractNext, 100);
+      });
+    }
+    
+    extractNext();
+  });
+}
+
+// === Create frame cards ===
+function createFrameCards(count) {
+  framesGrid.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const card = document.createElement('div');
+    card.className = 'frame-card';
+    card.innerHTML = `
+      <img src="" alt="Frame ${i+1}" style="background:#1a1a2e;min-height:100px">
+      <div class="frame-info">
+        Frame ${i + 1}
+        <br><span class="frame-status pending">En attente…</span>
+      </div>
+    `;
+    framesGrid.appendChild(card);
+  }
+}
+
+// === Send frame to vision API ===
+async function analyzeFrame(frame, config) {
+  const payload = {
+    model: config.model,
+    messages: [{
+      role: 'user',
+      content: [
+        {
+          type: 'text',
+          text: `You are a movie and TV show identification expert. This is a frame from a video (possibly a TikTok/Instagram clip). 
+
+Identify what movie or TV show this frame is from. Look carefully at:
+- Actors/characters and their faces
+- Visual style, cinematography, color grading
+- Set design, locations, costumes, props
+- Any visible text, logos, or UI elements
+- Genre and era indicators
+
+Respond in this exact JSON format (no other text):
+{
+  "title": "the title if you can identify it, or empty string",
+  "type": "film" or "serie" or "anime" or "unknown",
+  "confidence": 0-100,
+  "description": "brief description of what you see in this frame",
+  "actors": ["visible actor names if recognizable"],
+  "clues": ["any visual clues that could help identify"]
+}
+
+If you cannot identify the specific title, still describe what you see in detail — this will help with identification from other frames.`
+        },
+        {
+          type: 'image_url',
+          image_url: { url: frame.dataUrl }
+        }
+      ]
+    }],
+    max_tokens: 500,
+    temperature: 0.3
+  };
+  
+  const resp = await fetch(config.apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${config.apiKey}`
+    },
+    body: JSON.stringify(payload)
+  });
+  
+  if (!resp.ok) {
+    const errText = await resp.text();
+    throw new Error(`API error ${resp.status}: ${errText.substring(0, 200)}`);
+  }
+  
+  const data = await resp.json();
+  const content = data.choices[0].message.content;
+  
+  // Parse JSON from response (handle markdown code blocks)
+  let jsonMatch = content.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) {
+    return {
+      title: '',
+      type: 'unknown',
+      confidence: 0,
+      description: content.substring(0, 300),
+      actors: [],
+      clues: []
+    };
+  }
+  
+  try {
+    return JSON.parse(jsonMatch[0]);
+  } catch {
+    return {
+      title: '',
+      type: 'unknown',
+      confidence: 0,
+      description: content.substring(0, 300),
+      actors: [],
+      clues: []
+    };
+  }
+}
+
+// === Consolidate results ===
+function consolidateResults(analyses) {
+  // Collect all identified titles
+  const titleVotes = {};
+  const allClues = [];
+  const allActors = new Set();
+  const descriptions = [];
+  
+  for (const a of analyses) {
+    if (a.title && a.title.trim()) {
+      const key = a.title.toLowerCase().trim();
+      if (!titleVotes[key]) {
+        titleVotes[key] = { title: a.title, count: 0, totalConf: 0, type: a.type };
+      }
+      titleVotes[key].count++;
+      titleVotes[key].totalConf += a.confidence || 0;
+    }
+    if (a.description) descriptions.push(a.description);
+    if (a.actors) a.actors.forEach(a2 => allActors.add(a2));
+    if (a.clues) a.clues.forEach(c => allClues.push(c));
+  }
+  
+  // Find best title
+  let bestTitle = null;
+  let bestScore = 0;
+  for (const key in titleVotes) {
+    const v = titleVotes[key];
+    const score = v.count * 50 + v.totalConf / v.count;
+    if (score > bestScore) {
+      bestScore = score;
+      bestTitle = v;
+    }
+  }
+  
+  return {
+    bestTitle,
+    allClues,
+    allActors: Array.from(allActors),
+    descriptions,
+    frameCount: analyses.length
+  };
+}
+
+// === Display result ===
+function displayResult(consolidated) {
+  const { bestTitle, allClues, allActors, descriptions, frameCount } = consolidated;
+  
+  if (bestTitle && bestTitle.title) {
+    const avgConf = Math.round(bestTitle.totalConf / bestTitle.count);
+    const typeLabel = { film: 'Film', serie: 'Série', anime: 'Anime', unknown: 'Média' }[bestTitle.type] || 'Média';
+    const badgeClass = bestTitle.type === 'film' ? 'badge-film' : bestTitle.type === 'serie' ? 'badge-serie' : 'badge-unknown';
+    
+    let confidenceColor = avgConf >= 70 ? '#00b894' : avgConf >= 40 ? '#fdcb6e' : '#e74c3c';
+    
+    let html = `
+      <div>
+        <span class="result-badge ${badgeClass}">${typeLabel}</span>
+      </div>
+      <div class="result-title">${bestTitle.title}</div>
+      <div class="result-meta">
+        Identifié sur ${bestTitle.count}/${frameCount} frames
+        ${allActors.length ? `• Acteurs: ${allActors.slice(0,5).join(', ')}` : ''}
+      </div>
+    `;
+    
+    if (descriptions.length) {
+      html += `<div class="result-desc"><strong>Ce que l'IA a vu:</strong><br>${descriptions[0]}</div>`;
+    }
+    
+    if (allClues.length) {
+      html += `<div class="result-desc" style="margin-top:12px"><strong>Indices visuels:</strong><br>• ${allClues.slice(0, 8).join('<br>• ')}</div>`;
+    }
+    
+    html += `
+      <div class="result-confidence">
+        <span class="confidence-text">Confiance</span>
+        <div class="confidence-bar"><div class="confidence-fill" style="width:${avgConf}%;background:${confidenceColor}"></div></div>
+        <span class="confidence-text">${avgConf}%</span>
+      </div>
+    `;
+    
+    if (avgConf < 50) {
+      html += `<div style="margin-top:16px;padding:14px;background:#2a2515;border:1px solid #5a4a20;border-radius:8px;font-size:0.85em;color:#fdcb6e">
+        ⚠️ Confiance faible. Tu peux envoyer la capture d'écran ou le clip à Hermes via Telegram pour une analyse plus poussée avec recherche web.
+      </div>`;
+    }
+    
+    resultContent.innerHTML = html;
+  } else {
+    // No title found — show descriptions and clues
+    let html = `
+      <div>
+        <span class="result-badge badge-unknown">Non identifié</span>
+      </div>
+      <div class="result-title" style="font-size:1.2em;color:var(--dim)">Aucun titre trouvé avec certitude</div>
+      <div class="result-desc" style="margin-top:16px">
+        <strong>Descriptions des frames:</strong>
+    `;
+    descriptions.forEach((d, i) => {
+      html += `<br><em>Frame ${i+1}:</em> ${d}`;
+    });
+    
+    if (allClues.length) {
+      html += `<br><br><strong>Indices visuels collectés:</strong><br>• ${allClues.join('<br>• ')}`;
+    }
+    
+    if (allActors.length) {
+      html += `<br><br><strong>Acteurs potentiels:</strong> ${allActors.join(', ')}`;
+    }
+    
+    html += `
+      <div style="margin-top:20px;padding:14px;background:#1a2a1a;border:1px solid #2a4a2a;border-radius:8px;font-size:0.85em;color:#6fdc6f">
+        💡 Envoie une capture d'écran ou le clip à Hermes sur Telegram — il peut faire une recherche web avec ces descriptions pour trouver le titre.
+      </div>
+    `;
+    
+    resultContent.innerHTML = html;
+  }
+  
+  resultCard.style.display = 'block';
+  resultCard.scrollIntoView({ behavior: 'smooth' });
+}
+
+// === Show error ===
+function showError(msg) {
+  errorMsg.textContent = '❌ ' + msg;
+  errorMsg.style.display = 'block';
+}
+
+// === Main analyze function ===
+analyzeBtn.addEventListener('click', async () => {
+  if (!currentFile) return;
+  
+  const config = getConfig();
+  
+  // Reset UI
+  analyzeBtn.disabled = true;
+  analyzeBtn.textContent = '⏳ Analyse en cours…';
+  progressWrap.style.display = 'block';
+  progressFill.style.width = '0%';
+  progressText.textContent = 'Extraction des frames…';
+  errorMsg.style.display = 'none';
+  resultCard.style.display = 'none';
+  framesGrid.innerHTML = '';
+  extractedFrames = [];
+  
+  try {
+    // Create frame placeholder cards
+    createFrameCards(config.frameCount);
+    
+    // Wait for video metadata
+    if (!video.duration || isNaN(video.duration)) {
+      await new Promise((resolve, reject) => {
+        video.addEventListener('loadedmetadata', resolve, { once: true });
+        setTimeout(() => reject(new Error('Timeout loading video metadata')), 10000);
+      });
+    }
+    
+    // Extract frames
+    progressText.textContent = `Extraction de ${config.frameCount} frames…`;
+    extractedFrames = await extractFrames(video, config.frameCount);
+    
+    // Analyze each frame
+    progressText.textContent = 'Analyse par IA…';
+    const analyses = [];
+    
+    for (let i = 0; i < extractedFrames.length; i++) {
+      const frame = extractedFrames[i];
+      const card = framesGrid.children[i];
+      const status = card.querySelector('.frame-status');
+      
+      // Update status to analyzing
+      status.className = 'frame-status analyzing';
+      status.textContent = '<span class="spinner"></span> Analyse…';
+      
+      const progress = 30 + (i / extractedFrames.length) * 60;
+      progressFill.style.width = progress + '%';
+      progressText.textContent = `Analyse frame ${i + 1}/${extractedFrames.length}…`;
+      
+      try {
+        const result = await analyzeFrame(frame, config);
+        analyses.push(result);
+        status.className = 'frame-status done';
+        status.textContent = result.title ? `✓ ${result.title}` : '✓ Analysé';
+      } catch (err) {
+        console.error(`Frame ${i} error:`, err);
+        analyses.push({
+          title: '',
+          type: 'unknown',
+          confidence: 0,
+          description: `Erreur: ${err.message}`,
+          actors: [],
+          clues: []
+        });
+        status.className = 'frame-status error';
+        status.textContent = '✗ Erreur';
+      }
+    }
+    
+    // Consolidate
+    progressFill.style.width = '95%';
+    progressText.textContent = 'Consolidation des résultats…';
+    
+    const consolidated = consolidateResults(analyses);
+    displayResult(consolidated);
+    
+    progressFill.style.width = '100%';
+    progressText.textContent = '✅ Terminé';
+    
+  } catch (err) {
+    console.error(err);
+    showError(err.message);
+  } finally {
+    analyzeBtn.disabled = false;
+    analyzeBtn.textContent = '🔍 Identifier le film / série';
+    setTimeout(() => { progressWrap.style.display = 'none'; }, 2000);
+  }
+});
+
+</script>
+</body>
+</html>

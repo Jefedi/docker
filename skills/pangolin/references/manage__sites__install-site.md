@@ -1,0 +1,304 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Install Sites
+
+> Install Newt as a binary or Docker container
+
+<div />
+
+Newt can be installed as either a static binary executable or a Docker container. You must first create a site and copy the Newt config in Pangolin before running Newt.
+
+## Binary Installation
+
+### Quick Install (Recommended)
+
+Use this command to automatically install Newt. It detects your system architecture automatically and always pulls the latest version, adding Newt to your PATH:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+curl -fsSL https://static.pangolin.net/get-newt.sh | bash
+```
+
+#### Windows
+
+To run Newt on Windows, use the latest installer from [GitHub releases](https://github.com/fosrl/newt/releases/latest).
+
+<Warning>
+  If you are using Newt on Windows as a service or with clients, `wintun.dll` may be required.
+</Warning>
+
+### Manual Download
+
+Binaries for Linux, macOS, and Windows are available in the [GitHub releases](https://github.com/fosrl/newt/releases/latest) for ARM and AMD64 (x86\_64) architectures.
+
+Download and install manually:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+wget -O newt "https://github.com/fosrl/newt/releases/download/{version}/newt_{architecture}" && chmod +x ./newt
+```
+
+<Note>
+  Replace `{version}` with the desired version and `{architecture}` with your architecture. Check the [release notes](https://github.com/fosrl/newt/releases) for the latest information.
+</Note>
+
+### Running Newt
+
+Run Newt with the configuration from Pangolin:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+newt \
+--id 31frd0uzbjvp721 \
+--secret h51mmlknrvrwv8s4r1i210azhumt6isgbpyavxodibx1k2d6 \
+--endpoint https://app.pangolin.net
+```
+
+### Systemd Service
+
+Create `/etc/newt/newt.env` with the initial values from your Pangolin site configuration:
+
+```bash title="/etc/newt/newt.env" theme={"theme":"gruvbox-light-hard"}
+NEWT_ID=31frd0uzbjvp721
+NEWT_SECRET=h51mmlknrvrwv8s4r1i210azhumt6isgbpyavxodibx1k2d6
+PANGOLIN_ENDPOINT=https://app.pangolin.net
+```
+
+Create the directory, write the file, and restrict its permissions:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+sudo install -d -m 0755 /etc/newt
+sudo editor /etc/newt/newt.env
+sudo chmod 600 /etc/newt/newt.env
+```
+
+Then create a systemd service. Newt reads those environment variables automatically, so `ExecStart` does not need to repeat them as flags:
+
+```ini title="/etc/systemd/system/newt.service" theme={"theme":"gruvbox-light-hard"}
+[Unit]
+Description=Newt
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+EnvironmentFile=/etc/newt/newt.env
+ExecStart=/usr/local/bin/newt
+Restart=always
+RestartSec=2
+UMask=0077
+
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+```
+
+<Warning>
+  Make sure the binary exists at `/usr/local/bin/newt` before daemon reload and starting the service:
+
+  ```bash theme={"theme":"gruvbox-light-hard"}
+  which newt
+  ```
+</Warning>
+
+Reload systemd and enable the service:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+sudo systemctl daemon-reload
+sudo systemctl enable --now newt
+sudo systemctl status newt
+```
+
+If you later change `/etc/newt/newt.env`, restart the service so Newt picks up the new values.
+
+See [Configure Sites](/manage/sites/configure-site) for more environment variables.
+
+## Docker Installation
+
+### Pull the Image
+
+Pull the latest Newt image from Docker Hub:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+docker pull fosrl/newt:latest
+```
+
+### Run with Docker
+
+Run Newt with CLI arguments from Pangolin:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+docker run -it fosrl/newt --id 31frd0uzbjvp721 \
+--secret h51mmlknrvrwv8s4r1i210azhumt6isgbpyavxodibx1k2d6 \
+--endpoint https://app.pangolin.net
+```
+
+### Docker Compose
+
+#### Environment Variables (Recommended)
+
+```yaml title="docker-compose.yml" theme={"theme":"gruvbox-light-hard"}
+services:
+  newt:
+    image: fosrl/newt
+    container_name: newt
+    restart: unless-stopped
+    environment:
+      - PANGOLIN_ENDPOINT=https://app.pangolin.net
+      - NEWT_ID=2ix2t8xk22ubpfy
+      - NEWT_SECRET=nnisrfsdfc7prqsp9ewo1dvtvci50j5uiqotez00dgap0ii2
+```
+
+#### Config File Injected as Compose Secret
+
+A safer but slightly more complex way is to use [Compose Secrets](https://docs.docker.com/compose/how-tos/use-secrets/). First, create a `JSON` file containing your configuration:
+
+```json title="newt-config.secret" theme={"theme":"gruvbox-light-hard"}
+{
+  "id": "2ix2t8xk22ubpfy",
+  "secret": "nnisrfsdfc7prqsp9ewo1dvtvci50j5uiqotez00dgap0ii2",
+  "endpoint": "https://app.pangolin.net",
+  "tlsClientCert": ""
+}
+```
+
+Then register and reference the secret in your `docker-compose.yml`:
+
+```yaml title="docker-compose.yml" theme={"theme":"gruvbox-light-hard"}
+services:
+  newt:
+    image: fosrl/newt
+    container_name: newt
+    restart: unless-stopped
+    environment:
+      - CONFIG_FILE=/run/secrets/newt-config
+    secrets:
+      - newt-config
+
+secrets:
+  newt-config:
+    file: ./newt-config.secret
+```
+
+This allows you to separate sensitive secrets from plain configuration, improving security when storing or sharing your `docker-compose.yml` anywhere else.
+
+#### CLI Arguments
+
+```yaml title="docker-compose.yml" theme={"theme":"gruvbox-light-hard"}
+services:
+  newt:
+    image: fosrl/newt
+    container_name: newt
+    restart: unless-stopped
+    command:
+      - --id 31frd0uzbjvp721
+      - --secret h51mmlknrvrwv8s4r1i210azhumt6isgbpyavxodibx1k2d6
+      - --endpoint https://app.pangolin.net
+```
+
+#### Docker healthcheck
+
+The newt cliens suports healthchecks as described in [Configure Sites](/manage/sites/configure-site#param-health-file). This file can be used to do a
+healthcheck from within docker (compose file).
+
+We need to define the `HEALTH_FILE` environment variable as well as the healthcheck itself:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+    environment:
+      - HEALTH_FILE=/tmp/healthy
+    healthcheck:
+      test: ["CMD-SHELL", "[ -f /tmp/healthy ]"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 3
+```
+
+Start the service:
+
+```bash theme={"theme":"gruvbox-light-hard"}
+docker compose up -d
+```
+
+## Platform-Specific Installation
+
+### Unraid
+
+Newt is available in the Unraid Community Applications store. Search for "Newt" and follow the installation prompts. Enter the ID, secret, and endpoint from Pangolin in the template fields.
+
+<Frame caption="Newt available in Unraid Community Applications store">
+  <img src="https://mintcdn.com/fossorial/u-2SUNWyK_LJL3sU/images/unraid_store.png?fit=max&auto=format&n=u-2SUNWyK_LJL3sU&q=85&s=c726d330c8c27969304ed49fcab0d0a2" alt="Newt on CA" width="1142" height="746" data-path="images/unraid_store.png" />
+</Frame>
+
+### Portainer and Other UIs
+
+Container management UIs like Portainer typically allow passing commands and environment variables to containers similar to Docker Compose. Look for a commands or arguments configuration section and follow the relevant guides.
+
+### Windows Service
+
+On Windows, newt can to be installed and run as a Windows service to remain persistent.
+
+#### Service Management Commands
+
+```
+# Install the service
+newt.exe install
+
+# Start the service
+newt.exe start
+
+# Stop the service
+newt.exe stop
+
+# Check service status
+newt.exe status
+
+# Remove the service
+newt.exe remove
+
+# Show help
+newt.exe service-help
+```
+
+Note running the service requires credentials in `%PROGRAMDATA%\newt\newt-client\config.json`.
+
+#### Service Configuration
+
+When running as a service, newt will read configuration from environment variables or you can modify the service to include command-line arguments:
+
+1. Install the service: `newt.exe install`
+2. Set the credentials in `%PROGRAMDATA%\newt\newt-client\config.json`. Hint: if you run newt once with --id and --secret this file will be populated!
+3. Start the service: `newt.exe start`
+
+#### Service Logs
+
+When running as a service, logs are written to:
+
+* Windows Event Log (Application log, source: "newtWireguardService")
+* Log files in: `%PROGRAMDATA%\newt\logs\newt.log`
+
+You can view the Windows Event Log using Event Viewer or PowerShell:
+
+```powershell theme={"theme":"gruvbox-light-hard"}
+Get-EventLog -LogName Application -Source "newtWireguardService" -Newest 10
+```
+
+### Advantech Router App
+
+Download the correct version of the router app for your device from the [GitHub releases](https://github.com/fosrl/newt/releases/latest). You can find more information about router apps along with the right version information for your hardware on the the [Advantech engineering portal](https://icr.advantech.com/products/software/router-apps).
+
+To install the router app, log into your Advantech router and navigate to the Router Apps section. Upload the downloaded `.tgz` file and follow the prompts to install.
+
+<Frame caption="Screenshot of installing the router app on an Advantech router UI">
+  <img src="https://mintcdn.com/fossorial/dec_kAhQNYLFyJ7a/images/advantech_router_app_install.png?fit=max&auto=format&n=dec_kAhQNYLFyJ7a&q=85&s=626cc5fefdd89caf1c45bdbf875dd988" alt="Advantech router UI showing Newt router app installation" width="400" centered data-path="images/advantech_router_app_install.png" />
+</Frame>
+
+After installation, click on the router app link at the top of the page to configure the app with your Newt credentials from Pangolin. Once you have entered the credentials, save and start the app. The router will now be connected to your Pangolin site and you can manage it like any other Newt site in the dashboard.
+
+<Frame caption="Screenshot of configuring the router app on an Advantech router UI">
+  <img src="https://mintcdn.com/fossorial/dec_kAhQNYLFyJ7a/images/advantech_router_app_configure.png?fit=max&auto=format&n=dec_kAhQNYLFyJ7a&q=85&s=27e0357c01623f906f37eef379461ab3" alt="Advantech router UI showing Newt credential configuration" width="400" centered data-path="images/advantech_router_app_configure.png" />
+</Frame>
+
+A complete config file is located at `/etc/newt/settings` on the router. You can edit this file directly to change credentials or add additional configuration options. After making changes, restart the router app to apply the new configuration. An example settings file can be found at: [https://github.com/fosrl/newt/blob/main/packages/advantech/merge/etc/defaults](https://github.com/fosrl/newt/blob/main/packages/advantech/merge/etc/defaults)

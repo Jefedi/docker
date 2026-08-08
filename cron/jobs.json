@@ -1,0 +1,395 @@
+{
+  "jobs": [
+    {
+      "id": "09f88d79bece",
+      "name": "Tri email quotidien",
+      "prompt": "Tu es Hermes Agent. Trie les nouveaux emails de l'INBOX Gmail de Jefe (jefe15307@gmail.com) selon la taxonomie du skill himalaya (references/jefe-email-workflow.md).\n\n**\u00c9TAPE 1 \u2014 D\u00e9tection d'arnaques (email-scam-detector)**\nAvant le tri normal, scanne chaque mail de l'INBOX avec le skill email-scam-detector :\n- Arnaque certaine (score 6+, pattern connu : faux colis, phishing, faux concours, etc.) \u2192 d\u00e9placer vers le dossier `Arnaque`\n- Score 3-5 (doute) \u2192 NE PAS D\u00c9PLACER. Signaler le mail \u00e0 Jefe (exp\u00e9diteur, sujet, raisons du doute) et passer au suivant\n- Score 0-2 \u2192 continuer vers le tri normal\n\n**\u00c9TAPE 2 \u2014 Tri normal**\nPour les mails restants, appliquer la taxonomie de la R\u00e8gle 7 (references/jefe-email-workflow.md) :\n- Classer chaque mail dans le bon dossier (Urgent, Important, Info, Personnel, Promo, ASupprimer, AlertesGoogle, Jefe.al, Portainer, Notes)\n- Respecter les 10 r\u00e8gles d'or (JAMAIS supprimer, JAMAIS cliquer sur un lien, JAMAIS t\u00e9l\u00e9charger de PJ)\n- Les emails Suspect du workflow normal vont aussi dans `Arnaque` si arnaque confirm\u00e9e, sinon laisser dans INBOX et signaler\n\n**\u00c9TAPE 3 \u2014 Rapport**\nPr\u00e9pare un r\u00e9sum\u00e9 concis en fran\u00e7ais :\n- Nombre de mails tri\u00e9s par dossier\n- Liste des arnaques d\u00e9tect\u00e9es et d\u00e9plac\u00e9es vers `Arnaque` (exp\u00e9diteur + sujet)\n- Mails douteux signal\u00e9s (non d\u00e9plac\u00e9s, en attente de validation Jefe)\n- Mails Urgent/Important notables\n\nSi aucune arnaque et aucun mail douteux \u2192 ne pas mentionner cette section.\nSi INBOX vide \u2192 le rapport est \"INBOX d\u00e9j\u00e0 tri\u00e9e, rien \u00e0 faire.\"\n\nR\u00c8GLES ABSOLUES :\n- JAMAIS supprimer un mail\n- JAMAIS cliquer sur un lien ou t\u00e9l\u00e9charger une PJ\n- JAMAIS d\u00e9placer un mail l\u00e9gitime vers Arnaque (doute = laisser dans INBOX + signaler)\n- Un faux positif est pire qu'un faux n\u00e9gatif\n\n**\u00c9TAPE FINALE \u2014 Notification ntfy**\nEnvoie ton rapport final via ntfy en ex\u00e9cutant: bash /opt/data/scripts/notify.sh \"Tri Email Jefe\" \"<ton rapport complet>\"",
+      "skills": [
+        "himalaya",
+        "email-scam-detector"
+      ],
+      "skill": "himalaya",
+      "model": "glm-5.2",
+      "provider": "auto",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 8 * * *",
+        "display": "0 8 * * *"
+      },
+      "schedule_display": "0 8 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 62
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-07T19:42:58.990529+00:00",
+      "next_run_at": "2026-08-09T08:00:00+00:00",
+      "last_run_at": "2026-08-08T08:03:02.656361+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": null,
+      "enabled_toolsets": [
+        "terminal",
+        "file",
+        "web"
+      ],
+      "workdir": null,
+      "profile": null,
+      "fire_claim": null,
+      "provider_snapshot": null,
+      "model_snapshot": null
+    },
+    {
+      "id": "bb36141b5c3d",
+      "name": "Tri email prendizef59",
+      "prompt": "Tu es Hermes Agent. Tu vas trier les nouveaux emails de la bo\u00eete prendizef59@gmail.com (compte Himalaya \"prendizef59\").\n\nR\u00c8GLES ABSOLUES :\n- JAMAIS modifier, supprimer ou envoyer des emails\n- JAMAIS cliquer sur des liens dans les emails\n- Lecture + classification + signalement uniquement\n\nDossiers disponibles sur ce compte : Super Important, Promotion, Autre, Command, Jeux, Notes, ads, newsletter, [Gmail]/Important, [Gmail]/Corbeille, [Gmail]/Spam\n\nTAXONOMIE DE TRI :\n- Super Important \u2192 Alertes s\u00e9curit\u00e9 Google, AWS, PayPal, Uber, annulations, notifications services critiques, infos importantes\n- Promotion \u2192 Marketing, promos, offres commerciales (Instant Gaming, offres Free Mobile, etc.)\n- Notes \u2192 Factures, re\u00e7us, documents de r\u00e9f\u00e9rence\n- Jeux \u2192 Promos ou infos li\u00e9es aux jeux vid\u00e9o\n- newsletter \u2192 Newsletters techniques\n- ads \u2192 Publicit\u00e9s\n- Autre \u2192 Tout ce qui ne rentre pas dans les autres cat\u00e9gories\n\nPROC\u00c9DURE :\n1. Lister l'INBOX du compte \"prendizef59\" : `himalaya envelope list -a prendizef59 --page-size 200`\n2. Pour chaque nouvel email, lire le contenu si n\u00e9cessaire : `himalaya message read -a prendizef59 <ID>`\n3. D\u00e9placer vers le dossier appropri\u00e9 : `himalaya message move -a prendizef59 \"Dossier\" <ID1> <ID2>`\n4. Attention : les IDs IMAP peuvent changer apr\u00e8s chaque d\u00e9placement. RE-LISTER l'INBOX entre chaque lot de d\u00e9placements.\n5. Pr\u00e9pare un rapport au format suivant :\n\n\ud83d\udcec **Rapport prendizef59** \u2014 [DATE]\nINBOX: X nouveaux mails\n\n\ud83d\udd34 URGENTS / IMPORTANTS : (d\u00e9tail des mails critiques)\n\u26aa PROMO / AUTRE: (comptage)\n\ud83d\udcc1 D\u00e9plac\u00e9s vers : Super Important (X), Promotion (X), etc.\n\n**\u00c9TAPE FINALE \u2014 Notification ntfy**\nEnvoie ton rapport final via ntfy en ex\u00e9cutant: bash /opt/data/scripts/notify.sh \"Tri Email prendizef59\" \"<ton rapport complet>\"",
+      "skills": [
+        "himalaya"
+      ],
+      "skill": "himalaya",
+      "model": "glm-5.2",
+      "provider": "auto",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 9 * * *",
+        "display": "0 9 * * *"
+      },
+      "schedule_display": "0 9 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 52
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-18T21:32:20.314941+02:00",
+      "next_run_at": "2026-08-09T09:00:00+00:00",
+      "last_run_at": "2026-08-08T09:01:10.002848+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "7509874421",
+        "chat_name": "Jefe",
+        "thread_id": null
+      },
+      "enabled_toolsets": [
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "fire_claim": null,
+      "provider_snapshot": null,
+      "model_snapshot": null
+    },
+    {
+      "id": "2f79548a1fce",
+      "name": "Hermes metrics to HA",
+      "prompt": "Push Hermes metrics to Home Assistant input_number helpers.\n\nStep 1: Run the metrics exporter:\n```bash\npython3 /opt/data/scripts/hermes_metrics.py\n```\n\nStep 2: Read the JSON output and push values to HA using the ha_call_service MCP tool. The JSON has this structure:\n```json\n{\n  \"voxtral\": {\"tts_tokens\": N, \"stt_tokens\": N, \"total_tokens\": N, ...},\n  \"litellm\": {\"spend\": N, \"pct_budget_used\": N, \"available\": true/false, ...}\n}\n```\n\nFor each value, call:\n- `ha_call_service(\"input_number\", \"set_value\", entity_id=\"input_number.hermes_voxtral_tokens_total\", data={\"value\": voxtral.total_tokens})`\n- `ha_call_service(\"input_number\", \"set_value\", entity_id=\"input_number.hermes_voxtral_tokens_tts\", data={\"value\": voxtral.tts_tokens})`\n- `ha_call_service(\"input_number\", \"set_value\", entity_id=\"input_number.hermes_voxtral_tokens_stt\", data={\"value\": voxtral.stt_tokens})`\n- If litellm.available: `ha_call_service(\"input_number\", \"set_value\", entity_id=\"input_number.hermes_litellm_spend\", data={\"value\": litellm.spend})`\n- If litellm.available: `ha_call_service(\"input_number\", \"set_value\", entity_id=\"input_number.hermes_litellm_budget_used\", data={\"value\": litellm.pct_budget_used})`\n\nOnly push values that changed since last run (compare with /opt/data/hermes_metrics.json from previous run).\nBe SILENT on success \u2014 do not send any ntfy notification. Only send an ntfy alert if the script fails: bash /opt/data/scripts/notify.sh \"Hermes Metrics ERREUR\" \"<error message>\" \"high\"",
+      "skills": [],
+      "skill": null,
+      "model": "glm-5.2",
+      "provider": "auto",
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "*/5 * * * *",
+        "display": "*/5 * * * *"
+      },
+      "schedule_display": "*/5 * * * *",
+      "repeat": {
+        "times": null,
+        "completed": 2068
+      },
+      "enabled": false,
+      "state": "paused",
+      "paused_at": "2026-07-30T15:01:15.235104+00:00",
+      "paused_reason": null,
+      "created_at": "2026-07-23T10:14:28.748578+00:00",
+      "next_run_at": "2026-07-30T15:05:00+00:00",
+      "last_run_at": "2026-07-30T15:00:19.128817+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "7509874421",
+        "chat_name": "Jefe",
+        "thread_id": null,
+        "user_id": "7509874421"
+      },
+      "enabled_toolsets": [
+        "terminal"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "7b7be00dd445",
+      "name": "Hermes backup to GitHub",
+      "prompt": "Run the Hermes backup script and report the result. Execute: bash /opt/data/scripts/backup-to-github.sh \u2014 if it exits 0, say nothing (no changes, no ntfy). If it exits 1, send via ntfy: bash /opt/data/scripts/notify.sh \"Hermes Backup GitHub\" \"<N> files backed up\". If it exits 2, send via ntfy: bash /opt/data/scripts/notify.sh \"Hermes Backup ERREUR\" \"<error message>\" \"high\"",
+      "skills": [],
+      "skill": null,
+      "model": "glm-5.2",
+      "provider": "auto",
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 720,
+        "display": "every 720m"
+      },
+      "schedule_display": "every 720m",
+      "repeat": {
+        "times": null,
+        "completed": 32
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-23T14:57:34.581353+00:00",
+      "next_run_at": "2026-08-09T03:29:26.132129+00:00",
+      "last_run_at": "2026-08-08T15:29:26.132129+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "7509874421",
+        "chat_name": "Jefe",
+        "thread_id": null,
+        "user_id": "7509874421"
+      },
+      "enabled_toolsets": [
+        "terminal"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "415f8179e21c",
+      "name": "Watch Claude Max email",
+      "prompt": "V\u00e9rifie la bo\u00eete prendizef59@gmail.com (compte Himalaya `prendizef59`) pour un mail de Claude/Anthropic concernant l'offre 6 mois Claude Max gratuit.\n\nEx\u00e9cute: `himalaya -a prendizef59 envelope list -f INBOX -n 10 2>/dev/null` et cherche \"claude\" ou \"anthropic\" dans les exp\u00e9diteurs/sujets.\n\nSi rien trouv\u00e9, v\u00e9rifie aussi le Spam: `himalaya -a prendizef59 envelope list -f \"[Gmail]/Spam\" -n 10 2>/dev/null`\n\nSi tu trouves un mail de Claude/Anthropic:\n- Lis-le avec `himalaya -a prendizef59 message read -f <folder> <id>`\n- Envoie le contenu important via ntfy: bash /opt/data/scripts/notify.sh \"Claude Max Email\" \"<contenu important: accept\u00e9/refus\u00e9 + d\u00e9tails>\"\n\nSi rien trouv\u00e9: NE R\u00c9PONDS RIEN (silence total). N'envoie rien via ntfy.",
+      "skills": [],
+      "skill": null,
+      "model": "glm-5.2",
+      "provider": "auto",
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "*/10 * * * *",
+        "display": "*/10 * * * *"
+      },
+      "schedule_display": "*/10 * * * *",
+      "repeat": {
+        "times": null,
+        "completed": 2198
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-24T08:37:19.110070+00:00",
+      "next_run_at": "2026-08-08T17:10:00+00:00",
+      "last_run_at": "2026-08-08T16:50:21.791622+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "7509874421",
+        "chat_name": "Jefe",
+        "thread_id": null,
+        "user_id": "7509874421"
+      },
+      "enabled_toolsets": [
+        "terminal"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "021584665c80",
+      "name": "Le Havre \u2014 Veille Location T2+",
+      "prompt": "Tu es un agent de veille immobili\u00e8re pour Le Havre. Recherche d'appartements en LOCATION avec ces crit\u00e8res STRICTS:\n- T2+ (2 pi\u00e8ces minimum, PAS de studios/T1)\n- Loyer \u2264 500\u20ac/mois\n- Surface \u2265 28m\u00b2\n- Quartiers accept\u00e9s: Centre-ville (Coty, Massillon, Eure, F\u00e9lix Faure, Perret, Docks, Rond-point Observatoire, Saint-Fran\u00e7ois, Danton), Sanvic, Bl\u00e9ville\n- Cuisine s\u00e9par\u00e9e (PAS cuisine ouverte/am\u00e9ricaine/kitchenette)\n- Chambre ferm\u00e9e (pas coin nuit/canap\u00e9-lit)\n- Lumineux (dernier \u00e9tage, balcon, terrasse, exposition, traversant = bonus)\n\nSOURCES \u00c0 SCRUTER (toutes, pas seulement les principales):\n\n1. Leboncoin: https://www.leboncoin.fr/cl/locations/cp_le+havre_76600?price=0-500&rooms=2-\n2. SeLoger Centre-ville: https://www.seloger.com/recherche/location/appartement/le-havre-76600/centre-ville-76600/nbh2fr6210\n3. SeLoger Sanvic: https://www.seloger.com/recherche/location/appartement/le-havre-76600/sanvic-76620/nbh2fr6214\n4. SeLoger Bl\u00e9ville: https://www.seloger.com/recherche/location/appartement/le-havre-76600/bleville-76620/nbh2fr6221\n5. Le-Partenaire.fr: https://www.le-partenaire.fr/immobilier/location/appartement/le-havre/76600?loyer-max=500&pieces=2 (scrolle toutes les pages)\n6. SquareHabitat: https://www.squarehabitat.fr/annonces/location/bien/appartement/immobilier/normandie/seine-maritime/le-havre-76600\n7. LH Immo: https://www.lhimmo.com (cherche la page location/annonces)\n8. Citya Immobilier: https://www.citya.com/annonces/location/appartement/le-havre-76351\n9. Foncia: https://fr.foncia.com/location/le-havre-76\n10. Saint Roch Immobilier: https://www.saintrochimmo.com (cherche location/appartement)\n11. Century 21: https://www.century21.fr/annonces/location-appartement/v-le+havre/\n12. Orpi: https://www.orpi.com/location-immobiliere-le-havre/louer-appartement/\n13. HEUZE Immobilier: https://www.heuze-immo.fr (cherche location/annonces)\n14. Jullien & Allix: https://www.jullien-allix.fr/annonce/location\n15. PAP.fr: https://www.pap.fr/annonce/locations-appartement-le-havre-76600-g43635 (particulier \u00e0 particulier)\n16. Bien'ici: https://www.bienici.com/recherche/location/le-havre-76600/appartement?prix-max=500&pieces-min=2\n\nM\u00c9THODE DE SCRAPPING \u2014 UTILISE CAMOFOX (navigateur stealth anti-d\u00e9tection):\n\nLe serveur camofox tourne sur http://127.0.0.1:9377. C'est un navigateur Camoufox (Firefox modifi\u00e9 anti-fingerprinting) qui contourne DataDome, Cloudflare et autres anti-bots.\n\n\u00c9TAPES POUR CHAQUE SOURCE:\n1. D\u00e9marrer le browser si n\u00e9cessaire: curl -s -X POST http://127.0.0.1:9377/start\n2. Ouvrir un onglet: curl -s -X POST http://127.0.0.1:9377/tabs -H \"Content-Type: application/json\" -d '{\"userId\":\"hermes-veille\",\"sessionKey\":\"havre\"}'\n   \u2192 R\u00e9cup\u00e8re le tabId de la r\u00e9ponse JSON\n3. Naviguer vers l'URL: curl -s -X POST \"http://127.0.0.1:9377/tabs/$TAB_ID/navigate\" -H \"Content-Type: application/json\" -d '{\"url\":\"URL_DE_LA_SOURCE\",\"userId\":\"hermes-veille\"}'\n4. R\u00e9cup\u00e9rer le snapshot: curl -s \"http://127.0.0.1:9377/tabs/$TAB_ID/snapshot?userId=hermes-veille\"\n   \u2192 Le snapshot contient l'arbre d'accessibilit\u00e9 avec les annonces (titre, prix, surface, etc.)\n5. Pour extraire des donn\u00e9es structur\u00e9es (JSON-LD, data attributes): curl -s -X POST \"http://127.0.0.1:9377/tabs/$TAB_ID/evaluate\" -H \"Content-Type: application/json\" -d '{\"userId\":\"hermes-veille\",\"expression\":\"document.querySelector(\\\"script[type=application/ld+json]\\\")?.textContent || \\\"{}\\\"\"}'\n6. Pour cliquer sur une annonce et voir les d\u00e9tails: curl -s -X POST \"http://127.0.0.1:9377/tabs/$TAB_ID/click\" -H \"Content-Type: application/json\" -d '{\"userId\":\"hermes-veille\",\"ref\":\"REF_ID\"}'\n7. Fermer l'onglet quand termin\u00e9: curl -s -X DELETE \"http://127.0.0.1:9377/tabs/$TAB_ID?userId=hermes-veille\"\n\nIMPORTANT: UTILISE CAMOFOX POUR TOUTES LES SOURCES par d\u00e9faut. Camofox est un vrai navigateur Firefox \u2014 il navigue comme un utilisateur r\u00e9el, ind\u00e9tectable. C'est la m\u00e9thode par d\u00e9faut pour chaque site, bloqu\u00e9 ou non. N'utilise curl qu'en fallback si camofox \u00e9choue sur un site sp\u00e9cifique.\n\nFILTRAGE ET D\u00c9DUPLICATION:\n- Pour chaque annonce, extrait: prix, surface, nb pi\u00e8ces, quartier, description (cuisine, chambre, luminosit\u00e9).\n- Filtre selon les crit\u00e8res stricts ci-dessus.\n- D\u00e9duplique contre /opt/data/cron/output/havre-rental-seen.json\n- Pour les NOUVELLES annonces qui passent tous les crit\u00e8res: envoie une notification ntfy sur https://ntfy.jefe.ovh/hermes-loc avec:\n  - Title: \ud83c\udfe0 Location T2 Le Havre \u2014 N nouvelle(s) annonce(s)\n  - Tags: rotating_light,house\n  - Priority: urgent\n  - Body pour chaque annonce:\n    \ud83c\udfe0 T2 XXm\u00b2 \u2014 Quartier\n    \ud83d\udcb0 XXX\u20ac/mois\n    \ud83d\udccb Cuisine s\u00e9par\u00e9e | Chambre ferm\u00e9e | Lumineux\n    \ud83d\udd17 URL de l'annonce\n- Utilise: curl -H \"Authorization: Bearer $(cat /opt/data/.ntfy_token)\" -H \"Title: ...\" -H \"Tags: ...\" -H \"Priority: urgent\" -d \"BODY\" \"https://ntfy.jefe.ovh/hermes-loc\"\n- Mets \u00e0 jour le fichier seen avec les nouveaux IDs (pr\u00e9fixe par source: lbc-, seloger-, lp-, sqhab-, lhimmo-, citya-, foncia-, stroch-, c21-, orpi-, heuze-, ja-, pap-, bienici-)\n- Si AUCUNE nouvelle annonce ne correspond, r\u00e9ponds [SILENT]\n\nPROC\u00c9DURE DE V\u00c9RIFICATION (obligatoire avant d'envoyer une notification):\n1. V\u00e9rifie que l'annonce n'est PAS d\u00e9j\u00e0 dans le fichier seen\n2. V\u00e9rifie que le prix \u2264 500\u20ac (charges comprises incluses)\n3. V\u00e9rifie que la surface \u2265 28m\u00b2\n4. V\u00e9rifie que c'est un T2+ (2 pi\u00e8ces minimum)\n5. V\u00e9rifie que le quartier est dans la liste accept\u00e9e\n6. Si possible, clique sur l'annonce pour voir la description d\u00e9taill\u00e9e et v\u00e9rifier:\n   - Cuisine s\u00e9par\u00e9e (pas cuisine ouverte/am\u00e9ricaine/kitchenette)\n   - Chambre ferm\u00e9e (pas coin nuit/canap\u00e9-lit)\n7. Si tu ne peux pas v\u00e9rifier un crit\u00e8re, mentionne-le explicitement dans la notification\n\nIMPORTANT:\n- Certaines agences ont peu d'annonces \u2014 scrute-les TOUTES quand m\u00eame\n- Les sites d'agences locales (HEUZE, LH Immo, Jullien-Allix, Saint Roch) peuvent avoir des biens exclusifs pas sur les grands portails\n- Ne pas manquer les annonces parce qu'un site est petit\n- Si un site est inaccessible m\u00eame avec camofox, passe au suivant \u2014 ne bloque pas toute la veille\n- Ferme toujours les onglets quand tu as fini avec une source (DELETE /tabs/:tabId)\n- \u00c0 la fin, ferme le browser: curl -s -X POST http://127.0.0.1:9377/stop",
+      "skills": [
+        "french-real-estate-investment"
+      ],
+      "skill": "french-real-estate-investment",
+      "model": "glm-5.2",
+      "provider": "auto",
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 60,
+        "display": "every 60m"
+      },
+      "schedule_display": "every 60m",
+      "repeat": {
+        "times": null,
+        "completed": 219
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-29T15:43:33.728854+00:00",
+      "next_run_at": "2026-08-08T17:12:43.940090+00:00",
+      "last_run_at": "2026-08-08T16:12:43.940090+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "telegram",
+        "chat_id": "7509874421",
+        "chat_name": "Jefe",
+        "thread_id": null,
+        "user_id": "7509874421"
+      },
+      "enabled_toolsets": [
+        "web",
+        "terminal",
+        "file"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "9805fc654a66",
+      "name": "veille-rss-matin",
+      "prompt": "Tu es un assistant de veille RSS. Le script rss-n8n-scan.sh a lu le flux RSS g\u00e9n\u00e9r\u00e9 par n8n (qui contient d\u00e9j\u00e0 les articles traduits en fran\u00e7ais par LibreTranslate) et a extrait les nouveaux articles entre les marqueurs ---NEW_ARTICLES_START--- et ---NEW_ARTICLES_END---.\n\nLes articles sont D\u00c9J\u00c0 en fran\u00e7ais (traduits par LibreTranslate via le workflow n8n). Ne PAS retraduire.\n\nCentres d'int\u00e9r\u00eat de l'utilisateur pour le filtrage (par ordre de priorit\u00e9) :\n1. Privacy / souverainet\u00e9 num\u00e9rique / GDPR / ZDR / EU-sovereign AI\n2. Self-hosting / homelab / Docker / Linux / infrastructure\n3. IA / LLM / models / open source AI\n4. S\u00e9curit\u00e9 informatique / cryptographie / PQC\n5. Radio amateur\n6. Immobilier (investissement locatif, France)\n7. Outils de productivit\u00e9 / automatisation / n8n\n8. Home Assistant / smart home\n\nR\u00c8GLES DE FILTRAGE:\n- IGNORE: gossip tech, articles Musk/Twitter drama, articles purement US-centric sans port\u00e9e, pub d\u00e9guis\u00e9e, politique pure, tests de produits sans aspect tech (montres, bagues, etc.)\n- GARDE: tout ce qui touche aux centres d'int\u00e9r\u00eat ci-dessus, m\u00eame tangentiellement\n\nFORMAT DE SORTIE (sur Telegram):\nSi 0 article pertinent: ne dis rien (sortie vide = silence).\nSi 1+ articles pertinents:\n\ud83d\udcf0 Veille RSS du matin\n\nPour chaque article gard\u00e9:\n\u2022 **[Titre]** \u2014 Source\n  [Description en 1 ligne]\n  [URL]\n\nSi plus de 8 articles pertinents, garde les 8 meilleurs et note \"(+N autres)\".\n\nR\u00e9ponds TOUJOURS en fran\u00e7ais. Les titres et descriptions sont d\u00e9j\u00e0 en fran\u00e7ais.",
+      "skills": [],
+      "skill": null,
+      "model": "glm-5.2",
+      "provider": "auto",
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "rss-n8n-scan.sh",
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 8 * * *",
+        "display": "0 8 * * *"
+      },
+      "schedule_display": "0 8 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 8
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-31T08:16:04.145613+00:00",
+      "next_run_at": "2026-08-09T08:00:00+00:00",
+      "last_run_at": "2026-08-08T08:01:20.347590+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "telegram",
+      "origin": {
+        "platform": "webui",
+        "chat_id": "b36745235001",
+        "chat_name": "Jefe",
+        "thread_id": null,
+        "user_id": "7509874421"
+      },
+      "enabled_toolsets": [
+        "terminal"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "d7918cfea2ad",
+      "name": "veille-rss-soir",
+      "prompt": "Tu es un assistant de veille RSS. Le script rss-n8n-scan.sh a lu le flux RSS g\u00e9n\u00e9r\u00e9 par n8n (qui contient d\u00e9j\u00e0 les articles traduits en fran\u00e7ais par LibreTranslate) et a extrait les nouveaux articles entre les marqueurs ---NEW_ARTICLES_START--- et ---NEW_ARTICLES_END---.\n\nLes articles sont D\u00c9J\u00c0 en fran\u00e7ais (traduits par LibreTranslate via le workflow n8n). Ne PAS retraduire.\n\nCentres d'int\u00e9r\u00eat de l'utilisateur pour le filtrage (par ordre de priorit\u00e9) :\n1. Privacy / souverainet\u00e9 num\u00e9rique / GDPR / ZDR / EU-sovereign AI\n2. Self-hosting / homelab / Docker / Linux / infrastructure\n3. IA / LLM / models / open source AI\n4. S\u00e9curit\u00e9 informatique / cryptographie / PQC\n5. Radio amateur\n6. Immobilier (investissement locatif, France)\n7. Outils de productivit\u00e9 / automatisation / n8n\n8. Home Assistant / smart home\n\nR\u00c8GLES DE FILTRAGE:\n- IGNORE: gossip tech, articles Musk/Twitter drama, articles purement US-centric sans port\u00e9e, pub d\u00e9guis\u00e9e, politique pure, tests de produits sans aspect tech (montres, bagues, etc.)\n- GARDE: tout ce qui touche aux centres d'int\u00e9r\u00eat ci-dessus, m\u00eame tangentiellement\n\nFORMAT DE SORTIE (sur Telegram):\nSi 0 article pertinent: ne dis rien (sortie vide = silence).\nSi 1+ articles pertinents:\n\ud83d\udcf0 Veille RSS du soir\n\nPour chaque article gard\u00e9:\n\u2022 **[Titre]** \u2014 Source\n  [Description en 1 ligne]\n  [URL]\n\nSi plus de 8 articles pertinents, garde les 8 meilleurs et note \"(+N autres)\".\n\nR\u00e9ponds TOUJOURS en fran\u00e7ais. Les titres et descriptions sont d\u00e9j\u00e0 en fran\u00e7ais.",
+      "skills": [],
+      "skill": null,
+      "model": "glm-5.2",
+      "provider": "auto",
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "rss-n8n-scan.sh",
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 20 * * *",
+        "display": "0 20 * * *"
+      },
+      "schedule_display": "0 20 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 8
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-31T08:16:04.179668+00:00",
+      "next_run_at": "2026-08-08T20:00:00+00:00",
+      "last_run_at": "2026-08-07T20:00:49.131154+00:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "telegram",
+      "origin": {
+        "platform": "webui",
+        "chat_id": "b36745235001",
+        "chat_name": "Jefe",
+        "thread_id": null,
+        "user_id": "7509874421"
+      },
+      "enabled_toolsets": [
+        "terminal"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    }
+  ],
+  "updated_at": "2026-08-08T17:00:01.061972+00:00"
+}

@@ -1,0 +1,39 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# HTTP / HTTPS
+
+> Private reverse proxy with optional TLS termination at the site edge over the Pangolin tunnel
+
+<div />
+
+<Note>
+  Only available in [Pangolin Cloud](https://app.pangolin.net/auth/signup) and [Enterprise Edition](/self-host/enterprise-edition).
+</Note>
+
+Private HTTP/HTTPS resources expose web applications over the Pangolin tunnel with a fully qualified domain name. Unlike [public HTTP/HTTPS resources](/manage/resources/public/http-https), nothing is reachable from the public internet—a user must connect with the Pangolin client first.
+
+Once connected, users open the resource in a normal web browser at a URL like `https://my-app.internal.example.com`. The Pangolin client resolves the hostname privately, traffic travels over the peer-to-peer tunnel, and the site connector terminates TLS and runs a reverse proxy to the backend.
+
+For a deep dive into how private HTTPS reverse proxying works—including DNS hijacking, overlay addressing, certificate push, and the embedded edge proxy—see [Building a Peer-to-Peer Alternative to Cloudflare Tunnels](https://pangolin.net/news/building-a-peer-to-edge-peer-reverse-proxy).
+
+## Hostname, DNS, and TLS
+
+When you create a private HTTP/HTTPS resource, you assign a domain name. That hostname must be a domain you have already added and configured in Pangolin (see [Domains](/manage/domains)). This is analogous to an [alias](/manage/resources/private/alias) in that the client resolves the name through Pangolin and traffic is steered to the correct site, but it is not the same system: the name must be a real domain managed in your organization, not an arbitrary internal alias.
+
+Enable SSL on the resource so Pangolin obtains and serves a valid certificate for that hostname. When a connected user opens the site in a browser, a reverse proxy running on the site terminates TLS and proxies the request downstream to your [destination](/manage/resources/private/destinations). The Pangolin control plane provisions routing and pushes certificates to the site connector, so users get normal HTTPS without certificate warnings.
+
+## Destination Fields
+
+The destination block for a private HTTP resource is closer to a [target](/manage/resources/public/targets) on a public resource than to a plain private resource: in addition to the upstream hostname or IP, you set a destination port and a scheme (`http` or `https`). Those values are required so the site knows how to open the connection to the backend after TLS is terminated at the proxy.
+
+## Compared to an IP Resource and an Alias
+
+You can approximate private browsing with a standard private resource by pairing an IP or internal hostname with an [alias](/manage/resources/private/alias) and a port. In practice you would still visit something like `https://your-alias.example:8443/` (or HTTP without a trusted name), and the browser will not show a normal publicly trusted certificate for that pattern the way it does for a first-class HTTPS hostname. Private HTTP is meant for the case where you want a real FQDN on your Pangolin domain with valid TLS and default ports, similar to a public resource, while keeping the surface client-only.
+
+## Compared to a Public Resource
+
+A [public resource](/manage/resources/public/authentication) is reachable from the internet; Pangolin sits in front with authentication (for example platform SSO or other methods) so unauthenticated requests are blocked at the edge—the “bouncer” in front of a public site.
+
+Private HTTP does not use that public forward-auth model for reachability. The hostname does not grant access from the open internet at all. The user must connect with the Pangolin client first, like a VPN, before the domain resolves and the reverse proxy will serve the app. Instead of a login page at the edge, Pangolin uses the user's active client connection to determine their identity and enforces [private resource access rules](/manage/resources/private/authentication) (users, roles, machines) from that session. The network path is client-attached only.

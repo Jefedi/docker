@@ -1,0 +1,8 @@
+{
+  "voxtral_total_tokens": 0,
+  "voxtral_tts_tokens": 0,
+  "voxtral_stt_tokens": 0,
+  "litellm_spend": 0.0,
+  "litellm_pct_budget_used": 0.0,
+  "litellm_available": true
+}

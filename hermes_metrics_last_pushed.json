@@ -1,0 +1,18 @@
+{
+  "voxtral": {
+    "total_tokens": 0,
+    "tts_tokens": 0,
+    "stt_tokens": 0
+  },
+  "litellm": {
+    "spend": 0.0,
+    "pct_budget_used": 0.0
+  },
+  "entity_values": {
+    "input_number.hermes_voxtral_tokens_total": 0,
+    "input_number.hermes_voxtral_tokens_tts": 0,
+    "input_number.hermes_voxtral_tokens_stt": 0,
+    "input_number.hermes_litellm_spend": 0.0,
+    "input_number.hermes_litellm_budget_used": 0.0
+  }
+}

@@ -1,0 +1,24 @@
+#include 'actions/calendar'
+
+/* Rappel iOS — crée un rappel dans l'app Rappels native
+ * Compile avec: cherri rappel_ios.cherri (dans conteneur Docker cherri-builder)
+ *
+ * Action definition pour addreminders avec paramètre variable:
+ * - is.workflow.actions.addreminders accepte WFInput (variable) pour le titre
+ * - Le raccourci ouvre l'app Rappels pour confirmer la création
+ * - Sync iCloud automatique entre tous les devices
+ */
+
+#define name "Rappel iOS"
+#define glyph bell
+#define color red
+
+action 'is.workflow.actions.addreminders' addReminder(
+    variable input: 'WFInput'
+)
+
+@titre = prompt("Titre du rappel :")
+
+addReminder(@titre)
+
+show("Rappel cree : {@titre}")

@@ -1,0 +1,20 @@
+services:
+  home-assistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: home-assistant
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ha_config:/config
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - TZ=Europe/Paris
+    labels:
+      - "glance.category=homelab"
+      - "glance.description=Domotique"
+      - "glance.icon=si:homeassistant"
+      - "glance.name=Home Assistant"
+      - "glance.url=https://ha.jefe.al"
+
+volumes:
+  ha_config:

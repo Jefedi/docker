@@ -1,0 +1,218 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# DNS & Networking
+
+> Configure your domain, DNS records, and network settings for Pangolin deployment
+
+<div />
+
+Pangolin requires proper DNS configuration and network setup to function correctly. This guide covers domain setup, DNS records, port configuration, and networking considerations.
+
+## DNS Configuration
+
+### Basic DNS Records
+
+You'll need to create A (or AAAA for IPv6) records pointing to your VPS IP address.
+
+<Steps>
+  <Step title="Create wildcard record">
+    Create a wildcard subdomain record for your domain:
+
+    ```
+    Type: A
+    Name: *
+    Value: YOUR_VPS_IP_ADDRESS
+    TTL: 300 (or default)
+    ```
+
+    <Check>
+      This allows any subdomain (e.g., `app.example.com`, `api.example.com`) to resolve to your VPS.
+    </Check>
+  </Step>
+
+  <Step title="Create root domain record (optional)">
+    If you plan to use your root domain as a resource:
+
+    ```
+    Type: A
+    Name: @ (or leave blank)
+    Value: YOUR_VPS_IP_ADDRESS
+    TTL: 300 (or default)
+    ```
+
+    <Info>
+      This is only needed if you want to use `example.com` (not just subdomains) as a resource.
+    </Info>
+  </Step>
+
+  <Step title="Wait for propagation">
+    DNS changes can take 5 minutes to 48 hours to propagate globally.
+
+    <Tip>
+      Use Google DNS (8.8.8.8) or your provider's DNS to test changes faster.
+    </Tip>
+  </Step>
+</Steps>
+
+## Port Configuration
+
+### Required Ports
+
+Pangolin requires these ports to be open on your VPS:
+
+<CardGroup cols={2}>
+  <Card title="TCP Port 80">
+    **HTTP/SSL Verification**
+
+    * Let's Encrypt domain validation
+    * Non-SSL resources
+    * Can be disabled with wildcard certs
+  </Card>
+
+  <Card title="TCP Port 443">
+    **HTTPS Traffic**
+
+    * Pangolin web dashboard
+    * SSL-secured resources
+    * Essential for operation
+  </Card>
+
+  <Card title="UDP Port 51820">
+    **Site Tunnels**
+
+    This is the default port for sites (Newt) to establish tunnels to the proxy (Gerbil).
+  </Card>
+
+  <Card title="UDP Port 21820">
+    **Client Tunnels**
+
+    This is the default port for clients relaying through Gerbil to newt. This port is only required for clients.
+  </Card>
+</CardGroup>
+
+<Warning>
+  Always verify your exposed ports (e.g., with [nmap](https://nmap.org/) or [RustScan](https://github.com/bee-san/RustScan)) and ensure you expose **only** the ports that are absolutely necessary. By tunneling out to the VPS, you are effectively including the VPS in your security boundary, so you must secure it as part of your overall network strategy. For more details, see [Docker’s port publishing documentation](https://docs.docker.com/engine/network/packet-filtering-firewalls/#port-publishing-and-mapping).
+</Warning>
+
+### Docker Port Exposure
+
+By default, Pangolin exposes these ports on all interfaces:
+
+```yaml theme={"theme":"gruvbox-light-hard"}
+gerbil:
+  ports:
+    - "80:80"        # HTTP/SSL verification and non-SSL resources
+    - "443:443"      # HTTPS for web UI and SSL resources
+    - "51820:51820"  # WireGuard for Newt connections
+    - "21820:21820"  # WireGuard for client connections
+```
+
+### Firewall Configuration
+
+Ensure your VPS firewall allows these ports:
+
+<Tabs>
+  <Tab title="Cloud Provider">
+    Configure security groups/firewall rules in your cloud provider's dashboard to allow:
+
+    * TCP ports 80 and 443
+    * UDP ports 51820 and 21820
+  </Tab>
+
+  <Tab title="UFW (Ubuntu)">
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    sudo ufw allow 80/tcp
+    sudo ufw allow 443/tcp
+    sudo ufw allow 51820/udp
+    sudo ufw allow 21820/udp
+    sudo ufw enable
+    ```
+  </Tab>
+
+  <Tab title="firewalld (CentOS/RHEL)">
+    ```bash theme={"theme":"gruvbox-light-hard"}
+    sudo firewall-cmd --permanent --add-port=80/tcp
+    sudo firewall-cmd --permanent --add-port=443/tcp
+    sudo firewall-cmd --permanent --add-port=51820/udp
+    sudo firewall-cmd --permanent --add-port=21820/udp
+    sudo firewall-cmd --reload
+    ```
+  </Tab>
+</Tabs>
+
+## Internal Network Configuration
+
+### Default Subnet Settings
+
+Pangolin uses these default network settings:
+
+```yaml theme={"theme":"gruvbox-light-hard"}
+gerbil:
+  block_size: 24
+  site_block_size: 30
+  subnet_group: 100.89.137.0/20
+```
+
+**What this means:**
+
+* **Gerbil network**: Uses first /24 subnet in `100.89.137.0/20` range
+* **Site allocation**: Each site gets a /30 subnet (4 IPs)
+* **CGNAT range**: Avoids conflicts with most private networks
+
+<Info>
+  The `100.89.137.0/20` range is in the CGNAT (Carrier-Grade NAT) space, which should avoid conflicts with typical private networks (192.168.x.x, 10.x.x.x, 172.16-31.x.x).
+</Info>
+
+<Warning>
+  **Important**: If this subnet conflicts with your network, change it in your config **before** registering your first Gerbil.
+</Warning>
+
+### Customizing Network Settings
+
+If you need to change the default network:
+
+```yaml theme={"theme":"gruvbox-light-hard"}
+gerbil:
+  block_size: 24          # Size of Gerbil's network block
+  site_block_size: 30     # Size of each site's network block
+  subnet_group: 10.0.0.0/8  # Custom subnet range
+  start_port: 51820       # WireGuard server port
+```
+
+<Tip>
+  For heavy WireGuard usage, consider increasing `site_block_size` to 29 (8 IPs) or 28 (16 IPs) per site.
+</Tip>
+
+## Docker Networking
+
+### Local Services
+
+When deploying services in Docker alongside Pangolin:
+
+<AccordionGroup>
+  <Accordion title="Container Communication">
+    **For services in the same Docker Compose:**
+
+    * Use service names as hostnames
+    * Example: `http://pangolin:8080`
+    * Docker Compose creates internal network automatically
+  </Accordion>
+
+  <Accordion title="Host Machine Access">
+    **To access services on the host machine:**
+
+    * Use `172.17.0.1` (Docker bridge gateway)
+    * Or use `host.docker.internal` (Docker Desktop)
+    * Example: `http://172.17.0.1:3000`
+  </Accordion>
+
+  <Accordion title="External Services">
+    **For services outside Docker:**
+
+    * Use the host's public IP address
+    * Ensure firewall allows the required ports
+    * Consider using VPN or secure tunnels
+  </Accordion>
+</AccordionGroup>

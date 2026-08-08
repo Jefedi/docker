@@ -1,0 +1,105 @@
+#include 'actions/web'
+#include 'actions/sharing'
+
+#define name "Traduire"
+#define glyph globe
+#define color purple
+
+action 'is.workflow.actions.getvalueforkey' dictGet(
+    variable input: 'WFInput',
+    text key: 'WFDictionaryKey'
+)
+
+action 'is.workflow.actions.dictatetext' dictateText(
+    text language: 'WFLanguage'
+)
+
+action 'is.workflow.actions.createnote' createNote(
+    variable body: 'NoteBody'
+)
+
+const API_URL = "https://translate.jefe.ovh"
+const API_KEY = "YOUR_API_KEY_HERE"
+
+menu "Mode de traduction" {
+    item "Saisir du texte":
+        @texte = prompt("Texte a traduire :", "Text", "", "true")
+        @mode = "texte"
+
+    item "Dicter (voix)":
+        @texte = dictateText("fr-FR")
+        @mode = "texte"
+}
+
+menu "Traduire vers :" {
+    item "Francais":
+        @target = "fr"
+    item "Anglais":
+        @target = "en"
+    item "Espagnol":
+        @target = "es"
+    item "Allemand":
+        @target = "de"
+    item "Italien":
+        @target = "it"
+    item "Portugais":
+        @target = "pt"
+    item "Neerlandais":
+        @target = "nl"
+    item "Russe":
+        @target = "ru"
+    item "Arabe":
+        @target = "ar"
+    item "Chinois simplifie":
+        @target = "zh-Hans"
+    item "Japonais":
+        @target = "ja"
+    item "Coreen":
+        @target = "ko"
+}
+
+menu "Depuis :" {
+    item "Auto (detecter)":
+        @source = "auto"
+    item "Francais":
+        @source = "fr"
+    item "Anglais":
+        @source = "en"
+    item "Espagnol":
+        @source = "es"
+    item "Allemand":
+        @source = "de"
+    item "Italien":
+        @source = "it"
+    item "Portugais":
+        @source = "pt"
+    item "Neerlandais":
+        @source = "nl"
+    item "Russe":
+        @source = "ru"
+    item "Arabe":
+        @source = "ar"
+    item "Chinois simplifie":
+        @source = "zh-Hans"
+    item "Japonais":
+        @source = "ja"
+}
+
+@response = jsonRequest("{API_URL}/translate", 'POST', {"q": "{@texte}", "source": "{@source}", "target": "{@target}", "format": "text", "api_key": "{API_KEY}"}, {"Content-Type": "application/json"})
+
+@translatedText = dictGet(@response, "translatedText")
+
+setClipboard(@translatedText)
+
+@noteContent = "Traduction {@source} -> {@target}
+
+Original :
+{@texte}
+
+Traduction :
+{@translatedText}"
+
+createNote(@noteContent)
+
+showNotification("Traduction copiee et sauvegardee dans Notes", "Traduire", true)
+show(@translatedText)

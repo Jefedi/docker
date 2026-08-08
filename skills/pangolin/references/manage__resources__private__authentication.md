@@ -1,0 +1,19 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Authentication
+
+> Only allow access to resources to specific users, roles, and machines
+
+<div />
+
+When a client connects into an organization they will NOT have access to any resources by default. Access must be explicitly granted to users, roles, or machines for a tunnel to be established to the site(s) hosting the resource. The client will show no sites or resources unless access is granted.
+
+Access can be granted in several ways:
+
+* **Roles:** Assign access to resources to specific roles. Any user with that role will gain access to the resource when they connect.
+* **Users:** Assign access to resources to specific users. Only those users will gain access to the resource when they connect.
+* **Machines:** Assign access to resources to specific machines. Only those machine clients will gain access to the resource when they connect. Note that machines can not be put into roles.
+
+When removing access to a resource, the client will automatically tear down the tunnel to that resource if there are no other resources accessible on that site.

@@ -1,0 +1,120 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Feature Requests & Bug Reports
+
+> How to submit feature requests and report bugs for Pangolin
+
+<div />
+
+We welcome contributions from the community to help improve Pangolin. To ensure your feedback is properly tracked and prioritized, use the repository that matches the component where your issue or request belongs.
+
+## Pick the Right Repository
+
+Pangolin is made up of multiple components. To get the fastest response, file your request or bug report in the repository that matches what you're using.
+
+### Server Components
+
+<CardGroup cols={2}>
+  <Card title="Pangolin" icon="server" href="https://github.com/fosrl/pangolin">
+    Dashboard and core platform.
+    [Discussions](https://github.com/fosrl/pangolin/discussions) and [Issues](https://github.com/fosrl/pangolin/issues).
+  </Card>
+
+  <Card title="Newt" icon="plug" href="https://github.com/fosrl/newt">
+    Site and network connector.
+    [Issues](https://github.com/fosrl/newt/issues).
+  </Card>
+
+  <Card title="Gerbil" icon="circle-nodes" href="https://github.com/fosrl/gerbil">
+    WireGuard interface management service.
+    [Issues](https://github.com/fosrl/gerbil/issues).
+  </Card>
+</CardGroup>
+
+### User Clients
+
+<CardGroup cols={2}>
+  <Card title="Windows App" icon="desktop" href="https://github.com/fosrl/windows">
+    Pangolin desktop application for Windows.
+    [Issues](https://github.com/fosrl/windows/issues).
+  </Card>
+
+  <Card title="Android App" icon="desktop" href="https://github.com/fosrl/android">
+    Pangolin mobile application for Android.
+    [Issues](https://github.com/fosrl/android/issues).
+  </Card>
+
+  <Card title="Apple Apps" icon="desktop" href="https://github.com/fosrl/apple">
+    Pangolin application for macOS, iOS, and iPadOS.
+    [Issues](https://github.com/fosrl/apple/issues).
+  </Card>
+
+  <Card title="Pangolin CLI" icon="desktop" href="https://github.com/fosrl/cli">
+    Pangolin CLI client for Linux and macOS environments.
+    [Issues](https://github.com/fosrl/cli/issues).
+  </Card>
+</CardGroup>
+
+## Feature Requests
+
+We encourage you to submit feature requests in the [GitHub Discussions section](https://github.com/fosrl/pangolin/discussions) of the Pangolin repository. This allows the community to:
+
+* **Upvote features** they want to see implemented
+* **Provide feedback** and suggestions on proposed features
+* **Discuss implementation details** and alternatives
+* **Help prioritize** which features to work on next
+
+<Note>
+  Feature requests with community support (upvotes and positive feedback) are more likely to be prioritized for development.
+</Note>
+
+## Bug Reports
+
+Bug reports should be submitted in GitHub Issues for the relevant repository:
+
+### Server Components
+
+* **Pangolin**: [fosrl/pangolin/issues](https://github.com/fosrl/pangolin/issues)
+* **Newt**: [fosrl/newt/issues](https://github.com/fosrl/newt/issues)
+* **Gerbil**: [fosrl/gerbil/issues](https://github.com/fosrl/gerbil/issues)
+
+### User Clients
+
+* **Windows App**: [fosrl/windows/issues](https://github.com/fosrl/windows/issues)
+* **Android App**: [fosrl/android/issues](https://github.com/fosrl/android/issues)
+* **Apple Apps**: [fosrl/apple/issues](https://github.com/fosrl/apple/issues)
+* **Pangolin CLI**: [fosrl/cli/issues](https://github.com/fosrl/cli/issues)
+* **Olm**: [fosrl/olm/issues](https://github.com/fosrl/olm/issues)
+
+Using the correct repo ensures:
+
+* **Proper tracking** of bugs through their lifecycle
+* **Developer visibility** for quick resolution
+* **Version tracking** and regression testing
+* **Duplicate detection** and consolidation
+
+<Warning>
+  Please provide as much detail as possible to help developers reproduce and fix the issue quickly.
+</Warning>
+
+## Before Submitting
+
+* Search existing discussions and issues to avoid duplicates
+* Provide clear, detailed information
+* Include steps to reproduce (for bugs)
+* Test on the latest version of Pangolin
+* Check if the issue is environment-specific
+
+## Alternative Channels
+
+<CardGroup cols={2}>
+  <Card title="Security Issues" icon="shield">
+    For security vulnerabilities, please email [security@pangolin.net](mailto:security@pangolin.net) instead of posting publicly.
+  </Card>
+
+  <Card title="General Questions" icon="question">
+    For general questions, use [GitHub Discussions](https://github.com/fosrl/pangolin/discussions) with the "Q\&A" category, or come chat with us on [Discord](https://pangolin.net/discord).
+  </Card>
+</CardGroup>

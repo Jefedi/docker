@@ -1,0 +1,99 @@
+#include 'actions/web'
+#include 'actions/sharing'
+#include 'actions/calendar'
+
+#define name "Traduire"
+#define glyph globe
+#define color purple
+
+// === Action definitions (remplacement de rawAction) ===
+action 'is.workflow.actions.getvalueforkey' dictGet(
+    variable input: 'WFInput',
+    text key: 'WFDictionaryKey'
+)
+
+action 'is.workflow.actions.dictatetext' dictateText(
+    text language: 'WFLanguage'
+)
+
+// ⚠️ NE PAS définir formatDate en action definition custom !
+// is.workflow.actions.formatdate est INVALIDE pour iOS.
+// Utiliser le built-in formatDate() avec #include 'actions/calendar'.
+// Le built-in génère is.workflow.actions.format.date (avec un point) = valide.
+
+// === Configuration ===
+const API_URL = "https://translate.jefe.ovh"
+const API_KEY = "VOTRE_CLE_API"
+
+// === Menu: mode de saisie ===
+menu "Mode de traduction" {
+    item "Saisir du texte":
+        @texte = prompt("Texte a traduire :", "Text", "", "true")
+        @mode = "texte"
+
+    item "Dicter (voix)":
+        @texte = dictateText("fr-FR")
+        @mode = "texte"
+}
+
+// === Menu: langue cible ===
+menu "Traduire vers :" {
+    item "Francais":
+        @target = "fr"
+    item "Anglais":
+        @target = "en"
+    item "Espagnol":
+        @target = "es"
+    item "Allemand":
+        @target = "de"
+    item "Italien":
+        @target = "it"
+    item "Portugais":
+        @target = "pt"
+    item "Neerlandais":
+        @target = "nl"
+    item "Russe":
+        @target = "ru"
+    item "Arabe":
+        @target = "ar"
+    item "Chinois simplifie":
+        @target = "zh-Hans"
+    item "Japonais":
+        @target = "ja"
+    item "Coreen":
+        @target = "ko"
+}
+
+// === Langue source: toujours auto-détection (pas de menu) ===
+@source = "auto"
+
+// === Date formatée (built-in, pas action definition) ===
+@today = formatDate(CurrentDate, "Custom", "dd-MM-yyyy")
+
+// === Traduction ===
+@response = jsonRequest("{API_URL}/translate", 'POST', {"q": "{@texte}", "source": "{@source}", "target": "{@target}", "format": "text", "api_key": "{API_KEY}"}, {"Content-Type": "application/json"})
+
+@translatedText = dictGet(@response, "translatedText")
+
+// === Préparation note Obsidian ===
+@noteContent = "## {@today} {@source} -> {@target}
+
+**Original :**
+{@texte}
+
+**Traduction :**
+{@translatedText}
+
+---
+
+"
+
+// === Sauvegarde Obsidian (sous-dossier Traductions/) ===
+setClipboard(@noteContent)
+openURL("obsidian://new?path=Traductions/Traduction_{@source}-{@target}_{@today}&clipboard=true&append=true&silent=true")
+
+// Traduction seule remise dans le presse-papier
+setClipboard(@translatedText)
+
+showNotification("Traduction {@source} -> {@target} sauvegardee dans Obsidian", "Traduire", true)
+show(@translatedText)

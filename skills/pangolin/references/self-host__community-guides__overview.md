@@ -1,0 +1,79 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.pangolin.net/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Overview
+
+<div />
+
+<Note>
+  These are community written guides and are not officially supported. If you have any issues, please reach out to the authors or the community on [Discord](https://pangolin.net/discord) or [Github discussions](https://github.com/orgs/fosrl/discussions).
+</Note>
+
+The modular design of this system enables the extension of its functionality through the integration of existing Traefik plugins, such as Crowdsec and Geoblock.
+Additionally, Prometheus can collect metrics from both CrowdSec and Traefik, which can then be visualized in Grafana to monitor security events, request statistics, and traffic patterns in real time.
+
+## Traefik plugins
+
+For a complete list of available plugins, please refer to the [Plugin Catalog](https://plugins.traefik.io/plugins).
+
+### Crowdsec Bouncer
+
+When installing Crowdsec via the Pangolin installer, the Crowdsec Traefik Bouncer will be automatically installed and configured by default. The configuration can be customized to meet your specific requirements.
+
+The CrowdSec Bouncer plugin for Traefik integrates CrowdSec’s security engine to block malicious traffic in real time. It runs as middleware within a Traefik container and enforces decisions based on CrowdSec’s threat intelligence. This helps protect services from bots, attackers, and abusive IPs dynamically.
+
+For additional information, consult the following resources:
+
+* [Traefik Plugin Catalog](https://plugins.traefik.io/plugins/6335346ca4caa9ddeffda116/crowdsec-bouncer-traefik-plugin)
+* [Github Repository](https://github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin)
+
+### Geoblock
+
+The GeoBlock plugin for Traefik is a middleware that restricts access based on the client’s geographic location. It runs within a Traefik container and uses IP-based geolocation to allow or block traffic from specific countries. This is useful for security, compliance, or access control in Traefik-managed services.
+
+<Note>
+  Pangolin now supports native geo-blocking. The GeoBlock plugin is considered legacy in Pangolin setups. If you previously installed it, follow [Remove GeoBlock Plugin](/self-host/community-guides/remove-geoblock-plugin) before enabling native geo-blocking.
+</Note>
+
+For more details, please refer to the following resources:
+
+* [Github Repository](https://github.com/PascalMinder/geoblock)
+
+### Middleware Manager
+
+The Middlware manager is a microservice that allows you to add custom middleware to Pangolin / Traefik resources.
+
+For more details, please refer to the following resources:
+
+* [Github Repository](https://github.com/hhftechnology/middleware-manager)
+
+## Metrics
+
+Currently you can claim metric data from Traefik and Crowdsec with Prometheus and visualize it within a Grafana Dashboard.
+
+### Prometheus
+
+Prometheus is an open-source monitoring and alerting toolkit designed for collecting and querying time-series metrics. It runs as a Docker container and uses a pull-based model to scrape data from configured endpoints. Prometheus integrates well with Grafana for visualization and Alertmanager for alert handling.
+
+For more details, please refer to the following resources:
+
+* [Homepage](https://prometheus.io/)
+* [Github Repository](https://github.com/prometheus/prometheus)
+
+### Grafana
+
+Grafana is an open-source analytics and visualization platform used to monitor and display time-series data. It runs as a Docker container and supports multiple data sources, including Prometheus, InfluxDB, and MySQL. Grafana provides interactive dashboards, alerting, and extensive customization options for data visualization.
+
+For more details, please refer to the following resources:
+
+* [Homepage](https://grafana.com/)
+* [Github Repository](https://github.com/grafana/grafana)
+
+### Traefik Logs Dashboard
+
+The Traefik Logs Dashboard is a real-time dashboard for analyzing Traefik logs with IP geolocation, status code analysis, and service metrics.
+
+For more details, please refer to the following resources:
+
+* [Github Repository](https://github.com/hhftechnology/traefik-log-dashboard)
